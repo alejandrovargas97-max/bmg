@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es" itemscope itemtype="http://schema.org/WebPage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>BridgeMind Education | Aprendizaje de Idiomas con Juegos Mentales</title>
+    <meta property="og:title" content="BridgeMind Education: La Próxima Generación de EdTech">
+    <meta property="og:description" content="Aprenda idiomas de forma innovadora con BridgeMind Education. Utilizamos IA personalizada y juegos mentales para dominar el multilingüismo de manera divertida y eficaz.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; color: #333; line-height: 1.6; background-color: #f7f9fc; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* HEADER & LOGO (LOGO DE TEXTO TEMPORAL) */
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background-color: white; border-bottom: 1px solid #ddd; }
+        .logo-text { font-size: 30px; font-weight: 800; color: #1a2c5b; } 
+        
+        /* ARREGLO DE IDIOMAS */
+        .language-switcher { text-align: center; padding: 15px 0; background-color: #f8f8f8; border-bottom: 1px solid #eee; }
+        .language-switcher button { background: none; border: none; cursor: pointer; font-size: 14px; margin: 0 3px; padding: 5px 8px; border-radius: 4px; transition: background-color 0.2s; }
+        .language-switcher button:hover { background-color: #e0e0e0; }
+        .language-switcher .active { background-color: #1a2c5b; color: white; font-weight: bold; }
+        .lang-content { display: none; }
+
+        /* HERO - Título y CTA */
+        .hero-section { background: linear-gradient(135deg, #1a2c5b, #0e1e40); color: #fff; padding: 120px 5%; text-align: center; margin-bottom: 40px; }
+        .hero-section h1 { font-size: 52px; margin-bottom: 20px; font-weight: 800; line-height: 1.2; }
+        .hero-section p { font-size: 26px; opacity: 0.9; margin-bottom: 50px; font-weight: 400; }
+        .cta-button { background-color: #e54a4a; color: white; padding: 18px 45px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 20px; transition: background-color 0.3s; box-shadow: 0 4px 10px rgba(229, 74, 74, 0.4); display: inline-block; }
+        .cta-button:hover { background-color: #c93b3b; }
+
+        .age-message-container { text-align: center; padding: 30px 0; background-color: #f4f4f9; border-top: 1px solid #e0e0e0; }
+        .age-message-container h2 { font-size: 2.0em; color: #1a2c5b; margin: 0; font-weight: 700; }
+        
+        /* MOCKUPS */
+        .mockup-section { padding: 50px 0; text-align: center; background-color: #ffffff; }
+        .mockup-section h2, .section-title { text-align: center; margin: 40px 0 20px; font-size: 2.4em; color: #1a2c5b; font-weight: 700; }
+        .mockup-section p { font-size: 1.1em; margin-bottom: 30px; opacity: 0.7; }
+        .mockup-grid { display: flex; justify-content: center; align-items: flex-start; gap: 30px; flex-wrap: wrap; margin-top: 40px; }
+        .mockup-grid img { border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #eee; max-width: 100%; height: auto; transition: transform 0.3s; }
+        .mockup-large { max-width: 600px; } 
+        .mockup-small { max-width: 250px; } 
+
+        /* VIDEO */
+        .video-container { max-width: 900px; margin: 0 auto; margin-bottom: 50px; }
+        .video-placeholder { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background-color: #333; border-radius: 10px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        .video-placeholder iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
+        /* TARJETAS DE CONTENIDO */
+        .card-container { display: flex; justify-content: space-around; gap: 30px; text-align: center; flex-wrap: wrap; margin-bottom: 50px;}
+        .card { flex-basis: calc(33% - 20px); padding: 30px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); background-color: white; transition: transform 0.3s;}
+        .card h3 { color: #e54a4a; font-size: 1.4em; font-weight: 600; margin-top: 0; }
+        .card-icon { font-size: 3.5em; color: #1a2c5b; margin-bottom: 10px; }
+        
+        /* CONTACTO (INFORMACION SIMPLE) */
+        .contact-section { background-color: #e9ecef; padding: 60px 20px; margin-top: 50px; border-radius: 10px; }
+        .contact-section h2 { color: #1a2c5b; margin-top: 0; text-align: center; }
+        .contact-info { max-width: 600px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: left; }
+        .contact-info p { font-size: 1.1em; margin: 10px 0; }
+        .contact-info a { color: #e54a4a; text-decoration: none; font-weight: 600; }
+        .contact-info a:hover { text-decoration: underline; }
+        .contact-cta { text-align: center; margin-top: 30px; }
+
+
+        /* Pie de página */
+        footer { background-color: #1a2c5b; color: white; padding: 25px 0; text-align: center; font-size: 0.9em; }
+        footer a { color: #ccc; text-decoration: none; margin: 0 15px; }
+
+        /* Estilo para el banner temporal sin imagen */
+        .banner-placeholder {
+            width: 100%; 
+            height: 150px; 
+            background-color: #f0f0f5; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #555; 
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .hero-section h1 { font-size: 40px; }
+            .hero-section p { font-size: 20px; }
+            .card { flex-basis: calc(50% - 15px); }
+        }
+        @media (max-width: 600px) {
+            .card { flex-basis: 100%; }
+        }
+    </style>
+
+    <script>
+        // TRADUCCIONES PARA TEXTOS ESTÁTICOS
+        const staticText = {
+            es: {
+                hero_h1: "Aprenda Idiomas con Juegos Mentales: Neuro-Lingüística e IA para todas las edades.",
+                hero_p: "El primer sistema de Entrenamiento Neuro-Lingüístico impulsado por IA. Fluidez garantizada, memoria potenciada y aprendizaje divertido para centros y usuarios individuales.",
+                cta: "¡Empezar Ahora!",
+                video_title: "Demostración en Video del Motor de IA y el Juego (7 Idiomas Activos)",
+                mockup_title: "La Metodología del 'Bridge': Juegos y Evidencia de Nuestra Interfaz Única",
+                mockup_p: "Una mirada a cómo la IA integra el juego complejo (como el ajedrez) con la corrección lingüística avanzada y el diagnóstico cognitivo."
+            },
+            en: {
+                hero_h1: "Learn Languages with Mind Games: Neuro-Linguistics and AI for all ages.",
+                hero_p: "The first Neuro-Linguistic Training system powered by AI. Guaranteed fluency, enhanced memory, and fun learning for schools and individual users.",
+                cta: "Start Now!",
+                video_title: "Video Demonstration of the AI Engine and Gameplay (7 Active Languages)",
+                mockup_title: "The 'Bridge' Methodology: Games and Evidence of Our Unique Interface",
+                mockup_p: "A look at how AI integrates complex gaming (like chess) with advanced linguistic correction and cognitive diagnostics."
+            },
+            zh: {
+                hero_h1: "通過腦力遊戲學習語言：針對所有年齡段的神經語言學與人工智能。",
+                hero_p: "首個由AI驅動的神經語言學訓練系統。保證流利度、增強記憶力，為學校和個人用戶提供有趣的學習體驗。",
+                cta: "立即開始！",
+                video_title: "AI引擎和遊戲玩法的視頻演示（7種活躍語言）",
+                mockup_title: "“橋樑”方法論：遊戲與我們獨特界面的證據",
+                mockup_p: "了解AI如何將複雜遊戲（如國際象棋）與高級語言校正和認知診斷整合。"
+            },
+            ar: {
+                hero_h1: "تعلم اللغات بألعاب العقل: علم الأعصاب اللغوي والذكاء الاصطناعي لجميع الأعمار.",
+                hero_p: "أول نظام تدريب عصبي لغوي مدعوم بالذكاء الاصطناعي. طلاقة مضمونة، وذاكرة محسّنة، وتعلّم ممتع للمراكز والمستخدمين الأفراد.",
+                cta: "ابدأ الآن!",
+                video_title: "عرض فيديو لمحرك الذكاء الاصطناعي وطريقة اللعب (7 لغات نشطة)",
+                mockup_title: "منهجية 'الجسر': الألعاب ودليل واجهتنا الفريدة",
+                mockup_p: "نظرة على كيفية دمج الذكاء الاصطناعي للألعاب المعقدة (مثل الشطرنج) مع التصحيح اللغوي المتقدم والتشخيص المعرفي."
+            },
+            ja: {
+                hero_h1: "思考ゲームで言語学習：全年齢対応のニューロ言語学とAI。",
+                hero_p: "AI駆動の初のニューロ言語トレーニングシステム。流暢さの保証、記憶力の向上、学校および個人ユーザー向けの楽しい学習。",
+                cta: "今すぐ開始！",
+                video_title: "AIエンジンとゲームプレイのビデオデモ（7つのアクティブ言語）",
+                mockup_title: "「ブリッジ」方法論：ゲームと独自のインターフェースの証拠",
+                mockup_p: "AIが複雑なゲーム（チェスなど）を高度な言語補正と認知診断に統合する方法をご覧ください。"
+            },
+            de: {
+                hero_h1: "Sprachen lernen mit Denkspielen: Neurolinguistik und KI für jedes Alter.",
+                hero_p: "Das erste KI-gesteuerte Neurolinguistische Trainingssystem. Garantierte Sprachgewandtheit, verbessertes Gedächtnis und spielerisches Lernen für Schulen und Einzelnutzer.",
+                cta: "Jetzt starten!",
+                video_title: "Videodemonstration der KI-Engine und des Gameplays (7 aktive Sprachen)",
+                mockup_title: "Die 'Bridge'-Methodik: Spiele und Beweise unserer einzigartigen Benutzeroberfläche",
+                mockup_p: "Ein Blick darauf, wie die KI komplexes Spielen (wie Schach) mit fortschrittlicher Sprachkorrektur und kognitiven Diagnosen integriert."
+            },
+            it: {
+                hero_h1: "Impara le Lingue con Giochi Mentali: Neuro-Linguistica e IA per tutte le età.",
+                hero_p: "Il primo sistema di Allenamento Neuro-Linguistico basato sull'IA. Fluidità garantita, memoria potenziata e apprendimento divertente per centri e utenti singoli.",
+                cta: "Inizia Ora!",
+                video_title: "Dimostrazione video del motore AI e del Gameplay (7 lingue attive)",
+                mockup_title: "La Metodologia 'Bridge': Giochi ed Evidenza della Nostra Interfaccia Unica",
+                mockup_p: "Uno sguardo a come l'IA integra giochi complessi (come gli scacchi) con la correzione linguistica avanzata e la diagnostica cognitiva."
+            },
+            fr: {
+                hero_h1: "Apprenez les Langues avec des Jeux Mentaux: Neurolinguistique et IA pour tous les âges.",
+                hero_p: "Le premier système d'Entraînement Neuro-Lingüistique alimenté par l'IA. Fluidité garantie, mémoire améliorée et apprentissage ludique pour les centres et les utilisateurs individuels.",
+                cta: "Commencer Maintenant!",
+                video_title: "Démonstration vidéo du moteur IA et du Gameplay (7 langues actives)",
+                mockup_title: "La Méthodologie 'Bridge': Jeux et Preuve de Notre Interface Unique",
+                mockup_p: "Un aperçu de la façon dont l'IA intègre le jeu complexe (comme les échecs) avec la correction linguistique avancée et le diagnostic cognitif."
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const langButtons = document.querySelectorAll('.lang-button');
+            const langContents = document.querySelectorAll('.lang-content');
+            const body = document.body;
+            
+            const showLanguage = (lang) => {
+                // Cambia el contenido dinámico
+                langContents.forEach(content => {
+                    content.style.display = content.id === lang ? 'block' : 'none'; 
+                });
+                
+                // Cambia el contenido estático
+                const texts = staticText[lang] || staticText['es'];
+                document.getElementById('hero-h1').innerHTML = texts.hero_h1;
+                document.getElementById('hero-p').innerHTML = texts.hero_p;
+                document.getElementById('cta-main').textContent = texts.cta;
+                document.getElementById('video-title').textContent = texts.video_title;
+                document.getElementById('mockup-title').textContent = texts.mockup_title;
+                document.getElementById('mockup-p').textContent = texts.mockup_p;
+                
+                // Cambia la clase activa del botón
+                langButtons.forEach(button => {
+                    button.classList.remove('active');
+                    if (button.dataset.lang === lang) {
+                        button.classList.add('active');
+                    }
+                });
+                
+                // Configurar la dirección de lectura (rtl para árabe)
+                body.style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
+                
+                // Actualizar el mensaje de edad (traducible)
+                const ageMessage = document.getElementById('age-message');
+                const marketMessages = {
+                    es: 'Nuestro mercado: Estudiantes de todas las edades, Ejecutivos y Centros Educativos.',
+                    en: 'Our Market: Students of all ages, Executives, and Educational Centers.',
+                    zh: '我們的市場：所有年齡段的學生、高管和教育中心。',
+                    ar: 'سوقنا: الطلاب من جميع الأعمار، والمديرين التنفيذيين، والمراكز التعليمية.',
+                    ja: '私たちの市場：すべての年齢の学生、エグゼクティブ、および教育センター。',
+                    de: 'Unser Markt: Schüler aller Altersgruppen, Führungskräfte und Bildungszentren.',
+                    it: 'Il nostro mercato: studenti di tutte le età, dirigenti e centri educativi.',
+                    fr: 'Notre marché : étudiants de tous âges, cadres et centres éducatifs.' 
+                };
+                ageMessage.textContent = marketMessages[lang] || marketMessages['es'];
+            };
+
+            langButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    showLanguage(button.dataset.lang);
+                });
+            });
+
+            // Inicia siempre en español
+            showLanguage('es');
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="main-header">
+    <span class="logo-text">BridgeMind Education</span>
+    <div class="language-switcher">
+        <button class="lang-button active" data-lang="es">ES</button>
+        <button class="lang-button" data-lang="en">EN</button>
+        <button class="lang-button" data-lang="zh">中文</button>
+        <button class="lang-button" data-lang="ar">عربي</button>
+        <button class="lang-button" data-lang="ja">日本語</button>
+        <button class="lang-button" data-lang="de">DE</button>
+        <button class="lang-button" data-lang="it">IT</button>
+        <button class="lang-button" data-lang="fr">FR</button>
+    </div>
+</div>
+
+<div class="photo-gallery-header">
+    <div class="banner-placeholder">
+        [ESPACIO PARA SU BANNER/IMAGEN PRINCIPAL. Reemplace este DIV con: `<img src="logo.jpg" alt="Banner de BridgeMind" style="width: 100%; display: block;">` cuando tenga su logo.]
+    </div>
+</div>
+
+<div class="age-message-container">
+    <h2 id="age-message">Nuestro mercado: Estudiantes de todas las edades, Ejecutivos y Centros Educativos.</h2>
+</div>
+
+<div class="hero-section">
+    <h1 id="hero-h1">Aprenda Idiomas con Juegos Mentales: Neuro-Lingüística e IA para todas las edades.</h1>
+    <p id="hero-p">El primer sistema de **Entrenamiento Neuro-Lingüístico** impulsado por IA. Fluidez garantizada, memoria potenciada y aprendizaje divertido para centros y usuarios individuales.</p>
+    <a href="#contacto" class="cta-button" id="cta-main">¡Empezar Ahora!</a>
+</div>
+
+<div class="container">
+
+    <div class="section video-section">
+        <h2 class="section-title" id="video-title">Demostración en Video del Motor de IA y el Juego (7 Idiomas Activos)</h2>
+        <div class="video-container">
+            <div class="video-placeholder">
+                <iframe src="//www.youtube.com/embed/-GsNUw_JS9w" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="mockup-section">
+        <h2 id="mockup-title">La Metodología del 'Bridge': Juegos y Evidencia de Nuestra Interfaz Única</h2>
+        <p id="mockup-p">Una mirada a cómo la IA integra el juego complejo (como el ajedrez) con la corrección lingüística avanzada y el diagnóstico cognitivo.</p>
+        <div class="mockup-grid">
+            <img src="1.jpg" alt="Interfaz Principal de BridgeMind (Tablero de Juego y Métricas)" class="mockup-large">
+            <img src="2.jpg" alt="Interfaz Móvil de Subasta o Corrección 1" class="mockup-small">
+            <img src="3.jpg" alt="Interfaz Móvil de Subasta o Corrección 2" class="mockup-small">
+        </div>
+        <p style="font-style: italic; font-size: 0.9em; margin-top: 15px;">**NOTA IMPORTANTE:** Para que se vean, debe tener los archivos **`1.jpg`**, **`2.jpg`** y **`3.jpg`** dentro de su carpeta **`bmg`**.</p>
+    </div>
+
+    <div class="lang-content" id="es">
+        <h2 class="section-title">NUESTROS PILARES (EDUCACIÓN, JUEGO Y MENTE)</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>Juego Activo e IA</h3><p>La IA adapta la dificultad en tiempo real, integrando el juego complejo con la corrección lingüística avanzada y la escalabilidad eficiente.</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>Retorno Cognitivo</h3><p>Mejora medible en la **memoria, lógica y velocidad de decisión** (ROI cognitivo) además de la fluidez lingüística garantizada.</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>Para Centros Educativos</h3><p>Herramientas de **diagnóstico de rendimiento cerebral** y progreso lingüístico valiosas para profesores, padres y directivos.</p></div>
+        </div>
+        
+        <div class="contact-section" id="contacto">
+            <h2 class="section-title" style="color: #1a2c5b;">¡ESTAMOS LISTOS PARA EMPEZAR!</h2>
+            <p style="text-align: center; font-size: 1.1em;">Contáctenos si tiene preguntas sobre nuestra metodología, planes para centros educativos o para inversión estratégica.</p>
+            <div class="contact-info">
+                <p>📧 Correo Electrónico: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 Contacto Rápido (WhatsApp): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">CONTACTAR POR WHATSAPP</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="lang-content" id="en">
+        <h2 class="section-title">OUR PILARS (EDUCATION, GAME, AND MIND)</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>Active Gameplay & AI</h3><p>AI adapts difficulty in real-time, integrating complex gaming with advanced linguistic correction and efficient scalability.</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>Cognitive Return</h3><p>Measurable improvement in **memory, logic, and decision speed** (cognitive ROI) in addition to guaranteed linguistic fluency.</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>For Educational Centers</h3><p>**Brain performance diagnostic** tools and linguistic progress insights valuable for teachers, parents, and administrators.</p></div>
+        </div>
+        <div class="contact-section" id="contacto-en">
+            <h2 class="section-title" style="color: #1a2c5b;">WE ARE READY TO START!</h2>
+            <p style="text-align: center; font-size: 1.1em;">Contact us with questions about our methodology, plans for educational centers, or strategic investment.</p>
+            <div class="contact-info">
+                <p>📧 Email Address: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 Quick Contact (WhatsApp): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">CONTACT VIA WHATSAPP</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="lang-content" id="zh">
+        <h2 class="section-title">我們的支柱（教育、遊戲和思維）</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>主動遊戲玩法與AI</h3><p>AI實時調整難度，將複雜遊戲與高級語言校正和高效可擴展性相結合。</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>認知回報</h3><p>除了保證語言流利度外，**記憶力、邏輯和決策速度**（認知投資回報率）也有可衡量的提高。</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>適用於教育中心</h3><p>**腦部表現診斷**工具和語言進度洞察，對教師、家長和管理人員有價值。</p></div>
+        </div>
+        <div class="contact-section" id="contacto-zh">
+            <h2 class="section-title" style="color: #1a2c5b;">我們已準備好開始！</h2>
+            <p style="text-align: center; font-size: 1.1em;">如果您對我們的教學方法、教育中心計劃或戰略投資有疑問，請聯繫我們。</p>
+            <div class="contact-info">
+                <p>📧 電子郵件: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 快速聯繫 (WhatsApp): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">通過WHATSAPP聯繫</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="lang-content" id="ar">
+        <h2 class="section-title">ركائزنا (التعليم، اللعب، والعقل)</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>اللعب النشط والذكاء الاصطناعي</h3><p>يتكيف الذكاء الاصطناعي مع الصعوبة في الوقت الفعلي، ويدمج الألعاب المعقدة مع التصحيح اللغوي المتقدم وقابلية التوسع الفعالة.</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>العائد المعرفي</h3><p>تحسن قابل للقياس في **الذاكرة، والمنطق، وسرعة اتخاذ القرار** (العائد المعرفي على الاستثمار) بالإضافة إلى الطلاقة اللغوية المضمونة.</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>للمراكز التعليمية</h3><p>أدوات **تشخيص أداء الدماغ** ورؤى التقدم اللغوي ذات القيمة للمعلمين، والآباء، والإداريين.</p></div>
+        </div>
+        <div class="contact-section" id="contacto-ar">
+            <h2 class="section-title" style="color: #1a2c5b;">نحن جاهزون للبدء!</h2>
+            <p style="text-align: center; font-size: 1.1em;">تواصل معنا لطرح أسئلة حول منهجيتنا، وخططنا للمراكز التعليمية، أو الاستثمار الاستراتيجي.</p>
+            <div class="contact-info">
+                <p>📧 البريد الإلكتروني: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 اتصال سريع (واتساب): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">التواصل عبر واتساب</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="lang-content" id="ja">
+        <h2 class="section-title">私たちの柱（教育、ゲーム、そして心）</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>アクティブなゲームプレイとAI</h3><p>AIは難易度をリアルタイムで調整し、複雑なゲームを高度な言語補正と効率的なスケーラビリティに統合します。</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>認知的リターン</h3><p>保証された言語流暢さに加え、**記憶力、論理、意思決定速度**（認知的ROI）の測定可能な改善。</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>教育センター向け</h3><p>**脳のパフォーマンス診断**ツールと、教師、保護者、管理者に価値のある言語進捗インサイト。</p></div>
+        </div>
+        <div class="contact-section" id="contacto-ja">
+            <h2 class="section-title" style="color: #1a2c5b;">始める準備ができました！</h2>
+            <p style="text-align: center; font-size: 1.1em;">当社の方法論、教育センター向けプラン、または戦略的投資に関するご質問は、お問い合わせください。</p>
+            <div class="contact-info">
+                <p>📧 メールアドレス: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 クイック連絡先 (WhatsApp): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">WHATSAPPで連絡</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="lang-content" id="de">
+        <h2 class="section-title">UNSERE SÄULEN (BILDUNG, SPIEL UND GEIST)</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>Aktives Gameplay & KI</h3><p>Die KI passt die Schwierigkeit in Echtzeit an und integriert komplexes Spielen mit fortschrittlicher Sprachkorrektur und effizienter Skalierbarkeit.</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>Kognitiver Ertrag</h3><p>Messbare Verbesserung der **Gedächtnisleistung, Logik und Entscheidungsgeschwindigkeit** (kognitiver ROI) zusätzlich zur garantierten Sprachgewandtheit.</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>Für Bildungszentren</h3><p>**Diagnosetools für die Gehirnleistung** und Einblicke in den sprachlichen Fortschritt, wertvoll für Lehrer, Eltern und Administratoren.</p></div>
+        </div>
+        <div class="contact-section" id="contacto-de">
+            <h2 class="section-title" style="color: #1a2c5b;">WIR SIND STARTKLAR!</h2>
+            <p style="text-align: center; font-size: 1.1em;">Kontaktieren Sie uns bei Fragen zu unserer Methodik, Plänen für Bildungszentren oder strategischen Investitionen.</p>
+            <div class="contact-info">
+                <p>📧 E-Mail-Adresse: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 Schneller Kontakt (WhatsApp): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">ÜBER WHATSAPP KONTAKTIEREN</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="lang-content" id="it">
+        <h2 class="section-title">I NOSTRI PILASTRI (EDUCAZIONE, GIOCO E MENTE)</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>Gameplay Attivo e IA</h3><p>L'IA adatta la difficoltà in tempo reale, integrando giochi complessi con la correzione linguistica avanzata e la scalabilità efficiente.</p></div>
+            <div class="card"><div class="card-icon">🧠</div><h3>Ritorno Cognitivo</h3><p>Miglioramento misurabile nella **memoria, logica e velocità di decisione** (ROI cognitivo) oltre alla fluidità linguistica garantita.</p></div>
+            <div class="card"><div class="card-icon">🏫</div><h3>Per Centri Educativi</h3><p>Strumenti di **diagnostica delle prestazioni cerebrali** e approfondimenti sul progresso linguistico preziosi per insegnanti, genitori e dirigenti.</p></div>
+        </div>
+        <div class="contact-section" id="contacto-it">
+            <h2 class="section-title" style="color: #1a2c5b;">SIAMO PRONTI PER INIZIARE!</h2>
+            <p style="text-align: center; font-size: 1.1em;">Contattaci per domande sulla nostra metodologia, piani per centri educativi o investimenti strategici.</p>
+            <div class="contact-info">
+                <p>📧 Indirizzo Email: <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
+                <p>📞 Contatto Rapido (WhatsApp): <a href="https://wa.me/34634268663" target="_blank">+34 634268663</a></p>
+            </div>
+            <div class="contact-cta">
+                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">CONTATTA TRAMITE WHATSAPP</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="lang-content" id="fr">
+        <h2 class="section-title">NOS PILIERS (ÉDUCATION, JEU ET ESPRIT)</h2>
+        <div class="card-container">
+            <div class="card"><div class="card-icon">🎮</div><h3>Gameplay Actif et IA</h3><p>L'IA adapte la difficulté en temps réel, intégrant des jeux complexes à la correction linguistique avancée et à une évolutivité efficace15:36 05/12/202515:36 05/12/202515:36 05/12/2025
