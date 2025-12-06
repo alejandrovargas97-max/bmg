@@ -9,214 +9,92 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* ESTILOS GENERALES */
-        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; color: #333; line-height: 1.6; background-color: #f7f9fc; scroll-behavior: smooth; }
+        /* ESTILOS GENERALES */        
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; color: #333; line-height: 1.6; background-color: #f7f9fc; scroll-behavior: smooth; }        
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-
-        /* HEADER */
-        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background-color: white; border-bottom: 1px solid #ddd; }
-        .logo-text { font-size: 24px; font-weight: 800; color: #1a2c5b; } 
         
-        /* SELECTOR DE IDIOMAS */
-        .language-switcher { text-align: center; padding: 10px 0; background-color: #f8f8f8; border-bottom: 1px solid #eee; display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }
-        .language-switcher button { background: none; border: 1px solid #ccc; cursor: pointer; font-size: 13px; padding: 5px 10px; border-radius: 20px; transition: all 0.2s; }
-        .language-switcher button:hover { background-color: #e0e0e0; }
-        .language-switcher .active { background-color: #1a2c5b; color: white; border-color: #1a2c5b; font-weight: bold; }
+        /* HEADER (Cabecera) - CORREGIDO PARA EL LOGO */        
+        .main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background-color: white; border-bottom: 1px solid #ddd; }        
         
-        /* OCULTAR/MOSTRAR CONTENIDO */
-        .lang-content { display: none; }
-        .lang-content.active-content { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* HERO SECTION */
-        .hero-section { background: linear-gradient(135deg, #1a2c5b, #0e1e40); color: #fff; padding: 100px 5%; text-align: center; margin-bottom: 40px; }
-        .hero-section h1 { font-size: 42px; margin-bottom: 20px; font-weight: 800; line-height: 1.2; }
-        .hero-section p { font-size: 20px; opacity: 0.9; margin-bottom: 40px; font-weight: 400; max-width: 800px; margin-left: auto; margin-right: auto; }
-        
-        /* BOTÓN DE ACCIÓN (CTA) */
-        .cta-button { background-color: #e54a4a; color: white; padding: 15px 40px; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 18px; transition: transform 0.2s, background-color 0.2s; box-shadow: 0 4px 15px rgba(229, 74, 74, 0.4); display: inline-block; cursor: pointer; border: none; }
-        .cta-button:hover { background-color: #c93b3b; transform: translateY(-2px); }
-
-        /* BANNER ROJO */
-        .age-message-container { text-align: center; padding: 20px 0; background-color: #e54a4a; color: white; font-weight: bold; }
-        .age-message-container h2 { font-size: 1.5em; margin: 0; }
-
-        /* SECCIONES */
-        .mockup-section { padding: 40px 0; text-align: center; background-color: #fff; }
-        .section-title { text-align: center; margin: 40px 0 30px; font-size: 2em; color: #1a2c5b; font-weight: 700; text-transform: uppercase; }
-        
-        /* IMÁGENES */
-        .mockup-grid { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-        .mockup-grid img { border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 100%; height: auto; }
-        .mockup-large { width: 600px; } 
-        .mockup-small { width: 220px; } 
-
-        /* VIDEO */
-        .video-container { max-width: 800px; margin: 0 auto 50px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .video-placeholder { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
-        .video-placeholder iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        
-        /* TARJETAS */
-        .card-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 50px;}
-        .card { flex: 1 1 300px; max-width: 350px; padding: 30px; border: 1px solid #eee; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background-color: white; text-align: center; }
-        .card-icon { font-size: 3em; margin-bottom: 15px; display: block; }
-        .card h3 { color: #e54a4a; margin-bottom: 15px; }
-
-        /* CONTACTO */
-        .contact-section { background-color: #e9ecef; padding: 50px 20px; border-radius: 15px; text-align: center; margin-top: 40px; }
-        .contact-info { background: white; padding: 20px; border-radius: 10px; display: inline-block; margin: 20px auto; text-align: left; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .contact-info p { margin: 10px 0; font-size: 16px; }
-        .contact-info a { color: #1a2c5b; font-weight: bold; text-decoration: none; }
-
-        /* FOOTER */
-        footer { background-color: #1a2c5b; color: #ccc; padding: 40px 0; text-align: center; font-size: 0.9em; margin-top: 50px; }
-        footer a { color: white; text-decoration: none; margin: 0 10px; }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .hero-section h1 { font-size: 32px; }
-            .mockup-large { width: 100%; }
-            .mockup-small { width: 45%; }
+        /* Nuevo estilo para el contenedor del logo */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Espacio entre el logo y el texto */
         }
-    </style>
-
-    <script>
-        // TEXTOS QUE CAMBIAN AL INSTANTE (Hero y Títulos fijos)
-        const staticText = {
-            es: { h1: "Aprenda Idiomas con Juegos Mentales", p: "Entrenamiento Neuro-Lingüístico e IA.", cta: "¡Empezar Ahora!", video: "Demo del Motor de IA", mockup_t: "Metodología 'Bridge'", mockup_p: "Juego complejo + Corrección Lingüística." },
-            en: { h1: "Learn Languages with Mind Games", p: "Neuro-Linguistic Training & AI.", cta: "Start Now!", video: "AI Engine Demo", mockup_t: "'Bridge' Methodology", mockup_p: "Complex gaming + Linguistic Correction." },
-            zh: { h1: "通過腦力遊戲學習語言", p: "神經語言學訓練與人工智能。", cta: "立即開始！", video: "AI演示", mockup_t: "“橋樑”方法論", mockup_p: "複雜遊戲 + 語言校正。" },
-            ar: { h1: "تعلم اللغات بألعاب العقل", p: "التدريب العصبي اللغوي والذكاء الاصطناعي.", cta: "ابدأ الآن!", video: "عرض الذكاء الاصطناعي", mockup_t: "منهجية الجسر", mockup_p: "الألعاب المعقدة + التصحيح اللغوي." },
-            ja: { h1: "思考ゲームで言語学習", p: "ニューロ言語トレーニングとAI。", cta: "今すぐ開始！", video: "AIデモ", mockup_t: "「ブリッジ」方法論", mockup_p: "複雑なゲーム + 言語補正。" },
-            de: { h1: "Sprachen lernen mit Denkspielen", p: "Neurolinguistik und KI.", cta: "Jetzt starten!", video: "KI-Demo", mockup_t: "Die 'Bridge'-Methodik", mockup_p: "Komplexes Spiel + Sprachkorrektur." },
-            it: { h1: "Impara le Lingue con Giochi Mentali", p: "Neuro-Linguistica e IA.", cta: "Inizia Ora!", video: "Demo IA", mockup_t: "Metodologia 'Bridge'", mockup_p: "Gioco complesso + Correzione linguistica." },
-            fr: { h1: "Apprenez les Langues avec des Jeux Mentaux", p: "Neurolinguistique et IA.", cta: "Commencer Maintenant!", video: "Démo IA", mockup_t: "Méthodologie 'Bridge'", mockup_p: "Jeu complexe + Correction linguistique." }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const buttons = document.querySelectorAll('.language-switcher button');
-            const contents = document.querySelectorAll('.lang-content');
-            const body = document.body;
-
-            // Función para cambiar idioma
-            window.setLanguage = (lang) => {
-                // 1. Activar botón visualmente
-                buttons.forEach(btn => btn.classList.remove('active'));
-                document.querySelector(`button[data-lang="${lang}"]`).classList.add('active');
-
-                // 2. Mostrar contenido específico del idioma y ocultar los demás
-                contents.forEach(div => {
-                    div.classList.remove('active-content');
-                    if (div.id === lang) div.classList.add('active-content');
-                });
-
-                // 3. Cambiar textos fijos de la cabecera
-                const t = staticText[lang] || staticText['es'];
-                document.getElementById('hero-h1').innerText = t.h1;
-                document.getElementById('hero-p').innerText = t.p;
-                document.getElementById('cta-main').innerText = t.cta;
-                document.getElementById('video-title').innerText = t.video;
-                document.getElementById('mockup-title').innerText = t.mockup_t;
-                document.getElementById('mockup-p').innerText = t.mockup_p;
-
-                // 4. Dirección para Árabe
-                body.style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
-            };
-
-            // Event listeners para botones de idioma
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
-            });
-
-            // LOGICA DEL BOTÓN "EMPEZAR AHORA" PARA BAJAR AL CONTACTO
-            document.getElementById('cta-main').addEventListener('click', (e) => {
-                e.preventDefault();
-                // Buscar el div del idioma que está activo actualmente
-                const activeDiv = document.querySelector('.lang-content.active-content');
-                if (activeDiv) {
-                    // Buscar la sección de contacto DENTRO de ese idioma
-                    const contactSection = activeDiv.querySelector('.contact-section');
-                    if (contactSection) {
-                        contactSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-
-            // Iniciar en español
-            setLanguage('es');
-        });
-    </script>
-</head>
-
-<body>
-
-    <div class="main-header">
-        <div class="logo-text">BridgeMind</div>
-        <div class="language-switcher">
-            <button data-lang="es" class="active">ES</button>
-            <button data-lang="en">EN</button>
-            <button data-lang="zh">中文</button>
-            <button data-lang="ar">عربي</button>
-            <button data-lang="ja">JP</button>
-            <button data-lang="de">DE</button>
-            <button data-lang="it">IT</button>
-            <button data-lang="fr">FR</button>
-        </div>
-    </div>
-
-    <div class="age-message-container">
-        <h2>¡TECNOLOGÍA NEURO-LINGÜÍSTICA APLICADA!</h2>
-    </div>
-
-    <div class="hero-section">
-        <h1 id="hero-h1">Aprenda Idiomas con Juegos Mentales</h1>
-        <p id="hero-p">Entrenamiento Neuro-Lingüístico e IA.</p>
-        <a href="#" class="cta-button" id="cta-main">¡Empezar Ahora!</a>
-    </div>
-
-    <div class="container">
         
-        <div class="section">
-            <h2 class="section-title" id="video-title">Demostración en Video</h2>
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <iframe src="https://www.youtube.com/embed/-GsNUw_JS9w" allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
+        /* Estilo para tu logo de imagen */
+        .logo-image {
+            height: 40px; /* Tamaño del logo */
+            width: auto;
+            object-fit: contain;
+        }
 
-        <div class="mockup-section">
-            <h2 id="mockup-title">La Metodología del 'Bridge'</h2>
-            <p id="mockup-p">Juego complejo + Corrección Lingüística.</p>
-            <div class="mockup-grid">
-                <img src="1.jpeg" alt="App Screen 1" class="mockup-large">
-                <img src="2.jpeg" alt="App Screen 2" class="mockup-small">
-                <img src="3.jpg" alt="App Screen 3" class="mockup-small">
-            </div>
-        </div>
+        .logo-text { font-size: 24px; font-weight: 800; color: #1a2c5b; }                 
+        
+        /* SELECTOR DE IDIOMAS */        
+        .language-switcher { text-align: center; padding: 10px 0; background-color: #f8f8f8; border-bottom: 1px solid #eee; display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }        
+        .language-switcher button { background: none; border: 1px solid #ccc; cursor: pointer; font-size: 13px; padding: 5px 10px; border-radius: 20px; transition: all 0.2s; }        
+        .language-switcher button:hover { background-color: #e0e0e0; }        
+        .language-switcher .active { background-color: #1a2c5b; color: white; border-color: #1a2c5b; font-weight: bold; }                
+        
+        /* OCULTAR/MOSTRAR CONTENIDO */        
+        .lang-content { display: none; }        
+        .lang-content.active-content { display: block; animation: fadeIn 0.5s; }        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* HERO SECTION */        
+        .hero-section { background: linear-gradient(135deg, #1a2c5b, #0e1e40); color: #fff; padding: 100px 5%; text-align: center; margin-bottom: 40px; }        
+        .hero-section h1 { font-size: 42px; margin-bottom: 20px; font-weight: 800; line-height: 1.2; }        
+        .hero-section p { font-size: 20px; opacity: 0.9; margin-bottom: 40px; font-weight: 400; max-width: 800px; margin-left: auto; margin-right: auto; }                
+        
+        /* BOTÓN DE ACCIÓN (CTA) */        
+        .cta-button { background-color: #e54a4a; color: white; padding: 15px 40px; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 18px; transition: transform 0.2s, background-color 0.2s; box-shadow: 0 4px 15px rgba(229, 74, 74, 0.4); display: inline-block; cursor: pointer; border: none; }        
+        .cta-button:hover { background-color: #c93b3b; transform: translateY(-2px); }
+        
+        /* BANNER ROJO */        
+        .age-message-container { text-align: center; padding: 20px 0; background-color: #e54a4a; color: white; font-weight: bold; }        
+        .age-message-container h2 { font-size: 1.5em; margin: 0; }
+        
+        /* SECCIONES */        
+        .mockup-section { padding: 40px 0; text-align: center; background-color: #fff; }        
+        .section-title { text-align: center; margin: 40px 0 30px; font-size: 2em; color: #1a2c5b; font-weight: 700; text-transform: uppercase; }                
+        
+        /* IMÁGENES - CORRECCIÓN CLAVE: Uso de CSS Grid para ordenar las fotos */        
+        .mockup-grid { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; /* 2 columnas principales */
+            gap: 20px; 
+            margin-top: 30px; 
+            max-width: 900px; /* Ancho máximo para el grid */
+            margin-left: auto;
+            margin-right: auto;
+        }        
 
-        <div class="lang-content active-content" id="es">
-            <h2 class="section-title">NUESTROS PILARES</h2>
-            <div class="card-container">
-                <div class="card"><span class="card-icon">🎮</span><h3>Juego Activo e IA</h3><p>La IA adapta la dificultad en tiempo real.</p></div>
-                <div class="card"><span class="card-icon">🧠</span><h3>Retorno Cognitivo</h3><p>Mejora memoria, lógica y velocidad.</p></div>
-                <div class="card"><span class="card-icon">🏫</span><h3>Para Centros</h3><p>Diagnóstico de rendimiento cerebral.</p></div>
-            </div>
-            <div class="contact-section">
-                <h2>¡HABLEMOS!</h2>
-                <p>Contáctenos para planes educativos o inversión.</p>
-                <div class="contact-info">
-                    <p>📧 <a href="mailto:bridgemindgames@gmail.com">bridgemindgames@gmail.com</a></p>
-                    <p>📞 <a href="https://wa.me/34634268663" target="_blank">+34 634268663 (WhatsApp)</a></p>
-                </div>
-                <br><br>
-                <a href="https://wa.me/34634268663" target="_blank" class="cta-button">CONTACTAR POR WHATSAPP</a>
-            </div>
-        </div>
+        /* La columna derecha contendrá las 2 imágenes pequeñas */
+        .small-mockups-container {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+        }
 
-        <div class="lang-content" id="en">
-            <h2 class="section-title">OUR PILLARS</h2>
-            <div class="card-container">
-                <div class="card"><span class="card-icon">🎮</span><h3>Active Gameplay</h3><p>AI adapts difficulty in real-time.</p></div>
-                <div class="card"><span class="card-icon">🧠</span><h3>Cognitive Return</h3><p>Improves memory, logic, and speed.</p></div>
-                <div class="card"><span class="card-icon">🏫
+        .mockup-grid img, .small-mockups-container img { 
+            border-radius: 10px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            width: 100%; 
+            height: 100%; /* Ocupa la altura disponible */
+            object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+        }
+
+        /* Aseguramos que la grande y las pequeñas tengan una altura total similar */
+        .mockup-large { 
+            height: 720px; /* Altura de referencia */
+        }
+        
+        /* VIDEO */        
+        .video-container { max-width: 800px; margin: 0 auto 50px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }        
+        .video-placeholder { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }        
+        .video-placeholder iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }                
+        
+        /* TARJETAS */        
+        .card-container { display: flex
