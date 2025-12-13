@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -67,7 +67,7 @@
 </head>
 <body>
     <header id="mainHeader">
-        <img src="img/bmg.jpg" alt="BridgeMind Logo" class="logo">
+        <img src="bmg.jpg" alt="BridgeMind Logo" class="logo">
         <div class="banderas">
             <button class="bandera" onclick="cambiarIdioma('es')"><span class="flag-icon flag-icon-es"></span> ES</button>
             <button class="bandera" onclick="cambiarIdioma('en')"><span class="flag-icon flag-icon-gb"></span> EN</button>
@@ -85,15 +85,15 @@
         <p id="descripcion" style="text-align:center;">Neuro-Lingüística e IA para todas las edades.</p>
         
         <div class="imagenes">
-            <img src="img/1.jpeg" alt="Juegos de niños" id="img1">
-            <img src="img/2.jpeg" alt="Juegos de adultos" id="img2">
-            <img src="img/3.jpg" alt="Collage de educación" id="img3">
-            <img src="img/esbr.jpg" alt="España" id="img4">
+            <img src="1.jpeg" alt="Juegos de niños" id="img1">
+            <img src="2.jpeg" alt="Juegos de adultos" id="img2">
+            <img src="3.jpg" alt="Collage de educación" id="img3">
+            <img src="esbr.jpg" alt="España" id="img4">
         </div>
         
         <div class="video-container">
             <video controls id="videoPrincipal">
-                <source id="videoSrc" src="vid/esp.mp4" type="video/mp4">
+                <source id="videoSrc" src="esp.mp4" type="video/mp4">
                 Tu navegador no soporta video.
             </video>
             <p id="mensajeVideo" style="display:none; color:#856404;">Video no disponible</p>
@@ -132,10 +132,28 @@
         <p>BridgeMind Education © 2024</p>
     </footer>
 
+    <!-- CHATBOT 24/7 -->
+    <script>
+        window.botpressWebChat.init({
+            host: 'https://cdn.botpress.cloud/webchat/v2',
+            botId: '1e648085-d4da-43ea-bc5d-2b6e4b0aa88a',
+            clientId: '1e648085-d4da-43ea-bc5d-2b6e4b0aa88a',
+            theme: {
+                primaryColor: '#007bff',
+                secondaryColor: '#0056b3',
+                backgroundColor: '#ffffff'
+            },
+            position: 'bottom-right',
+            persistentMenu: ['preguntas-frecuentes', 'agendar-cita', 'juego-demo'],
+            language: 'auto'
+        });
+    </script>
+    <script src="https://cdn.botpress.cloud/webchat/v2/js/botpress.js"></script>
+
     <script>
         // ========== CONFIGURACIÓN GOOGLE SHEETS ==========
-        // ¡¡IMPORTANTE!! REEMPLAZA ESTA URL POR LA NUEVA DE TU GOOGLE SCRIPT
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywK8LSqrwN18umgJtV4uaNPi7sDvF1tR0gOcoN_T6CV4KHHIpYcaBQbl0cyAaCdsNF/exec";
+        // ⚠️ REEMPLAZA ESTA URL POR LA TUYA
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR2QsiF4-OQr5LkpyAN2sLOLUO35l2bWJik2HDk9pbJxceKipZbETsVnTJfT1sW1tU/exec";
         
         // ========== HEADER FIJO - EFECTO SCROLL ==========
         window.addEventListener('DOMContentLoaded', function() {
@@ -160,9 +178,10 @@
                 tituloForm: "Contacto para organizaciones",
                 label1: "Organización", label2: "Sector", label3: "Empleados", label4: "País",
                 label5: "Contacto", label6: "Email", label7: "Teléfono", label8: "Comentarios",
-                boton: "Enviar consulta", exito: "✅ ¡Enviado!", error: "❌ Error al enviar",
+                boton: "Enviar consulta", exito: "✅ ¡Enviado! Los datos se guardaron en Google Sheets.",
+                error: "❌ Error al enviar. Intente nuevamente o contacte directamente.",
                 contacto: "Contacto: bridgemindgames@gmail.com",
-                video: "vid/esp.mp4", img4: "img/esbr.jpg"
+                video: "esp.mp4", img4: "esbr.jpg"
             },
             en: {
                 titulo: "Learn Languages with Mind Games: Neuro-Linguistics and AI",
@@ -173,9 +192,10 @@
                 tituloForm: "Contact for organizations",
                 label1: "Organization", label2: "Sector", label3: "Employees", label4: "Country",
                 label5: "Contact", label6: "Email", label7: "Phone", label8: "Comments",
-                boton: "Send inquiry", exito: "✅ Sent!", error: "❌ Send error",
+                boton: "Send inquiry", exito: "✅ Sent! Data saved to Google Sheets.",
+                error: "❌ Send error. Please try again or contact directly.",
                 contacto: "Contact: bridgemindgames@gmail.com",
-                video: "vid/aus.mp4", img4: "img/enbr.jpg"
+                video: "aus.mp4", img4: "enbr.jpg"
             },
             fr: {
                 titulo: "Apprenez des langues avec des jeux cérébraux",
@@ -186,9 +206,10 @@
                 tituloForm: "Contact pour organisations",
                 label1: "Organisation", label2: "Secteur", label3: "Employés", label4: "Pays",
                 label5: "Contact", label6: "Email", label7: "Téléphone", label8: "Commentaires",
-                boton: "Envoyer demande", exito: "✅ Envoyé!", error: "❌ Erreur d'envoi",
+                boton: "Envoyer demande", exito: "✅ Envoyé! Données sauvegardées dans Google Sheets.",
+                error: "❌ Erreur d'envoi. Veuillez réessayer ou contacter directement.",
                 contacto: "Contact : bridgemindgames@gmail.com",
-                video: "vid/fra.mp4", img4: "img/frbr.jpg"
+                video: "fra.mp4", img4: "frbr.jpg"
             },
             de: {
                 titulo: "Sprachen lernen mit Gedankenspielen",
@@ -199,9 +220,10 @@
                 tituloForm: "Kontakt für Organisationen",
                 label1: "Organisation", label2: "Branche", label3: "Mitarbeiter", label4: "Land",
                 label5: "Kontakt", label6: "E-Mail", label7: "Telefon", label8: "Kommentare",
-                boton: "Anfrage senden", exito: "✅ Gesendet!", error: "❌ Sende-Fehler",
+                boton: "Anfrage senden", exito: "✅ Gesendet! Daten in Google Sheets gespeichert.",
+                error: "❌ Sende-Fehler. Bitte erneut versuchen oder direkt kontaktieren.",
                 contacto: "Kontakt: bridgemindgames@gmail.com",
-                video: "vid/ale.mp4", img4: "img/alebr.jpg"
+                video: "ale.mp4", img4: "alebr.jpg"
             },
             it: {
                 titulo: "Imparare le lingue con giochi mentali",
@@ -212,9 +234,10 @@
                 tituloForm: "Contatto per organizzazioni",
                 label1: "Organizzazione", label2: "Settore", label3: "Dipendenti", label4: "Paese",
                 label5: "Contatto", label6: "Email", label7: "Telefono", label8: "Commenti",
-                boton: "Invia richiesta", exito: "✅ Inviato!", error: "❌ Errore invio",
+                boton: "Invia richiesta", exito: "✅ Inviato! Dati salvati in Google Sheets.",
+                error: "❌ Errore invio. Riprovare o contattare direttamente.",
                 contacto: "Contatto: bridgemindgames@gmail.com",
-                video: "vid/ita.mp4", img4: "img/itabr.jpg"
+                video: "ita.mp4", img4: "itabr.jpg"
             },
             jp: {
                 titulo: "頭脳ゲームで言語を学ぶ",
@@ -225,9 +248,10 @@
                 tituloForm: "組織向けお問い合わせ",
                 label1: "組織", label2: "セクター", label3: "従業員", label4: "国",
                 label5: "連絡先", label6: "メール", label7: "電話", label8: "コメント",
-                boton: "お問い合わせ", exito: "✅ 送信済み!", error: "❌ 送信エラー",
+                boton: "お問い合わせ", exito: "✅ 送信済み! データをGoogle Sheetsに保存しました。",
+                error: "❌ 送信エラー。もう一度お試しいただくか、直接お問い合わせください。",
                 contacto: "お問い合わせ: bridgemindgames@gmail.com",
-                video: "vid/jap.mp4", img4: "img/jpnbrg.jpg"
+                video: "jap.mp4", img4: "jpnbrg.jpg"
             },
             zh: {
                 titulo: "通过智力游戏学习语言",
@@ -238,9 +262,10 @@
                 tituloForm: "组织联系",
                 label1: "组织", label2: "行业", label3: "员工", label4: "国家",
                 label5: "联系人", label6: "邮箱", label7: "电话", label8: "评论",
-                boton: "发送咨询", exito: "✅ 已发送!", error: "❌ 发送错误",
+                boton: "发送咨询", exito: "✅ 已发送! 数据已保存到Google Sheets。",
+                error: "❌ 发送错误。请重试或直接联系。",
                 contacto: "联系方式: bridgemindgames@gmail.com",
-                video: "vid/chn.mp4", img4: "img/shbr.jpg"
+                video: "chn.mp4", img4: "shbr.jpg"
             },
             ar: {
                 titulo: "تعلم اللغات بألعاب العقل",
@@ -251,9 +276,10 @@
                 tituloForm: "اتصال للمنظمات",
                 label1: "منظمة", label2: "قطاع", label3: "موظفين", label4: "بلد",
                 label5: "اتصال", label6: "بريد إلكتروني", label7: "هاتف", label8: "تعليقات",
-                boton: "إرسال استفسار", exito: "✅ تم الإرسال!", error: "❌ خطأ في الإرسال",
+                boton: "إرسال استفسار", exito: "✅ تم الإرسال! تم حفظ البيانات في Google Sheets.",
+                error: "❌ خطأ في الإرسال. يرجى المحاولة مرة أخرى أو الاتصال مباشرة.",
                 contacto: "للتواصل: bridgemindgames@gmail.com",
-                video: "vid/ara.mp4", img4: "img/dubr.jpg"
+                video: "ara.mp4", img4: "dubr.jpg"
             }
         };
 
@@ -311,7 +337,7 @@
             localStorage.setItem('idioma', idioma);
         }
 
-        // ========== FORMULARIO CORREGIDO QUE SÍ GUARDA EN GOOGLE SHEETS ==========
+        // ========== FORMULARIO QUE SÍ FUNCIONA ==========
         document.getElementById('formulario').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -345,7 +371,7 @@
             boton.disabled = true;
             
             try {
-                // Preparar datos COMO JSON (esto es lo que tu Google Script espera)
+                // Preparar datos
                 const datos = {
                     organizacion: document.getElementById('organizacion').value,
                     sector: document.getElementById('sector').value,
@@ -360,43 +386,32 @@
                     origen: 'BridgeMind Website'
                 };
                 
-                // ENVIAR como JSON (CORRECTO)
+                // Enviar (VERSIÓN SIMPLE QUE FUNCIONA)
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify(datos)
                 });
                 
-                // Leer respuesta del servidor
                 const resultado = await response.json();
                 
                 if (resultado.success) {
-                    // ÉXITO: Mostrar mensaje según idioma
-                    mensaje.textContent = traducciones[idioma].exito + " " + (resultado.message || "");
+                    mensaje.textContent = traducciones[idioma].exito;
                     mensaje.className = "exito";
                     mensaje.style.display = "block";
-                    
-                    // Limpiar formulario
-                    this.reset();
+                    this.reset(); // Limpiar formulario
                 } else {
-                    // ERROR del servidor
                     throw new Error(resultado.message || 'Error del servidor');
                 }
                 
             } catch (error) {
-                console.error('Error completo:', error);
-                // Mostrar error según idioma
-                mensaje.textContent = traducciones[idioma].error + " - " + (error.message || "Intente nuevamente");
+                console.error('Error:', error);
+                mensaje.textContent = traducciones[idioma].error;
                 mensaje.className = "error";
                 mensaje.style.display = "block";
             } finally {
-                // Restaurar botón
                 boton.textContent = traducciones[idioma].boton;
                 boton.disabled = false;
                 
-                // Ocultar mensaje después de 5 segundos
                 setTimeout(() => {
                     mensaje.style.display = "none";
                 }, 5000);
