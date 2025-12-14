@@ -382,11 +382,10 @@
                     email: email,
                     telefono: document.getElementById('telefono').value || "",
                     comentarios: document.getElementById('comentarios').value || "",
-                    idioma: idioma,
-                    origen: 'BridgeMind Website'
+                idioma: 'es',                    origen: 'BridgeMind Website'
                 };
                 
-                // Enviar (VERSIÓN SIMPLE QUE FUNCIONA)
+                // Enviar (VERSIÓN SIMPLE QUE F'es',
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify(datos)
@@ -423,4 +422,5 @@
     </script>
 </body>
 </html>
+
 
