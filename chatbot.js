@@ -5,7 +5,7 @@
 
 (function() {
     // 🔑 COLOCA TU API KEY DE GEMINI AQUÍ:
-    const GEMINI_API_KEY = 'TU_API_KEY_AQUI'; // ← REEMPLAZA ESTO
+    const GEMINI_API_KEY = 'AIzaSyDDZsV69Pp3mIHyba4liiEMKTHZa1MIMpI'; // ← REEMPLAZA ESTO
     
     // Variable global de idioma
     let currentLanguage = 'es';
