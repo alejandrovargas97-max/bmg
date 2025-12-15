@@ -5,7 +5,7 @@
 
 (function() {
     // 🔑 COLOCA TU API KEY DE GEMINI AQUÍ:
-    const GEMINI_API_KEY = 'AIzaSyDDZsV69Pp3mIHyba4liiEMKTHZa1MIMpI'; // ← REEMPLAZA ESTO
+    const GEMINI_API_KEY = 'TU_API_KEY_AQUI'; // ← REEMPLAZA ESTO
     
     // Variable global de idioma
     let currentLanguage = 'es';
@@ -15,30 +15,29 @@
     // =============================================
     
     function detectLanguageButtons() {
-        // Busca los botones de idioma en tu sitio
-        const languageButtons = document.querySelectorAll('.language-selector button, nav button');
-        
-        languageButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const buttonText = this.textContent.trim().toUpperCase();
-                
-                // Mapeo de códigos de idioma
-                const langMap = {
-                    'ES': 'es',
-                    'EN': 'en',
-                    'FR': 'fr',
-                    'DE': 'de',
-                    'IT': 'it',
-                    'JP': 'ja',
-                    'ZH': 'zh',
-                    'AR': 'ar'
-                };
-                
-                if (langMap[buttonText]) {
-                    currentLanguage = langMap[buttonText];
-                    console.log('Idioma detectado:', currentLanguage);
-                }
-            });
+        // Detecta clics en CUALQUIER botón del sitio
+        document.addEventListener('click', function(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+            
+            const buttonText = button.textContent.trim().toUpperCase();
+            
+            // Mapeo de códigos de idioma
+            const langMap = {
+                'ES': 'es',
+                'EN': 'en',
+                'FR': 'fr',
+                'DE': 'de',
+                'IT': 'it',
+                'JP': 'ja',
+                'ZH': 'zh',
+                'AR': 'ar'
+            };
+            
+            if (langMap[buttonText]) {
+                currentLanguage = langMap[buttonText];
+                console.log('✅ Idioma del chatbot cambiado a:', currentLanguage);
+            }
         });
     }
     
@@ -317,10 +316,9 @@ Tono professionale ed entusiasta.`,
         }
         
         #bmg-chat-btn img {
-            width: 100%;
-            height: 100%;
+            width: 45px;
+            height: 45px;
             object-fit: contain;
-            filter: brightness(0) invert(1);
         }
         
         #bmg-chat-box {
