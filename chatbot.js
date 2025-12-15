@@ -1,0 +1,91 @@
+(function() {
+    var style = document.createElement('style');
+    style.textContent = `
+        #chat-btn {position:fixed;bottom:20px;right:20px;width:60px;height:60px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;display:flex;align-items:center;justify-content:center;}
+        #chat-box {position:fixed;bottom:90px;right:20px;width:360px;height:500px;background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none;flex-direction:column;z-index:9998;}
+        #chat-box.show {display:flex;}
+        .chat-header {background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;}
+        .chat-body {flex:1;overflow-y:auto;padding:20px;background:#f8f9fa;}
+        .msg {margin-bottom:16px;display:flex;}
+        .msg.bot {justify-content:flex-start;}
+        .msg.user {justify-content:flex-end;}
+        .msg-txt {max-width:75%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.4;}
+        .msg.bot .msg-txt {background:white;box-shadow:0 2px 4px rgba(0,0,0,0.1);}
+        .msg.user .msg-txt {background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+    `;
+    document.head.appendChild(style);
+
+    var html = `
+        <button id="chat-btn">
+            <svg viewBox="0 0 24 24" style="width:30px;height:30px;fill:white;">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+            </svg>
+        </button>
+        <div id="chat-box">
+            <div class="chat-header">
+                <div>
+                    <h3 style="margin:0;font-size:18px;">BridgeMind Assistant</h3>
+                    <div style="font-size:12px;opacity:0.9;">Online</div>
+                </div>
+                <button onclick="document.getElementById('chat-box').classList.remove('show')" style="background:none;border:none;color:white;font-size:28px;cursor:pointer;line-height:1;">×</button>
+            </div>
+            <div class="chat-body" id="msgs"></div>
+            <div style="padding:16px;background:white;border-top:1px solid #e0e0e0;display:flex;gap:8px;">
+                <input type="text" id="chat-inp" placeholder="Escribe tu mensaje..." style="flex:1;border:2px solid #e0e0e0;border-radius:24px;padding:12px 16px;font-size:14px;outline:none;">
+                <button onclick="window.sendChatMsg()" style="background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:white;width:44px;height:44px;border-radius:50%;cursor:pointer;">▶</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    document.getElementById('chat-btn').onclick = function() {
+        var box = document.getElementById('chat-box');
+        box.classList.toggle('show');
+        if (box.classList.contains('show') && !window.chatStarted) {
+            setTimeout(function() {
+                addChatMsg('¡Hola! 👋 Soy el asistente de BridgeMind Education.\n\n¿En qué puedo ayudarte?', 'bot');
+                window.chatStarted = true;
+            }, 300);
+        }
+    };
+
+    function addChatMsg(text, type) {
+        var msgs = document.getElementById('msgs');
+        var div = document.createElement('div');
+        div.className = 'msg ' + type;
+        var txt = document.createElement('div');
+        txt.className = 'msg-txt';
+        txt.innerHTML = text.replace(/\n/g, '<br>');
+        div.appendChild(txt);
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    window.sendChatMsg = function() {
+        var inp = document.getElementById('chat-inp');
+        var msg = inp.value.trim();
+        if (!msg) return;
+        
+        addChatMsg(msg, 'user');
+        inp.value = '';
+        
+        setTimeout(function() {
+            var resp = '¡Gracias! 🎉\n\nContáctanos:\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com';
+            
+            if (msg.toLowerCase().includes('demo')) {
+                resp = '¡Excelente! 🎉\n\nDemo GRATUITA incluye:\n• 1 día completo\n• 4 participantes\n• Aprenden Bridge\n\n📱 WhatsApp: +34 634 268 663';
+            } else if (msg.toLowerCase().includes('info') || msg.toLowerCase().includes('qué')) {
+                resp = 'BridgeMind enseña idiomas con Bridge 🃏\n\n• 4 alumnos/mesa\n• 6 horas/semana\n• Programa de 1 año\n\nContacto:\n📱 +34 634 268 663';
+            } else if (msg.toLowerCase().includes('humano') || msg.toLowerCase().includes('persona')) {
+                resp = '¡Por supuesto! 👤\n\nHabla con nosotros:\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com';
+            }
+            
+            addChatMsg(resp, 'bot');
+        }, 800);
+    };
+
+    document.getElementById('chat-inp').onkeypress = function(e) {
+        if (e.key === 'Enter') window.sendChatMsg();
+    };
+})();
