@@ -1,5 +1,5 @@
 (function(){
-const k='TU_API_KEY_AQUI';
+const k='AIzaSyDDZsV69Pp3mIHyba4liiEMKTHZa1MIMpI';
 const e='bridgemindgames@gmail.com';
 let l=null,h=[],u=null,b=false;
 
@@ -7,6 +7,7 @@ function init(){
 u=localStorage.getItem('bmg_u')||'u'+Date.now();
 localStorage.setItem('bmg_u',u);
 l=localStorage.getItem('bmg_l');
+  
 const s=localStorage.getItem('bmg_h'+u);
 if(s)try{h=JSON.parse(s)}catch(e){}
 }
