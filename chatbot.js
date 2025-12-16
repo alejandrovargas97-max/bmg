@@ -1,136 +1,44 @@
-function showContactForm(type) {
-    const labels = {
-        es: { name: 'Nombre', email: 'Email', phone: 'Teléfono', message: 'Mensaje', submit: 'Enviar' },
-        en: { name: 'Name', email: 'Email', phone: 'Phone', message: 'Message', submit: 'Send' },
-        fr: { name: 'Nom', email: 'Email', phone: 'Téléphone', message: 'Message', submit: 'Envoyer' },
-        de: { name: 'Name', email: 'Email', phone: 'Telefon', message: 'Nachricht', submit: 'Senden' },
-        it: { name: 'Nome', email: 'Email', phone: 'Telefono', message: 'Messaggio', submit: 'Invia' },
-        ja: { name: '名前', email: 'メール', phone: '電話', message: 'メッセージ', submit: '送信' },
-        zh: { name: '姓名', email: '邮箱', phone: '电话', message: '留言', submit: '发送' },
-        ar: { name: 'الاسم', email: 'البريد', phone: 'الهاتف', message: 'الرسالة', submit: 'إرسال' }
-    };
-    
-    const l = labels[selectedLang] || labels.es;
-    
-    const div = document.createElement('div');
-    div.className = 'bmg-msg bot';
-    div.innerHTML = `
-        <div class="bmg-form">
-            <input type="text" id="bmg-form-name" placeholder="${l.name}">
-            <input type="email" id="bmg-form-email" placeholder="${l.email}">
-            <input type="tel" id="bmg-form-phone" placeholder="${l.phone}">
-            <textarea id="bmg-form-msg" placeholder="${l.message}" rows="3"></textarea>
-            <button onclick="window.bmgSubmitForm('${type}')">${l.submit}</button>
-        </div>
-    `;
-    
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
+(function(){
+const k='TU_API_KEY_AQUI';
+const e='bridgemindgames@gmail.com';
+let l=null,h=[],u=null,b=false;
+
+function init(){
+u=localStorage.getItem('bmg_u')||'u'+Date.now();
+localStorage.setItem('bmg_u',u);
+l=localStorage.getItem('bmg_l');
+const s=localStorage.getItem('bmg_h'+u);
+if(s)try{h=JSON.parse(s)}catch(e){}
 }
 
-window.bmgSubmitForm = async function(type) {
-    const name = document.getElementById('bmg-form-name').value;
-    const email = document.getElementById('bmg-form-email').value;
-    const phone = document.getElementById('bmg-form-phone').value;
-    const message = document.getElementById('bmg-form-msg').value;
-    
-    if (!name || !email) {
-        alert('Por favor completa nombre y email / Please fill name and email');
-        return;
-    }
-    
-    await sendNotification(type, { name, email, phone, message });
-    
-    const confirmations = {
-        es: '✅ ¡Perfecto! Te contactaremos pronto.\n\n📱 WhatsApp: +34 634 268 663\n💬 WeChat: +34 634 268 663\n📲 Telegram: +34 634 268 663',
-        en: '✅ Perfect! We\'ll contact you soon.\n\n📱 WhatsApp: +34 634 268 663\n💬 WeChat: +34 634 268 663\n📲 Telegram: +34 634 268 663'
-    };
-    
-    add(confirmations[selectedLang] || confirmations.es, 'bot');
+function save(){
+if(l)localStorage.setItem('bmg_l',l);
+if(h.length)localStorage.setItem('bmg_h'+u,JSON.stringify(h))
+}
+
+async function notify(t,d){
+const hh=new Date().getHours();
+if(hh<8||hh>23)return;
+const subj=t==='human'?'🔴 Cliente':'📅 Reunión';
+const msg=`Usuario:${u}\nIdioma:${l}\n\nNombre:${d.n}\nEmail:${d.e}\nTel:${d.p}\nMsg:${d.m}`;
+const fd=new FormData();
+fd.append('_subject',subj);
+fd.append('message',msg);
+try{await fetch(`https://formsubmit.co/${e}`,{method:'POST',body:fd})}catch(er){}
+}
+
+const info={
+es:`Asistente BridgeMind. ESPAÑOL. Enseñamos idiomas con Bridge. 4/mesa,6h/sem,1año. Demo gratis. Contrato anual,pago mensual. Costos:fundador en reunión. Contacto:+34 634 268 663. 8-23h España`,
+en:`BridgeMind assistant. ENGLISH. Languages via Bridge. 4/table,6h/wk,1yr. Free demo. Annual contract,monthly pay. Costs:founder in meeting. Contact:+34 634 268 663. 8-23h Spain`,
+fr:`Assistant BridgeMind. FRANÇAIS. Langues par Bridge. Contact:+34 634 268 663`,
+de:`BridgeMind Assistent. DEUTSCH. Sprachen durch Bridge. Kontakt:+34 634 268 663`,
+it:`Assistente BridgeMind. ITALIANO. Lingue con Bridge. Contatto:+34 634 268 663`,
+ja:`BridgeMindアシスタント。日本語。ブリッジで言語。連絡先:+34 634 268 663`,
+zh:`BridgeMind助手。中文。桥牌教语言。联系:+34 634 268 663`,
+ar:`مساعد BridgeMind. العربية. لغات بالبريدج. اتصال:+34 634 268 663`
 };
 
-function showTyping() {
-    const div = document.createElement('div');
-    div.className = 'bmg-msg bot';
-    div.id = 'bmg-typing';
-    const typing = document.createElement('div');
-    typing.className = 'bmg-typing';
-    typing.innerHTML = '<span></span><span></span><span></span>';
-    div.appendChild(typing);
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
-}
+const css=`#bc{position:fixed;bottom:20px;right:20px;width:70px;height:70px;background:linear-gradient(135deg,#667eea,#764ba2);border:none;border-radius:50%;cursor:pointer;box-shadow:0 4px 20px rgba(102,126,234,.5);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}#bc:hover{transform:scale(1.1)}#bi{font-size:32px}#bt{color:#fff;font-size:11px;font-weight:600}#bx{position:fixed;bottom:100px;right:20px;width:380px;height:600px;background:#fff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.25);display:none;flex-direction:column;z-index:9999}#bx.s{display:flex}.bh{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px}.bb{flex:1;overflow-y:auto;padding:20px;background:#f8f9fa}.m{margin-bottom:16px;display:flex}.m.b{justify-content:flex-start}.m.u{justify-content:flex-end}.mt{max-width:80%;padding:12px 16px;border-radius:18px;font-size:14px}.m.b .mt{background:#fff;color:#2d3748}.m.u .mt{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}`;
 
-function removeTyping() {
-    const t = document.getElementById('bmg-typing');
-    if (t) t.remove();
-}
-
-async function sendMsg() {
-    const msg = inp.value.trim();
-    if (!msg || processing || !selectedLang) return;
-    
-    processing = true;
-    send.disabled = true;
-    
-    add(msg, 'user');
-    inp.value = '';
-    
-    chatHistory.push({ role: 'user', parts: [{ text: msg }] });
-    saveState();
-    
-    showTyping();
-    
-    try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${CONFIG.geminiApiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [
-                    { role: 'user', parts: [{ text: BUSINESS_INFO[selectedLang] }] },
-                    ...chatHistory
-                ],
-                generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
-            })
-        });
-        
-        const data = await res.json();
-        removeTyping();
-        
-        if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-            const reply = data.candidates[0].content.parts[0].text;
-            add(reply, 'bot');
-            chatHistory.push({ role: 'model', parts: [{ text: reply }] });
-            saveState();
-        } else {
-            throw new Error('Invalid response');
-        }
-    } catch (err) {
-        removeTyping();
-        console.error(err);
-        add('Error. Contact: +34 634 268 663', 'bot');
-    }
-    
-    processing = false;
-    send.disabled = false;
-    inp.focus();
-}
-
-// =============================================
-// EVENTOS
-// =============================================
-
-btn.onclick = toggle;
-close.onclick = toggle;
-send.onclick = sendMsg;
-inp.onkeypress = (e) => {
-    if (e.key === 'Enter') sendMsg();
-};
-
-// =============================================
-// INICIALIZACIÓN
-// =============================================
-
-initUser();
-console.log('✅ BridgeMind Chatbot cargado');
-console.log('User ID:', userId);
+console.log('Chatbot cargado - Parte 1/2');
+})();
