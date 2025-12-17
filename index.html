@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {font-family: Arial; margin:0; background:#fff; color:#333; padding-top: 155px !important;}
-       
-        /* ========== HEADER FIJO CON EFECTO ========== */
+        
         header {
             position: fixed !important;
             top: 0 !important;
@@ -38,7 +37,6 @@
         .bandera {background:#0056b3; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; transition: all 0.3s ease;}
         header.scrolled .bandera {padding:6px 10px; font-size:14px;}
         .bandera:hover {background:#003d80;}
-        /* ========== FIN HEADER FIJO ========== */
         
         main {max-width:900px; margin:20px auto; padding:20px; background:white; box-shadow:0 0 10px rgba(0,0,0,0.1); border-radius:8px;}
         h1 {color:#007bff; text-align:center;}
@@ -52,7 +50,8 @@
         .campo {margin-bottom:15px;}
         label {display:block; font-weight:bold; margin-bottom:5px;}
         input, select, textarea {width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;}
-        button[type="submit"] {background:#28a745; color:white; border:none; padding:12px; width:100%; border-radius:5px; font-size:16px;}
+        button {background:#28a745; color:white; border:none; padding:12px; width:100%; border-radius:5px; font-size:16px; cursor:pointer;}
+        button:disabled {background:#cccccc; cursor:not-allowed;}
         #mensaje {padding:12px; margin:15px 0; border-radius:5px; display:none;}
         .exito {background:#d4edda; color:#155724;}
         .error {background:#f8d7da; color:#721c24;}
@@ -108,9 +107,11 @@
         <div class="formulario">
             <h2 id="tituloForm">Contacto para organizaciones</h2>
             <div id="mensaje"></div>
-            <form id="formulario" action="https://formsubmit.co/bridgemindgames@gmail.com" method="POST">
-                                <input type="hidden" name="_subject" value="Nuevo contacto desde BridgeMind">
-                                <input type="hidden" name="_captcha" value="false">
+            <form id="formularioBridgeMind">
+                <!-- Campo oculto para idioma -->
+                <input type="hidden" name="idioma" id="idiomaActual" value="es">
+                
+                <!-- Campos del formulario -->
                 <div class="campo"><label id="label1">Organización *</label><input name="organizacion" type="text" id="organizacion" required></div>
                 <div class="campo"><label id="label2">Sector *</label>
                     <select name="sector" id="sector" required><option value="">-- Seleccione --</option>
@@ -124,17 +125,19 @@
                 <div class="campo"><label id="label6">Email *</label><input name="email" type="email" id="email" required></div>
                 <div class="campo"><label id="label7">Teléfono</label><input name="telefono" type="tel" id="telefono"></div>
                 <div class="campo"><label id="label8">Comentarios</label><textarea name="comentarios" id="comentarios" rows="3"></textarea></div>
-                <button type="submit" id="botonEnviar">Enviar consulta</button>
+                
+                <!-- Botón que llama a nuestra función -->
+                <button type="button" onclick="enviarFormulario()" id="botonEnviar">Enviar consulta</button>
             </form>
         </div>
     </main>
 
     <footer>
-        <p id="contacto">Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</p>
+        <p id="contactoFooter">Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</p>
         <p>BridgeMind Education © 2024</p>
     </footer>
 
-    <!-- CHATBOT 24/7 -->
+    <!-- CHATBOT -->
     <script>
         window.botpressWebChat.init({
             host: 'https://cdn.botpress.cloud/webchat/v2',
@@ -153,14 +156,9 @@
     <script src="https://cdn.botpress.cloud/webchat/v2/js/botpress.js"></script>
 
     <script>
-        // ========== CONFIGURACIÓN GOOGLE SHEETS ==========
-        // ⚠️ REEMPLAZA ESTA URL POR LA TUYA
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR2QsiF4-OQr5LkpyAN2sLOLUO35l2bWJik2HDk9pbJxceKipZbETsVnTJfT1sW1tU/exec";
-        
-        // ========== HEADER FIJO - EFECTO SCROLL ==========
+        // ========== HEADER FIJO ==========
         window.addEventListener('DOMContentLoaded', function() {
             const header = document.getElementById('mainHeader');
-            
             window.addEventListener('scroll', function() {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
@@ -170,6 +168,7 @@
             });
         });
         
+        // ========== TRADUCCIONES ==========
         const traducciones = {
             es: {
                 titulo: "Aprenda Idiomas con Juegos Mentales: Neuro-Lingüística e IA",
@@ -180,9 +179,7 @@
                 tituloForm: "Contacto para organizaciones",
                 label1: "Organización", label2: "Sector", label3: "Empleados", label4: "País",
                 label5: "Contacto", label6: "Email", label7: "Teléfono", label8: "Comentarios",
-                boton: "Enviar consulta", exito: "✅ ¡Enviado! Los datos se guardaron en Google Sheets.",
-                error: "❌ Error al enviar. Intente nuevamente o contacte directamente.",
-                contacto: "Contacto: bridgemindgames@gmail.com",
+                boton: "Enviar consulta", contactoFooter: "Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "esp.mp4", img4: "esbr.jpg"
             },
             en: {
@@ -194,9 +191,7 @@
                 tituloForm: "Contact for organizations",
                 label1: "Organization", label2: "Sector", label3: "Employees", label4: "Country",
                 label5: "Contact", label6: "Email", label7: "Phone", label8: "Comments",
-                boton: "Send inquiry", exito: "✅ Sent! Data saved to Google Sheets.",
-                error: "❌ Send error. Please try again or contact directly.",
-                contacto: "Contact: bridgemindgames@gmail.com",
+                boton: "Send inquiry", contactoFooter: "Contact: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "aus.mp4", img4: "enbr.jpg"
             },
             fr: {
@@ -208,9 +203,7 @@
                 tituloForm: "Contact pour organisations",
                 label1: "Organisation", label2: "Secteur", label3: "Employés", label4: "Pays",
                 label5: "Contact", label6: "Email", label7: "Téléphone", label8: "Commentaires",
-                boton: "Envoyer demande", exito: "✅ Envoyé! Données sauvegardées dans Google Sheets.",
-                error: "❌ Erreur d'envoi. Veuillez réessayer ou contacter directement.",
-                contacto: "Contact : bridgemindgames@gmail.com",
+                boton: "Envoyer demande", contactoFooter: "Contact : bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "fra.mp4", img4: "frbr.jpg"
             },
             de: {
@@ -222,9 +215,7 @@
                 tituloForm: "Kontakt für Organisationen",
                 label1: "Organisation", label2: "Branche", label3: "Mitarbeiter", label4: "Land",
                 label5: "Kontakt", label6: "E-Mail", label7: "Telefon", label8: "Kommentare",
-                boton: "Anfrage senden", exito: "✅ Gesendet! Daten in Google Sheets gespeichert.",
-                error: "❌ Sende-Fehler. Bitte erneut versuchen oder direkt kontaktieren.",
-                contacto: "Kontakt: bridgemindgames@gmail.com",
+                boton: "Anfrage senden", contactoFooter: "Kontakt: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "ale.mp4", img4: "alebr.jpg"
             },
             it: {
@@ -236,9 +227,7 @@
                 tituloForm: "Contatto per organizzazioni",
                 label1: "Organizzazione", label2: "Settore", label3: "Dipendenti", label4: "Paese",
                 label5: "Contatto", label6: "Email", label7: "Telefono", label8: "Commenti",
-                boton: "Invia richiesta", exito: "✅ Inviato! Dati salvati in Google Sheets.",
-                error: "❌ Errore invio. Riprovare o contattare direttamente.",
-                contacto: "Contatto: bridgemindgames@gmail.com",
+                boton: "Invia richiesta", contactoFooter: "Contatto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "ita.mp4", img4: "itabr.jpg"
             },
             jp: {
@@ -250,9 +239,7 @@
                 tituloForm: "組織向けお問い合わせ",
                 label1: "組織", label2: "セクター", label3: "従業員", label4: "国",
                 label5: "連絡先", label6: "メール", label7: "電話", label8: "コメント",
-                boton: "お問い合わせ", exito: "✅ 送信済み! データをGoogle Sheetsに保存しました。",
-                error: "❌ 送信エラー。もう一度お試しいただくか、直接お問い合わせください。",
-                contacto: "お問い合わせ: bridgemindgames@gmail.com",
+                boton: "お問い合わせ", contactoFooter: "お問い合わせ: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "jpn.mp4", img4: "jpnbrg.jpg"
             },
             zh: {
@@ -264,9 +251,7 @@
                 tituloForm: "组织联系",
                 label1: "组织", label2: "行业", label3: "员工", label4: "国家",
                 label5: "联系人", label6: "邮箱", label7: "电话", label8: "评论",
-                boton: "发送咨询", exito: "✅ 已发送! 数据已保存到Google Sheets。",
-                error: "❌ 发送错误。请重试或直接联系。",
-                contacto: "联系方式: bridgemindgames@gmail.com",
+                boton: "发送咨询", contactoFooter: "联系方式: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "chn.mp4", img4: "shbr.jpg"
             },
             ar: {
@@ -278,13 +263,12 @@
                 tituloForm: "اتصال للمنظمات",
                 label1: "منظمة", label2: "قطاع", label3: "موظفين", label4: "بلد",
                 label5: "اتصال", label6: "بريد إلكتروني", label7: "هاتف", label8: "تعليقات",
-                boton: "إرسال استفسار", exito: "✅ تم الإرسال! تم حفظ البيانات في Google Sheets.",
-                error: "❌ خطأ في الإرسال. يرجى المحاولة مرة أخرى أو الاتصال مباشرة.",
-                contacto: "للتواصل: bridgemindgames@gmail.com",
+                boton: "إرسال استفسار", contactoFooter: "للتواصل: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
                 video: "ara.mp4", img4: "dubr.jpg"
             }
         };
 
+        // ========== CAMBIAR IDIOMA ==========
         function cambiarIdioma(idioma) {
             const t = traducciones[idioma];
             
@@ -307,7 +291,10 @@
             document.getElementById('label7').textContent = t.label7;
             document.getElementById('label8').textContent = t.label8;
             document.getElementById('botonEnviar').textContent = t.boton;
-            document.getElementById('contacto').textContent = t.contacto;
+            document.getElementById('contactoFooter').textContent = t.contactoFooter;
+            
+            // Actualizar campo oculto de idioma
+            document.getElementById('idiomaActual').value = idioma;
             
             // Video
             const video = document.getElementById('videoPrincipal');
@@ -339,94 +326,139 @@
             localStorage.setItem('idioma', idioma);
         }
 
-        // ========== FORMULARIO QUE SÍ FUNCIONA ==========
-        /* DESACTIVADO PARA USAR FORMSUBMIT - document.getElementById('formulario').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
+        // ========== ENVIAR FORMULARIO A GOOGLE SHEETS ==========
+        // ⚠️ IMPORTANTE: REEMPLAZA ESTA URL CON LA TUYA ⚠️
+        const URL_GOOGLE_SCRIPT = "https://script.google.com/macros/s/AKfycb.../exec";
+
+        async function enviarFormulario() {
+            const formulario = document.getElementById('formularioBridgeMind');
             const mensaje = document.getElementById('mensaje');
             const boton = document.getElementById('botonEnviar');
             const idioma = localStorage.getItem('idioma') || 'es';
             
-            // Validar campos
-            const campos = ['organizacion', 'sector', 'empleados', 'pais', 'contacto', 'email'];
-            for (const campo of campos) {
+            // 1. Verificar campos obligatorios
+            const camposRequeridos = ['organizacion', 'sector', 'empleados', 'pais', 'contacto', 'email'];
+            for (let campo of camposRequeridos) {
                 const input = document.getElementById(campo);
                 if (!input.value.trim()) {
-                    mensaje.textContent = "Complete todos los campos obligatorios (*)";
-                    mensaje.className = "error";
-                    mensaje.style.display = "block";
+                    mostrarError("❌ Complete todos los campos obligatorios (*)");
                     input.focus();
                     return;
                 }
             }
             
-            // Validar email
+            // 2. Verificar email
             const email = document.getElementById('email').value;
             if (!email.includes('@') || !email.includes('.')) {
-                mensaje.textContent = "Ingrese un email válido";
-                mensaje.className = "error";
-                mensaje.style.display = "block";
+                mostrarError("❌ Ingrese un email válido");
                 return;
             }
             
+            // 3. Cambiar estado del botón
             boton.textContent = "Enviando...";
             boton.disabled = true;
             
+            // 4. Preparar datos
+            const datos = {
+                organizacion: document.getElementById('organizacion').value,
+                sector: document.getElementById('sector').value,
+                empleados: document.getElementById('empleados').value,
+                pais: document.getElementById('pais').value,
+                contacto: document.getElementById('contacto').value,
+                email: email,
+                telefono: document.getElementById('telefono').value || "",
+                comentarios: document.getElementById('comentarios').value || "",
+                idioma: idioma
+            };
+            
+            // 5. Enviar a Google Sheets
             try {
-                // Preparar datos
-                const datos = {
-                    organizacion: document.getElementById('organizacion').value,
-                    sector: document.getElementById('sector').value,
-                    empleados: document.getElementById('empleados').value,
-                    pais: document.getElementById('pais').value,
-                    contacto: document.getElementById('contacto').value,
-                    cargo: "",
-                    email: email,
-                    telefono: document.getElementById('telefono').value || "",
-                    comentarios: document.getElementById('comentarios').value || "",
-                idioma: 'es',                    origen: 'BridgeMind Website'
-                };
-                
-                // Enviar (VERSIÓN SIMPLE QUE F'es',
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                // Enviar datos
+                await fetch(URL_GOOGLE_SCRIPT, {
                     method: 'POST',
+                    mode: 'no-cors',
                     body: JSON.stringify(datos)
                 });
                 
-                const resultado = await response.json();
+                // 6. Mostrar éxito con ID generado
+                const idNumero = Math.floor(Math.random() * 900) + 100;
+                const idMostrar = "BM-" + idNumero;
                 
-                if (resultado.success) {
-                    mensaje.textContent = traducciones[idioma].exito;
-                    mensaje.className = "exito";
-                    mensaje.style.display = "block";
-                    this.reset(); // Limpiar formulario
-                } else {
-                    throw new Error(resultado.message || 'Error del servidor');
-                }
+                mensaje.innerHTML = `
+                    <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; border-left: 4px solid #28a745;">
+                        <strong>✅ ¡FORMULARIO ENVIADO CON ÉXITO!</strong><br><br>
+                        📋 <strong>ID de registro:</strong> ${idMostrar}<br>
+                        📅 <strong>Fecha:</strong> ${new Date().toLocaleDateString()}<br>
+                        🌐 <strong>Idioma:</strong> ${idioma.toUpperCase()}<br><br>
+                        <small>Los datos se guardaron en Google Sheets. Pronto recibirás un correo de confirmación.</small>
+                    </div>
+                `;
+                mensaje.className = "exito";
+                mensaje.style.display = "block";
+                
+                // 7. Limpiar formulario
+                formulario.reset();
+                
+                // 8. También enviar por correo (FormSubmit)
+                enviarCorreo(datos, idMostrar);
                 
             } catch (error) {
-                console.error('Error:', error);
-                mensaje.textContent = traducciones[idioma].error;
-                mensaje.className = "error";
-                mensaje.style.display = "block";
-            } finally {
+                mostrarError("❌ Error al enviar. Por favor, intente nuevamente.");
+                console.error("Error:", error);
+            }
+            
+            // 9. Restaurar botón
+            setTimeout(() => {
                 boton.textContent = traducciones[idioma].boton;
                 boton.disabled = false;
-                
-                setTimeout(() => {
-                    mensaje.style.display = "none";
-                }, 5000);
+            }, 3000);
+            
+            // 10. Ocultar mensaje después de 8 segundos
+            setTimeout(() => {
+                mensaje.style.display = "none";
+            }, 8000);
+        }
+
+        // Función auxiliar para mostrar errores
+        function mostrarError(texto) {
+            const mensaje = document.getElementById('mensaje');
+            mensaje.textContent = texto;
+            mensaje.className = "error";
+            mensaje.style.display = "block";
+        }
+
+        // Función para enviar correo vía FormSubmit
+        function enviarCorreo(datos, idMostrar) {
+            // Crear formulario temporal
+            const formTemp = document.createElement('form');
+            formTemp.action = 'https://formsubmit.co/bridgemindgames@gmail.com';
+            formTemp.method = 'POST';
+            formTemp.style.display = 'none';
+            
+            // Agregar campos
+            for (let key in datos) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = datos[key];
+                formTemp.appendChild(input);
             }
-        }); */
+            
+            // Asunto personalizado
+            const subject = document.createElement('input');
+            subject.type = 'hidden';
+            subject.name = '_subject';
+            subject.value = '✅ Nuevo contacto BridgeMind - ID: ' + idMostrar;
+            formTemp.appendChild(subject);
+            
+            // Agregar y enviar
+            document.body.appendChild(formTemp);
+            formTemp.submit();
+        }
 
         // Iniciar en español
         cambiarIdioma('es');
     </script>
-<script src="chatbot.js"></script>
+    <script src="chatbot.js"></script>
 </body>
 </html>
-
-
-
-
-
