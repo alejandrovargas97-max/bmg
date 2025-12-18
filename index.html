@@ -47,38 +47,46 @@
         .btn-enviar { background: #28a745; color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-enviar:hover { background: #218838; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40,167,69,0.3); }
 
-        /* CHATBOT DISEÑO PREMIUM */
+        /* CHATBOT */
         #chat-trigger { position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px; border-radius: 50%; background: var(--blue); color: white; border: none; font-size: 32px; cursor: pointer; z-index: 9999; box-shadow: 0 6px 20px rgba(0,123,255,0.4); transition: 0.3s; }
         #chat-trigger:hover { transform: scale(1.1) rotate(5deg); }
-        #chat-window { display: none; position: fixed; bottom: 100px; right: 25px; width: 340px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); z-index: 9998; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); }
+        #chat-window { display: none; position: fixed; bottom: 100px; right: 25px; width: 340px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); z-index: 9998; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); max-height: 500px; }
         #chat-header { background: var(--blue); color: white; padding: 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        #chat-body { height: 380px; overflow-y: auto; padding: 20px; position: relative; background: #fff; background-image: url('logo.png'); background-repeat: no-repeat; background-position: center; background-size: 55%; }
-        #chat-body::after { content: ""; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.92); z-index: 1; }
-        .chat-msg { position: relative; z-index: 2; background: #f0f4f8; padding: 14px; border-radius: 15px; border-bottom-left-radius: 2px; margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: #444; border: 1px solid #e1e8ed; }
-        .chat-opt { position: relative; z-index: 2; display: block; width: 100%; padding: 12px; margin-bottom: 8px; background: white; color: var(--blue); border: 2px solid var(--blue); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.3s; text-align: left; }
+        #chat-body { height: 380px; overflow-y: auto; padding: 20px; }
+        .chat-msg { background: #f0f4f8; padding: 14px; border-radius: 15px; border-bottom-left-radius: 2px; margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: #444; border: 1px solid #e1e8ed; }
+        .chat-opt { display: block; width: 100%; padding: 12px; margin-bottom: 8px; background: white; color: var(--blue); border: 2px solid var(--blue); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.3s; text-align: left; border: none; }
         .chat-opt:hover { background: var(--blue); color: white; }
 
-        @media (max-width: 850px) { .pilares { grid-template-columns: 1fr; } .grid-galeria { grid-template-columns: repeat(2, 1fr); } body { padding-top: 220px; } h1 { font-size: 1.8rem; } }
+        @media (max-width: 850px) { 
+            .pilares { grid-template-columns: 1fr; } 
+            .grid-galeria { grid-template-columns: repeat(2, 1fr); } 
+            body { padding-top: 220px; } 
+            h1 { font-size: 1.8rem; } 
+        }
     </style>
 </head>
 <body>
 
 <header id="nav">
-    <img src="logo.png" class="logo" alt="BridgeMind">
-    <div class="banderas" id="flag-container">
-        </div>
+    <img src="logo.png" class="logo" alt="BridgeMind" onerror="this.src='https://via.placeholder.com/230x80/007bff/ffffff?text=BridgeMind'">
+    <div class="banderas" id="flag-container"></div>
 </header>
 
 <main>
     <h1 id="txt-h1">Aprenda Idiomas con el Bridge y la IA</h1>
     
     <div class="grid-galeria">
-        <img src="1.jpeg"> <img src="2.jpeg"> <img src="3.jpg">
-        <img src="esbr.jpg" id="foto-pais">
+        <img src="1.jpeg" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=Bridge+1'" alt="Bridge 1">
+        <img src="2.jpeg" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=Bridge+2'" alt="Bridge 2"> 
+        <img src="3.jpg" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=Bridge+3'" alt="Bridge 3">
+        <img src="esbr.jpg" id="foto-pais" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=ES'" alt="País">
     </div>
 
     <div class="video-box">
-        <video id="main-vid" controls><source id="main-src" src="esp.mp4" type="video/mp4"></video>
+        <video id="main-vid" controls>
+            <source id="main-src" src="esp.mp4" type="video/mp4">
+            Tu navegador no soporta video HTML5.
+        </video>
     </div>
 
     <div class="pilares">
@@ -99,127 +107,279 @@
     <div class="seccion-form">
         <h2 id="f-h2">Contacto para organizaciones</h2>
         <form action="https://formsubmit.co/bridgemindgames@gmail.com" method="POST">
-            <div class="form-group"><label id="l-org">Nombre de la Organización *</label><input type="text" name="org" required></div>
-            <div class="form-group"><label id="l-pais">País de Residencia *</label><input type="text" name="pais" required></div>
-            <div class="form-group"><label id="l-mail">Correo Electrónico *</label><input type="email" name="email" required></div>
+            <input type="hidden" name="_next" value="https://bridgemindgames.com/gracias">
+            <input type="hidden" name="_subject" value="Nueva consulta BridgeMind">
+            <input type="hidden" name="_captcha" value="false">
+            <div class="form-group">
+                <label id="l-org">Nombre de la Organización *</label>
+                <input type="text" name="org" required>
+            </div>
+            <div class="form-group">
+                <label id="l-pais">País de Residencia *</label>
+                <input type="text" name="pais" required>
+            </div>
+            <div class="form-group">
+                <label id="l-mail">Correo Electrónico *</label>
+                <input type="email" name="email" required>
+            </div>
             <button type="submit" class="btn-enviar" id="f-btn">Solicitar Información</button>
         </form>
     </div>
 </main>
 
-<button id="chat-trigger" onclick="toggleChat()">💬</button>
+<button id="chat-trigger" title="Chat">💬</button>
 <div id="chat-window">
-    <div id="chat-header">BridgeMind Assistant <span onclick="toggleChat()" style="cursor:pointer; font-size: 20px;">&times;</span></div>
-    <div id="chat-body" id="chat-content"></div>
+    <div id="chat-header">
+        BridgeMind Assistant 
+        <span onclick="toggleChat()" style="cursor:pointer; font-size: 20px; font-weight: bold;">×</span>
+    </div>
+    <div id="chat-body"></div>
 </div>
 
 <script>
     const langDB = {
         es: { 
-            h1: "Aprenda Idiomas con el Bridge y la IA", img: "esbr.jpg", vid: "esp.mp4",
-            p1t: "🃏 Bridge Estratégico", p1d: "Lógica del Bridge para acelerar la gramática.",
-            p2t: "🤖 IA Personalizada", p2d: "Contenido generado por IA en tiempo real.",
-            p3t: "📈 Programa de 6 Meses", p3d: "Fluidez operativa en tiempo récord.",
-            fh: "Contacto para organizaciones", l1: "Organización *", l2: "País *", l3: "Email *", fb: "Solicitar Información",
-            cq: "¿Cómo funciona el programa?", ca: "Sistema dual (Bridge + Idioma). IA por clase. Mínimo 6 meses. Sin prueba gratuita (demo pagada disponible)."
+            h1: "Aprenda Idiomas con el Bridge y la IA", 
+            img: "esbr.jpg", 
+            vid: "esp.mp4",
+            p1t: "🃏 Bridge Estratégico", 
+            p1d: "Utilizamos la lógica del Bridge para acelerar la comprensión gramatical y estratégica del nuevo idioma.",
+            p2t: "🤖 IA Personalizada", 
+            p2d: "Nuestra IA genera ejercicios y textos adaptados al progreso real de cada estudiante en tiempo real.",
+            p3t: "📈 Programa de 6 Meses", 
+            p3d: "Un viaje estructurado diseñado para alcanzar fluidez operativa mediante la práctica constante y lúdica.",
+            fh: "Contacto para organizaciones", 
+            l1: "Nombre de la Organización *", 
+            l2: "País de Residencia *", 
+            l3: "Correo Electrónico *", 
+            fb: "Solicitar Información",
+            cq: "¿Cómo funciona el programa?", 
+            ca: "Sistema dual (Bridge + Idioma). IA genera contenido por clase. Mínimo 6 meses. Demo pagada disponible."
         },
         en: { 
-            h1: "Learn Languages with Bridge & AI", img: "enbr.jpg", vid: "eng.mp4",
-            p1t: "🃏 Strategic Bridge", p1d: "Bridge logic to accelerate grammar learning.",
-            p2t: "🤖 Personalized AI", p2d: "AI-generated content in real-time.",
-            p3t: "📈 6-Month Program", p3d: "Operational fluency in record time.",
-            fh: "Contact for organizations", l1: "Organization *", l2: "Country *", l3: "Email *", fb: "Request Information",
-            cq: "How does the program work?", ca: "Dual system (Bridge + Language). AI per session. 6-month minimum. No free trial (paid demo available)."
+            h1: "Learn Languages with Bridge & AI", 
+            img: "enbr.jpg", 
+            vid: "eng.mp4",
+            p1t: "🃏 Strategic Bridge", 
+            p1d: "Bridge logic accelerates grammar and strategic language comprehension.",
+            p2t: "🤖 Personalized AI", 
+            p2d: "AI generates exercises adapted to each student's real progress.",
+            p3t: "📈 6-Month Program", 
+            p3d: "Structured journey to operational fluency through constant practice.",
+            fh: "Contact for organizations", 
+            l1: "Organization Name *", 
+            l2: "Country of Residence *", 
+            l3: "Email Address *", 
+            fb: "Request Information",
+            cq: "How does the program work?", 
+            ca: "Dual system (Bridge + Language). AI per session. 6-month minimum. Paid demo available."
         },
         fr: { 
-            h1: "Apprendre les langues via le Bridge & l'IA", img: "frbr.jpg", vid: "fr.mp4",
-            p1t: "🃏 Bridge Stratégique", p1d: "Logique du Bridge pour booster la grammaire.",
-            p2t: "🤖 IA Personnalisée", p2d: "Contenu IA généré en temps réel.",
-            p3t: "📈 Programme de 6 Mois", p3d: "Fluidité opérationnelle rapide.",
-            fh: "Contact pour les organisations", l1: "Organisation *", l2: "Pays *", l3: "Email *", fb: "Demander des infos",
-            cq: "Comment ça marche ?", ca: "Système dual. IA par classe. 6 mois minimum. Pas d'essai gratuit."
+            h1: "Apprenez les langues avec Bridge & IA", 
+            img: "frbr.jpg", 
+            vid: "fr.mp4",
+            p1t: "🃏 Bridge Stratégique", 
+            p1d: "Logique du Bridge pour accélérer la grammaire et la stratégie.",
+            p2t: "🤖 IA Personnalisée", 
+            p2d: "IA génère des exercices adaptés au progrès réel.",
+            p3t: "📈 Programme 6 Mois", 
+            p3d: "Parcours structuré vers la fluidité opérationnelle.",
+            fh: "Contact organisations", 
+            l1: "Nom de l'Organisation *", 
+            l2: "Pays de Résidence *", 
+            l3: "Adresse Email *", 
+            fb: "Demander Infos",
+            cq: "Comment ça marche?", 
+            ca: "Système dual. IA par classe. 6 mois minimum."
         },
-        de: { h1: "Sprachen lernen mit Bridge & KI", img: "debr.jpg", vid: "de.mp4", p1t: "🃏 Strategisches Bridge", p1d: "Bridge-Logik für Grammatik.", p2t: "🤖 KI-Unterstützung", p2d: "Echtzeit-KI-Inhalte.", p3t: "📈 6-Monats-Programm", p3d: "Schnelle operative Fließfähigkeit.", fh: "Kontakt", l1: "Organisation *", l2: "Land *", l3: "E-Mail *", fb: "Anfrage senden", cq: "Wie funktioniert es?", ca: "Duales System. KI pro Klasse. Mindestens 6 Monate." },
-        it: { h1: "Impara le lingue con Bridge e IA", img: "itbr.jpg", vid: "it.mp4", p1t: "🃏 Bridge Strategico", p1d: "Logica per la grammatica.", p2t: "🤖 IA Dedicata", p2d: "Contenuti IA in tempo reale.", p3t: "📈 Programma 6 Mesi", p3d: "Fluidità operativa rapida.", fh: "Contatto", l1: "Organizzazione *", l2: "Paese *", l3: "Email *", fb: "Invia Richiesta", cq: "Come funziona?", ca: "Sistema duale. IA per lezione. Minimo 6 mesi." },
-        jp: { h1: "ブリッジとAIで言語を学ぶ", img: "jpbr.jpg", vid: "jp.mp4", p1t: "🃏 戦略的ブリッジ", p1d: "文法を加速する論理。", p2t: "🤖 専用AI", p2d: "リアルタイムAI教材。", p3t: "📈 6ヶ月プログラム", p3d: "最短で流暢に。", fh: "組織向け窓口", l1: "組織名 *", l2: "国名 *", l3: "メール *", fb: "情報をリクエスト", cq: "仕組みは？", ca: "二重システム。最短6ヶ月。無料トライアルなし。" },
-        zh: { h1: "通过桥牌和人工智能学习语言", img: "zhbr.jpg", vid: "zh.mp4", p1t: "🃏 战略桥牌", p1d: "加速语法的逻辑。", p2t: "🤖 个性化AI", p2d: "实时生成的AI内容。", p3t: "📈 6个月计划", p3d: "创纪录的流畅度。", fh: "组织联系", l1: "组织 *", l2: "国家 *", l3: "邮箱 *", fb: "提交申请", cq: "如何运作？", ca: "双系统。每节课AI。至少6个月。" },
-        ar: { h1: "تعلم اللغات عبر البريدج والذكاء الاصطناعي", img: "arbr.jpg", vid: "ar.mp4", p1t: "🃏 البريدج الاستراتيجي", p1d: "منطق البريدج لتسريع القواعد.", p2t: "🤖 ذكاء اصطناعي مخصص", p2d: "محتوى فوري لكل حصة.", p3t: "📈 برنامج 6 أشهر", p3d: "طلاقة تشغيلية قياسية.", fh: "اتصال المنظمات", l1: "المنظمة *", l2: "البلد *", l3: "الإيميل *", fb: "طلب معلومات", cq: "كيف يعمل البرنامج؟", ca: "نظام مزدوج. ذكاء اصطناعي. 6 أشهر كحد أدنى." }
+        de: { 
+            h1: "Sprachen lernen mit Bridge & KI", 
+            img: "debr.jpg", 
+            vid: "de.mp4",
+            p1t: "🃏 Strategisches Bridge", 
+            p1d: "Bridge-Logik beschleunigt Grammatik und Strategie.",
+            p2t: "🤖 Personalisierte KI", 
+            p2d: "KI passt Übungen an echten Fortschritt an.",
+            p3t: "📈 6-Monats-Programm", 
+            p3d: "Strukturierter Weg zur operativen Flüssigkeit.",
+            fh: "Kontakt für Organisationen", 
+            l1: "Organisation *", 
+            l2: "Land *", 
+            l3: "E-Mail *", 
+            fb: "Information anfordern",
+            cq: "Wie funktioniert es?", 
+            ca: "Duales System. KI pro Session. 6 Monate Minimum."
+        },
+        it: { 
+            h1: "Impara lingue con Bridge e IA", 
+            img: "itbr.jpg", 
+            vid: "it.mp4",
+            p1t: "🃏 Bridge Strategico", 
+            p1d: "Logica Bridge accelera grammatica e strategia.",
+            p2t: "🤖 IA Personalizzata", 
+            p2d: "IA genera esercizi adattati al progresso reale.",
+            p3t: "📈 Programma 6 Mesi", 
+            p3d: "Percorso strutturato verso fluidità operativa.",
+            fh: "Contatti organizzazioni", 
+            l1: "Nome Organizzazione *", 
+            l2: "Paese di Residenza *", 
+            l3: "Indirizzo Email *", 
+            fb: "Richiedi Informazioni",
+            cq: "Come funziona?", 
+            ca: "Sistema duale. IA per lezione. 6 mesi minimo."
+        },
+        jp: { 
+            h1: "ブリッジとAIで言語学習", 
+            img: "jpbr.jpg", 
+            vid: "jp.mp4",
+            p1t: "🃏 戦略的ブリッジ", 
+            p1d: "ブリッジ論理で文法を加速。",
+            p2t: "🤖 パーソナライズAI", 
+            p2d: "生徒の実際の進捗に合わせたAI教材。",
+            p3t: "📈 6ヶ月プログラム", 
+            p3d: "運用流暢さへの構造化された道のり。",
+            fh: "組織向け問い合わせ", 
+            l1: "組織名 *", 
+            l2: "居住国 *", 
+            l3: "メールアドレス *", 
+            fb: "情報リクエスト",
+            cq: "仕組みは？", 
+            ca: "デュアルシステム。クラス毎AI。6ヶ月最小。"
+        },
+        zh: { 
+            h1: "桥牌+AI学习语言", 
+            img: "zhbr.jpg", 
+            vid: "zh.mp4",
+            p1t: "🃏 战略桥牌", 
+            p1d: "桥牌逻辑加速语法学习。",
+            p2t: "🤖 个性化AI", 
+            p2d: "根据真实进度生成AI内容。",
+            p3t: "📈 6个月计划", 
+            p3d: "通往操作流畅度的结构化旅程。",
+            fh: "组织联系", 
+            l1: "组织名称 *", 
+            l2: "居住国家 *", 
+            l3: "电子邮箱 *", 
+            fb: "申请信息",
+            cq: "如何运作？", 
+            ca: "双系统。每节课AI。6个月起。"
+        },
+        ar: { 
+            h1: "تعلم اللغات بالبريدج والذكاء الاصطناعي", 
+            img: "arbr.jpg", 
+            vid: "ar.mp4",
+            p1t: "🃏 البريدج الاستراتيجي", 
+            p1d: "منطق البريدج يسرّع تعلم القواعد.",
+            p2t: "🤖 ذكاء اصطناعي مخصص", 
+            p2d: "محتوى AI يتكيف مع تقدم الطالب.",
+            p3t: "📈 برنامج 6 أشهر", 
+            p3d: "رحلة منظمة للوصول للطلاقة التشغيلية.",
+            fh: "للمنظمات", 
+            l1: "اسم المنظمة *", 
+            l2: "البلد *", 
+            l3: "البريد الإلكتروني *", 
+            fb: "اطلب معلومات",
+            cq: "كيف يعمل؟", 
+            ca: "نظام مزدوج. AI لكل حصة. 6 أشهر."
+        }
     };
 
-    let activeL = 'es';
+    let activeLang = 'es';
 
+    // Inicializar banderas
     function initFlags() {
         const container = document.getElementById('flag-container');
         Object.keys(langDB).forEach(lang => {
             const btn = document.createElement('button');
             btn.className = `bandera ${lang === 'es' ? 'active' : ''}`;
-            btn.innerText = lang;
+            btn.innerHTML = lang.toUpperCase();
             btn.onclick = () => switchLang(lang, btn);
             container.appendChild(btn);
         });
     }
 
+    // Cambiar idioma
     function switchLang(lang, btnElement) {
-        activeL = lang;
-        const d = langDB[lang];
+        activeLang = lang;
+        const data = langDB[lang];
         
-        // Estética botones
+        // Actualizar botones
         document.querySelectorAll('.bandera').forEach(b => b.classList.remove('active'));
         btnElement.classList.add('active');
 
         // Textos principales
-        document.getElementById('txt-h1').innerText = d.h1;
-        document.getElementById('foto-pais').src = d.img + "?v=" + Date.now();
+        document.getElementById('txt-h1').textContent = data.h1;
+        
+        // Imagen país
+        const paisImg = document.getElementById('foto-pais');
+        paisImg.src = data.img + '?v=' + Date.now();
         
         // Video
-        const v = document.getElementById('main-vid');
-        document.getElementById('main-src').src = d.vid + "?v=" + Date.now();
-        v.load();
+        const video = document.getElementById('main-vid');
+        const source = document.getElementById('main-src');
+        source.src = data.vid + '?v=' + Date.now();
+        video.load();
 
         // Pilares
-        document.getElementById('p1-t').innerText = d.p1t; document.getElementById('p1-d').innerText = d.p1d;
-        document.getElementById('p2-t').innerText = d.p2t; document.getElementById('p2-d').innerText = d.p2d;
-        document.getElementById('p3-t').innerText = d.p3t; document.getElementById('p3-d').innerText = d.p3d;
+        document.getElementById('p1-t').textContent = data.p1t;
+        document.getElementById('p1-d').textContent = data.p1d;
+        document.getElementById('p2-t').textContent = data.p2t;
+        document.getElementById('p2-d').textContent = data.p2d;
+        document.getElementById('p3-t').textContent = data.p3t;
+        document.getElementById('p3-d').textContent = data.p3d;
 
         // Formulario
-        document.getElementById('f-h2').innerText = d.fh;
-        document.getElementById('l-org').innerText = d.l1;
-        document.getElementById('l-pais').innerText = d.l2;
-        document.getElementById('l-mail').innerText = d.l3;
-        document.getElementById('f-btn').innerText = d.fb;
+        document.getElementById('f-h2').textContent = data.fh;
+        document.getElementById('l-org').textContent = data.l1;
+        document.getElementById('l-pais').textContent = data.l2;
+        document.getElementById('l-mail').textContent = data.l3;
+        document.getElementById('f-btn').textContent = data.fb;
 
-        if(document.getElementById('chat-window').style.display === 'block') refreshChat();
+        // Refresh chat si está abierto
+        if (document.getElementById('chat-window').style.display === 'block') {
+            refreshChat();
+        }
     }
 
+    // Chat functions
     function toggleChat() {
-        const w = document.getElementById('chat-window');
-        w.style.display = (w.style.display === 'block') ? 'none' : 'block';
-        if(w.style.display === 'block') refreshChat();
+        const chatWindow = document.getElementById('chat-window');
+        chatWindow.style.display = chatWindow.style.display === 'block' ? 'none' : 'block';
+        if (chatWindow.style.display === 'block') {
+            refreshChat();
+        }
     }
 
     function refreshChat() {
-        const d = langDB[activeL];
-        document.getElementById('chat-body').innerHTML = `
-            <div class="chat-msg">Hello! I am the BridgeMind virtual assistant.</div>
-            <button class="chat-opt" onclick="ans()">${d.cq}</button>
+        const data = langDB[activeLang];
+        const chatBody = document.getElementById('chat-body');
+        chatBody.innerHTML = `
+            <div class="chat-msg">¡Hola! Soy el asistente virtual de BridgeMind.</div>
+            <button class="chat-opt" onclick="showAnswer()">${data.cq}</button>
         `;
     }
 
-    function ans() {
-        const d = langDB[activeL];
-        document.getElementById('chat-body').innerHTML = `
-            <div class="chat-msg">${d.ca}</div>
-            <button class="chat-opt" onclick="refreshChat()">← Back / Volver</button>
+    function showAnswer() {
+        const data = langDB[activeLang];
+        const chatBody = document.getElementById('chat-body');
+        chatBody.innerHTML = `
+            <div class="chat-msg">${data.ca}</div>
+            <button class="chat-opt" onclick="refreshChat()">← Volver / Back</button>
         `;
     }
 
-    window.onscroll = function() {
-        const nav = document.getElementById("nav");
-        if (window.pageYOffset > 50) nav.classList.add("scrolled");
-        else nav.classList.remove("scrolled");
-    };
+    // Scroll header effect
+    window.addEventListener('scroll', function() {
+        const nav = document.getElementById('nav');
+        if (window.pageYOffset > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
 
-    window.onload = initFlags;
+    // Inicializar al cargar
+    window.addEventListener('load', initFlags);
 </script>
 </body>
 </html>
