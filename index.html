@@ -1,265 +1,91 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BridgeMind Education</title>
-    <style>
-        :root { --blue: #007bff; --dark: #0056b3; --light: #f8f9fa; }
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin:0; padding-top: 180px; text-align: center; color: #333; background: #fff; }
-        
-        header { position: fixed; top: 0; width: 100%; z-index: 1000; background: var(--blue); color: white; padding: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        header.scrolled { padding: 8px 0; background: rgba(0,86,179,0.98); }
-        .logo { max-width: 230px; height: auto; margin-bottom: 12px; }
-        header.scrolled .logo { max-width: 150px; }
-        
-        .banderas { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 0 15px; }
-        .bandera { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 15px; border-radius: 25px; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.3s; }
-        .bandera:hover, .bandera.active { background: white; color: var(--blue); }
+(function() {
+    var style = document.createElement('style');
+    style.textContent = `
+        #chat-btn {position:fixed;bottom:20px;right:20px;width:60px;height:60px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;display:flex;align-items:center;justify-content:center;}
+        #chat-box {position:fixed;bottom:90px;right:20px;width:360px;height:500px;background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none;flex-direction:column;z-index:9998;}
+        #chat-box.show {display:flex;}
+        .chat-header {background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;}
+        .chat-body {flex:1;overflow-y:auto;padding:20px;background:#f8f9fa;}
+        .msg {margin-bottom:16px;display:flex;}
+        .msg.bot {justify-content:flex-start;}
+        .msg.user {justify-content:flex-end;}
+        .msg-txt {max-width:75%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.4;}
+        .msg.bot .msg-txt {background:white;box-shadow:0 2px 4px rgba(0,0,0,0.1);}
+        .msg.user .msg-txt {background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+    `;
+    document.head.appendChild(style);
 
-        main { max-width: 1000px; margin: auto; padding: 20px; }
-        h1 { font-size: 2.5rem; color: #222; margin-bottom: 30px; }
-        
-        .grid-galeria { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 30px 0; }
-        .grid-galeria img { width: 100%; height: 150px; object-fit: cover; border-radius: 15px; border: 1px solid #eee; transition: 0.3s; }
-        .grid-galeria img:hover { transform: scale(1.02); }
-
-        .video-box { margin: 40px 0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        video { width: 100%; display: block; background: #000; }
-
-        .pilares { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 50px 0; }
-        .pilar { background: var(--light); padding: 30px; border-radius: 18px; border-bottom: 5px solid var(--blue); text-align: left; transition: 0.3s; }
-        .pilar:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
-        .pilar h3 { color: var(--blue); font-size: 1.3rem; margin-top: 0; }
-        .pilar p { color: #555; line-height: 1.6; }
-
-        .seccion-form { background: var(--light); padding: 40px; border-radius: 25px; margin: 60px 0; border: 1px solid #eaeaea; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; }
-        input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
-        .btn-enviar { background: #28a745; color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
-
-        #chat-trigger { position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px; border-radius: 50%; background: var(--blue); color: white; border: none; font-size: 32px; cursor: pointer; z-index: 9999; box-shadow: 0 6px 20px rgba(0,123,255,0.4); }
-        #chat-window { display: none; position: fixed; bottom: 100px; right: 25px; width: 350px; max-height: 500px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); z-index: 9998; overflow: hidden; }
-        #chat-header { background: var(--blue); color: white; padding: 18px; font-weight: bold; display: flex; justify-content: space-between; }
-        #chat-body { height: 400px; overflow-y: auto; padding: 20px; }
-        .chat-msg { background: #f0f4f8; padding: 14px; border-radius: 15px; margin-bottom: 15px; font-size: 14px; }
-        .chat-opt { width: 100%; padding: 12px; margin-bottom: 8px; background: white; color: var(--blue); border: 2px solid var(--blue); border-radius: 12px; cursor: pointer; font-weight: 600; text-align: left; }
-
-        @media (max-width: 850px) { 
-            .pilares { grid-template-columns: 1fr; } 
-            .grid-galeria { grid-template-columns: repeat(2, 1fr); } 
-            body { padding-top: 220px; } 
-            h1 { font-size: 1.8rem; }
-        }
-    </style>
-</head>
-<body>
-
-<header id="header">
-    <img src="logo.png" class="logo" alt="BridgeMind" onerror="this.src='https://via.placeholder.com/230x80/007bff/ffffff?text=BridgeMind'">
-    <div class="banderas" id="flag-container">
-        <!-- BANDERAS SE GENERAN CON JS -->
-    </div>
-</header>
-
-<main>
-    <h1 id="titulo-principal">Aprenda Idiomas con el Bridge y la IA</h1>
+    var html = `
+        <button id="chat-btn">
+            <svg viewBox="0 0 24 24" style="width:30px;height:30px;fill:white;">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+            </svg>
+        </button>
+        <div id="chat-box">
+            <div class="chat-header">
+                <div>
+                    <h3 style="margin:0;font-size:18px;">BridgeMind Assistant</h3>
+                    <div style="font-size:12px;opacity:0.9;">Online</div>
+                </div>
+                <button onclick="document.getElementById('chat-box').classList.remove('show')" style="background:none;border:none;color:white;font-size:28px;cursor:pointer;line-height:1;">×</button>
+            </div>
+            <div class="chat-body" id="msgs"></div>
+            <div style="padding:16px;background:white;border-top:1px solid #e0e0e0;display:flex;gap:8px;">
+                <input type="text" id="chat-inp" placeholder="Escribe tu mensaje..." style="flex:1;border:2px solid #e0e0e0;border-radius:24px;padding:12px 16px;font-size:14px;outline:none;">
+                <button onclick="window.sendChatMsg()" style="background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:white;width:44px;height:44px;border-radius:50%;cursor:pointer;">▶</button>
+            </div>
+        </div>
+    `;
     
-    <div class="grid-galeria">
-        <img src="1.jpeg" alt="Bridge 1" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=Bridge'">
-        <img src="2.jpeg" alt="Bridge 2" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=Bridge'">
-        <img src="3.jpg" alt="Bridge 3" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=Bridge'">
-        <img id="foto-pais" src="esbr.jpg" alt="España" onerror="this.src='https://via.placeholder.com/250x150/007bff/ffffff?text=ES'">
-    </div>
+    document.body.insertAdjacentHTML('beforeend', html);
 
-    <div class="video-box">
-        <video id="video-principal" controls>
-            <source id="source-video" src="esp.mp4" type="video/mp4">
-            Tu navegador no soporta video.
-        </video>
-    </div>
-
-    <div class="pilares">
-        <div class="pilar">
-            <h3 id="pilar1-titulo">🃏 Bridge Estratégico</h3>
-            <p id="pilar1-texto">Lógica del Bridge para acelerar la comprensión gramatical y estratégica.</p>
-        </div>
-        <div class="pilar">
-            <h3 id="pilar2-titulo">🤖 IA Personalizada</h3>
-            <p id="pilar2-texto">IA genera ejercicios adaptados al progreso real de cada estudiante.</p>
-        </div>
-        <div class="pilar">
-            <h3 id="pilar3-titulo">📈 Programa 6 Meses</h3>
-            <p id="pilar3-texto">Viaje estructurado hacia fluidez operativa mediante práctica lúdica.</p>
-        </div>
-    </div>
-
-    <div class="seccion-form">
-        <h2 id="form-titulo">Contacto para organizaciones</h2>
-        <form action="https://formsubmit.co/bridgemindgames@gmail.com" method="POST">
-            <input type="hidden" name="_next" value="https://bridgemindgames.com/gracias">
-            <input type="hidden" name="_subject" value="Nueva consulta BridgeMind">
-            <input type="hidden" name="_captcha" value="false">
-            <div class="form-group">
-                <label id="label-org">Nombre de la Organización *</label>
-                <input type="text" name="org" required>
-            </div>
-            <div class="form-group">
-                <label id="label-pais">País *</label>
-                <input type="text" name="pais" required>
-            </div>
-            <div class="form-group">
-                <label id="label-email">Correo Electrónico *</label>
-                <input type="email" name="email" required>
-            </div>
-            <button type="submit" class="btn-enviar" id="btn-submit">Solicitar Información</button>
-        </form>
-    </div>
-</main>
-
-<button id="chat-trigger" onclick="toggleChat()">💬</button>
-<div id="chat-window">
-    <div id="chat-header">
-        BridgeMind Assistant 
-        <span onclick="toggleChat()" style="cursor:pointer;font-size:20px;">×</span>
-    </div>
-    <div id="chat-body"></div>
-</div>
-
-<script>
-    // BASE DE DATOS IDIOMAS - 8 IDIOMAS COMPLETOS
-    const idiomas = {
-        es: {
-            titulo: "Aprenda Idiomas con el Bridge y la IA",
-            foto: "esbr.jpg", video: "esp.mp4",
-            p1t: "🃏 Bridge Estratégico", p1d: "Lógica del Bridge para acelerar gramática y estrategia.",
-            p2t: "🤖 IA Personalizada", p2d: "IA genera ejercicios según progreso real del estudiante.",
-            p3t: "📈 Programa 6 Meses", p3d: "Estructura hacia fluidez operativa con práctica lúdica.",
-            formT: "Contacto para organizaciones", org: "Organización *", pais: "País *", email: "Email *", btn: "Solicitar Información",
-            chatQ: "¿Cómo funciona?", chatA: "Sistema dual Bridge+Idioma. IA por clase. 6 meses mínimo."
-        },
-        en: {
-            titulo: "Learn Languages with Bridge & AI", foto: "enbr.jpg", video: "eng.mp4",
-            p1t: "🃏 Strategic Bridge", p1d: "Bridge logic accelerates grammar & strategy.",
-            p2t: "🤖 Personalized AI", p2d: "AI adapts exercises to real student progress.",
-            p3t: "📈 6 Month Program", p3d: "Structured path to operational fluency.",
-            formT: "Contact organizations", org: "Organization *", pais: "Country *", email: "Email *", btn: "Request Info",
-            chatQ: "How it works?", chatA: "Dual Bridge+Language system. AI per class. 6 months min."
-        },
-        fr: { titulo: "Bridge & IA pour les langues", foto: "frbr.jpg", video: "fr.mp4",
-            p1t: "🃏 Bridge Stratégique", p1d: "Logique Bridge accélère grammaire.", p2t: "🤖 IA Personnalisée", p2d: "IA adapte exercices au progrès.",
-            p3t: "📈 Programme 6 Mois", p3d: "Vers fluidité opérationnelle.", formT: "Contact org.", org: "Organisation *", pais: "Pays *", email: "Email *", btn: "Infos",
-            chatQ: "Comment ça marche?", chatA: "Système dual. IA par classe. 6 mois."
-        },
-        de: { titulo: "Bridge & KI Sprachenlernen", foto: "debr.jpg", video: "de.mp4",
-            p1t: "🃏 Strategisches Bridge", p1d: "Bridge-Logik beschleunigt Grammatik.", p2t: "🤖 Personalisierte KI", p2d: "KI passt Übungen an.",
-            p3t: "📈 6-Monats-Programm", p3d: "Operative Flüssigkeit.", formT: "Kontakt", org: "Organisation *", pais: "Land *", email: "Email *", btn: "Anfrage",
-            chatQ: "Wie funktioniert es?", chatA: "Duales System. 6 Monate."
-        },
-        it: { titulo: "Bridge e IA per lingue", foto: "itbr.jpg", video: "it.mp4",
-            p1t: "🃏 Bridge Strategico", p1d: "Logica accelera grammatica.", p2t: "🤖 IA Personalizzata", p2d: "Esercizi adattati al progresso.",
-            p3t: "📈 Programma 6 Mesi", p3d: "Fluidità operativa.", formT: "Contatti", org: "Organizzazione *", pais: "Paese *", email: "Email *", btn: "Richiesta",
-            chatQ: "Come funziona?", chatA: "Sistema duale. 6 mesi."
-        },
-        jp: { titulo: "ブリッジ×AI語学", foto: "jpbr.jpg", video: "jp.mp4",
-            p1t: "🃏 戦略ブリッジ", p1d: "文法加速論理。", p2t: "🤖 パーソナルAI", p2d: "進捗別演習。",
-            p3t: "📈 6ヶ月", p3d: "運用流暢。", formT: "組織連絡", org: "組織 *", pais: "国 *", email: "メール *", btn: "依頼",
-            chatQ: "仕組み？", chatA: "デュアルシステム。6ヶ月。"
-        },
-        zh: { titulo: "桥牌+AI学语言", foto: "zhbr.jpg", video: "zh.mp4",
-            p1t: "🃏 战略桥牌", p1d: "加速语法逻辑。", p2t: "🤖 个性化AI", p2d: "实时适配演习。",
-            p3t: "📈 6个月", p3d: "操作流畅。", formT: "组织联系", org: "组织 *", pais: "国家 *", email: "邮箱 *", btn: "申请",
-            chatQ: "怎么运作？", chatA: "双系统。6个月。"
-        },
-        ar: { titulo: "بريدج+ذكاء اصطناعي", foto: "arbr.jpg", video: "ar.mp4",
-            p1t: "🃏 بريدج استراتيجي", p1d: "تسريع قواعد.", p2t: "🤖 ذكاء مخصص", p2d: "تمارين متكيفة。",
-            p3t: "📈 6 أشهر", p3d: "طلاقة تشغيلية。", formT: "للمنظمات", org: "منظمة *", pais: "بلد *", email: "إيميل *", btn: "اطلب",
-            chatQ: "كيف يعمل؟", chatA: "نظام مزدوج。6 أشهر。"
+    document.getElementById('chat-btn').onclick = function() {
+        var box = document.getElementById('chat-box');
+        box.classList.toggle('show');
+        if (box.classList.contains('show') && !window.chatStarted) {
+            setTimeout(function() {
+                addChatMsg('¡Hola! 👋 Soy el asistente de BridgeMind Education.\n\n¿En qué puedo ayudarte?', 'bot');
+                window.chatStarted = true;
+            }, 300);
         }
     };
 
-    let idiomaActual = 'es';
-
-    // ✅ FUNCIONES QUE FUNCIONAN 100%
-    function crearBanderas() {
-        const contenedor = document.getElementById('flag-container');
-        Object.keys(idiomas).forEach(id => {
-            const btn = document.createElement('button');
-            btn.className = `bandera ${id === 'es' ? 'active' : ''}`;
-            btn.textContent = id.toUpperCase();
-            btn.onclick = () => cambiarIdioma(id, btn);
-            contenedor.appendChild(btn);
-        });
+    function addChatMsg(text, type) {
+        var msgs = document.getElementById('msgs');
+        var div = document.createElement('div');
+        div.className = 'msg ' + type;
+        var txt = document.createElement('div');
+        txt.className = 'msg-txt';
+        txt.innerHTML = text.replace(/\n/g, '<br>');
+        div.appendChild(txt);
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
     }
 
-    function cambiarIdioma(id, boton) {
-        idiomaActual = id;
-        const datos = idiomas[id];
-
-        // QUITAR ACTIVE DE TODOS
-        document.querySelectorAll('.bandera').forEach(b => b.classList.remove('active'));
-        boton.classList.add('active');
-
-        // CAMBIAR TODO
-        document.getElementById('titulo-principal').textContent = datos.titulo;
-        document.getElementById('foto-pais').src = datos.foto + '?t=' + Date.now();
+    window.sendChatMsg = function() {
+        var inp = document.getElementById('chat-inp');
+        var msg = inp.value.trim();
+        if (!msg) return;
         
-        document.getElementById('source-video').src = datos.video + '?t=' + Date.now();
-        document.getElementById('video-principal').load();
+        addChatMsg(msg, 'user');
+        inp.value = '';
+        
+        setTimeout(function() {
+            var resp = '¡Gracias! 🎉\n\nContáctanos:\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com';
+            
+            if (msg.toLowerCase().includes('demo')) {
+                resp = '¡Excelente! 🎉\n\nDemo GRATUITA incluye:\n• 1 día completo\n• 4 participantes\n• Aprenden Bridge\n\n📱 WhatsApp: +34 634 268 663';
+            } else if (msg.toLowerCase().includes('info') || msg.toLowerCase().includes('qué')) {
+                resp = 'BridgeMind enseña idiomas con Bridge 🃏\n\n• 4 alumnos/mesa\n• 6 horas/semana\n• Programa de 1 año\n\nContacto:\n📱 +34 634 268 663';
+            } else if (msg.toLowerCase().includes('humano') || msg.toLowerCase().includes('persona')) {
+                resp = '¡Por supuesto! 👤\n\nHabla con nosotros:\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com';
+            }
+            
+            addChatMsg(resp, 'bot');
+        }, 800);
+    };
 
-        document.getElementById('pilar1-titulo').textContent = datos.p1t;
-        document.getElementById('pilar1-texto').textContent = datos.p1d;
-        document.getElementById('pilar2-titulo').textContent = datos.p2t;
-        document.getElementById('pilar2-texto').textContent = datos.p2d;
-        document.getElementById('pilar3-titulo').textContent = datos.p3t;
-        document.getElementById('pilar3-texto').textContent = datos.p3d;
-
-        document.getElementById('form-titulo').textContent = datos.formT;
-        document.getElementById('label-org').textContent = datos.org;
-        document.getElementById('label-pais').textContent = datos.pais;
-        document.getElementById('label-email').textContent = datos.email;
-        document.getElementById('btn-submit').textContent = datos.btn;
-
-        if (document.getElementById('chat-window').style.display === 'block') {
-            actualizarChat();
-        }
-    }
-
-    function toggleChat() {
-        const chat = document.getElementById('chat-window');
-        chat.style.display = chat.style.display === 'block' ? 'none' : 'block';
-        if (chat.style.display === 'block') actualizarChat();
-    }
-
-    function actualizarChat() {
-        const datos = idiomas[idiomaActual];
-        document.getElementById('chat-body').innerHTML = `
-            <div class="chat-msg">¡Hola! Soy BridgeMind Assistant.</div>
-            <button class="chat-opt" onclick="mostrarRespuesta()">${datos.chatQ}</button>
-        `;
-    }
-
-    function mostrarRespuesta() {
-        const datos = idiomas[idiomaActual];
-        document.getElementById('chat-body').innerHTML = `
-            <div class="chat-msg">${datos.chatA}</div>
-            <button class="chat-opt" onclick="actualizarChat()">← Volver</button>
-        `;
-    }
-
-    // HEADER SCROLL
-    window.addEventListener('scroll', () => {
-        document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // ✅ INICIALIZAR TODO
-    document.addEventListener('DOMContentLoaded', () => {
-        crearBanderas();
-        console.log('✅ BridgeMind cargado - 8 idiomas listos');
-    });
-</script>
-</body>
-</html>
+    document.getElementById('chat-inp').onkeypress = function(e) {
+        if (e.key === 'Enter') window.sendChatMsg();
+    };
+})();
