@@ -57,11 +57,142 @@
         .exito {background:#d4edda; color:#155724;}
         .error {background:#f8d7da; color:#721c24;}
         footer {text-align:center; padding:25px; background:#333; color:white; margin-top:40px;}
+
+        /* ========== CHATBOT STYLES ========== */
+        #chatbot-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.4);
+            z-index: 9999;
+            transition: all 0.3s ease;
+        }
+        #chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,123,255,0.6);
+        }
+        #chatbot-container {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            z-index: 9998;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chatbot-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #chatbot-header img {
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+        #chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-image: url('logo.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 150px;
+            background-attachment: local;
+        }
+        .chat-message {
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bot-message {
+            background: #e3f2fd;
+            color: #333;
+            align-self: flex-start;
+        }
+        .user-message {
+            background: #007bff;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .chat-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+        .chat-button:hover {
+            background: #0056b3;
+            transform: translateX(5px);
+        }
+        #chatbot-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+        #chatbot-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+        #chatbot-send {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
         @media (max-width:768px) {
             .pilares {grid-template-columns:1fr;}
             .imagenes img {width:45%;}
             body {padding-top: 160px !important;}
             header.scrolled .logo {max-width:180px;}
+            #chatbot-container {
+                width: 90%;
+                right: 5%;
+                height: 70vh;
+            }
         }
     </style>
 </head>
@@ -134,23 +265,25 @@
         <p>BridgeMind Education © 2024</p>
     </footer>
 
-    <!-- CHATBOT 24/7 -->
-    <script>
-        window.botpressWebChat.init({
-            host: 'https://cdn.botpress.cloud/webchat/v2',
-            botId: '1e648085-d4da-43ea-bc5d-2b6e4b0aa88a',
-            clientId: '1e648085-d4da-43ea-bc5d-2b6e4b0aa88a',
-            theme: {
-                primaryColor: '#007bff',
-                secondaryColor: '#0056b3',
-                backgroundColor: '#ffffff'
-            },
-            position: 'bottom-right',
-            persistentMenu: ['preguntas-frecuentes', 'agendar-cita', 'juego-demo'],
-            language: 'auto'
-        });
-    </script>
-    <script src="https://cdn.botpress.cloud/webchat/v2/js/botpress.js"></script>
+    <!-- CHATBOT -->
+    <button id="chatbot-button" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <img src="logo.png" alt="BridgeMind">
+            <span id="chatbot-title">BridgeMind Assistant</span>
+            <button id="chatbot-close" onclick="toggleChat()">×</button>
+        </div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input-container">
+            <input type="text" id="chatbot-input" placeholder="Escribe tu mensaje...">
+            <button id="chatbot-send" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR2QsiF4-OQr5LkpyAN2sLOLUO35l2bWJik2HDk9pbJxceKipZbETsVnTJfT1sW1tU/exec";
@@ -180,7 +313,22 @@
                 boton: "Enviar consulta", exito: "✅ ¡Enviado! Los datos se guardaron en Google Sheets.",
                 error: "❌ Error al enviar. Intente nuevamente o contacte directamente.",
                 contacto: "Contacto: bridgemindgames@gmail.com",
-                video: "esp.mp4", img4: "esbr.jpg"
+                video: "esp.mp4", img4: "esbr.jpg",
+                chatWelcome: "¡Hola! Soy el asistente de BridgeMind. ¿En qué puedo ayudarte?",
+                chatQ1: "¿Qué es BridgeMind?",
+                chatA1: "BridgeMind es un sistema de aprendizaje de idiomas mediante juegos (Bridge) y AI. Combinamos el juego estratégico con la enseñanza de idiomas.",
+                chatQ2: "¿Para quién es?",
+                chatA2: "Principalmente para jóvenes, pero está diseñado para todas las edades. Es perfecto para instituciones educativas.",
+                chatQ3: "¿Cuánto cuesta y cuánto dura?",
+                chatA3: "El programa dura mínimo 6 meses. El costo se ajusta según las necesidades de cada organización. Hablemos para crear un plan personalizado.",
+                chatQ4: "¿Cómo funciona la IA?",
+                chatA4: "Nuestra IA genera aplicaciones y contenido personalizado para cada clase, adaptándose al nivel y progreso de cada estudiante.",
+                chatQ5: "¿Ofrecen prueba gratuita?",
+                chatA5: "Si hay interés, firmamos un contrato. Podemos ir a tu ubicación (gastos pagados) para explicar el proyecto en persona.",
+                chatSchedule: "📅 Agendar cita/videollamada",
+                chatMenu: "📋 Ver menú principal",
+                chatOffline: "Actualmente no estoy disponible. Por favor contáctame:\n📧 bridgemindgames@gmail.com\n📱 WhatsApp: +34 634 268 663",
+                chatPlaceholder: "Escribe tu mensaje..."
             },
             en: {
                 titulo: "Learn Languages with Mind Games: Neuro-Linguistics and AI",
@@ -194,7 +342,22 @@
                 boton: "Send inquiry", exito: "✅ Sent! Data saved to Google Sheets.",
                 error: "❌ Send error. Please try again or contact directly.",
                 contacto: "Contact: bridgemindgames@gmail.com",
-                video: "aus.mp4", img4: "enbr.jpg"
+                video: "aus.mp4", img4: "enbr.jpg",
+                chatWelcome: "Hello! I'm the BridgeMind assistant. How can I help you?",
+                chatQ1: "What is BridgeMind?",
+                chatA1: "BridgeMind is a language learning system using games (Bridge) and AI. We combine strategic gameplay with language teaching.",
+                chatQ2: "Who is it for?",
+                chatA2: "Mainly for young people, but designed for all ages. Perfect for educational institutions.",
+                chatQ3: "How much does it cost and how long?",
+                chatA3: "The program lasts at least 6 months. Cost is adjusted according to each organization's needs. Let's talk to create a personalized plan.",
+                chatQ4: "How does the AI work?",
+                chatA4: "Our AI generates personalized applications and content for each class, adapting to each student's level and progress.",
+                chatQ5: "Do you offer a free trial?",
+                chatA5: "If interested, we sign a contract. We can visit your location (expenses paid) to explain the project in person.",
+                chatSchedule: "📅 Schedule appointment/video call",
+                chatMenu: "📋 View main menu",
+                chatOffline: "I'm currently unavailable. Please contact me:\n📧 bridgemindgames@gmail.com\n📱 WhatsApp: +34 634 268 663",
+                chatPlaceholder: "Type your message..."
             },
             fr: {
                 titulo: "Apprenez des langues avec des jeux cérébraux",
@@ -208,7 +371,22 @@
                 boton: "Envoyer demande", exito: "✅ Envoyé! Données sauvegardées dans Google Sheets.",
                 error: "❌ Erreur d'envoi. Veuillez réessayer ou contacter directement.",
                 contacto: "Contact : bridgemindgames@gmail.com",
-                video: "fra.mp4", img4: "frbr.jpg"
+                video: "fra.mp4", img4: "frbr.jpg",
+                chatWelcome: "Bonjour! Je suis l'assistant BridgeMind. Comment puis-je vous aider?",
+                chatQ1: "Qu'est-ce que BridgeMind?",
+                chatA1: "BridgeMind est un système d'apprentissage des langues par le jeu (Bridge) et l'IA. Nous combinons jeu stratégique et enseignement des langues.",
+                chatQ2: "Pour qui est-ce?",
+                chatA2: "Principalement pour les jeunes, mais conçu pour tous les âges. Parfait pour les institutions éducatives.",
+                chatQ3: "Combien ça coûte et combien de temps?",
+                chatA3: "Le programme dure au moins 6 mois. Le coût est ajusté selon les besoins de chaque organisation. Parlons-en pour créer un plan personnalisé.",
+                chatQ4: "Comment fonctionne l'IA?",
+                chatA4: "Notre IA génère des applications et du contenu personnalisés pour chaque classe, s'adaptant au niveau et aux progrès de chaque étudiant.",
+                chatQ5: "Offrez-vous un essai gratuit?",
+                chatA5: "Si intéressé, nous signons un contrat. Nous pouvons visiter votre lieu (frais payés) pour expliquer le projet en personne.",
+                chatSchedule: "📅 Planifier rendez-vous/appel vidéo",
+                chatMenu: "📋 Voir menu principal",
+                chatOffline: "Je suis actuellement indisponible. Veuillez me contacter:\n📧 bridgemindgames@gmail.com\n📱 WhatsApp: +34 634 268 663",
+                chatPlaceholder: "Tapez votre message..."
             },
             de: {
                 titulo: "Sprachen lernen mit Gedankenspielen",
@@ -222,7 +400,22 @@
                 boton: "Anfrage senden", exito: "✅ Gesendet! Daten in Google Sheets gespeichert.",
                 error: "❌ Sende-Fehler. Bitte erneut versuchen oder direkt kontaktieren.",
                 contacto: "Kontakt: bridgemindgames@gmail.com",
-                video: "ale.mp4", img4: "alebr.jpg"
+                video: "ale.mp4", img4: "alebr.jpg",
+                chatWelcome: "Hallo! Ich bin der BridgeMind-Assistent. Wie kann ich helfen?",
+                chatQ1: "Was ist BridgeMind?",
+                chatA1: "BridgeMind ist ein Sprachlernystem mit Spielen (Bridge) und KI. Wir kombinieren strategisches Gameplay mit Sprachunterricht.",
+                chatQ2: "Für wen ist es?",
+                chatA2: "Hauptsächlich für junge Menschen, aber für alle Altersgruppen. Perfekt für Bildungseinrichtungen.",
+                chatQ3: "Wie viel kostet es und wie lange?",
+                chatA3: "Das Programm dauert mindestens 6 Monate. Die Kosten werden je nach Bedarf der Organisation angepasst. Lassen Sie uns sprechen.",
+                chatQ4: "Wie funktioniert die KI?",
+                chatA4: "Unsere KI generiert personalisierte Anwendungen und Inhalte für jede Klasse, angepasst an Niveau und Fortschritt jedes Schülers.",
+                chatQ5: "Bieten Sie eine kostenlose Testversion?",
+                chatA5: "Bei Interesse unterzeichnen wir einen Vertrag. Wir können Ihren Standort besuchen (Kosten bezahlt), um das Projekt persönlich zu erklären.",
+                chatSchedule: "📅 Termin/Videoanruf vereinbaren",
+                chatMenu: "📋 Hauptmenü anzeigen",
+                chatOffline: "Ich bin derzeit nicht verfügbar. Bitte kontaktieren Sie mich:\n📧 bridgemindgames@gmail.com\n📱 WhatsApp: +34 634 268 663",
+                chatPlaceholder: "Nachricht eingeben..."
             },
             it: {
                 titulo: "Imparare le lingue con giochi mentali",
@@ -236,104 +429,22 @@
                 boton: "Invia richiesta", exito: "✅ Inviato! Dati salvati in Google Sheets.",
                 error: "❌ Errore invio. Riprovare o contattare direttamente.",
                 contacto: "Contatto: bridgemindgames@gmail.com",
-                video: "ita.mp4", img4: "itabr.jpg"
+                video: "ita.mp4", img4: "itabr.jpg",
+                chatWelcome: "Ciao! Sono l'assistente BridgeMind. Come posso aiutarti?",
+                chatQ1: "Cos'è BridgeMind?",
+                chatA1: "BridgeMind è un sistema di apprendimento linguistico tramite giochi (Bridge) e IA. Combiniamo gioco strategico con insegnamento linguistico.",
+                chatQ2: "Per chi è?",
+                chatA2: "Principalmente per giovani, ma progettato per tutte le età. Perfetto per istituzioni educative.",
+                chatQ3: "Quanto costa e quanto dura?",
+                chatA3: "Il programma dura almeno 6 mesi. Il costo è regolato secondo le necessità di ogni organizzazione. Parliamo per creare un piano personalizzato.",
+                chatQ4: "Come funziona l'IA?",
+                chatA4: "La nostra IA genera applicazioni e contenuti personalizzati per ogni classe, adattandosi al livello e progresso di ogni studente.",
+                chatQ5: "Offrite una prova gratuita?",
+                chatA5: "Se interessati, firmiamo un contratto. Possiamo visitare la vostra sede (spese pagate) per spiegare il progetto di persona.",
+                chatSchedule: "📅 Programmare appuntamento/videochiamata",
+                chatMenu: "📋 Visualizza menu principale",
+                chatOffline: "Attualmente non sono disponibile. Per favore contattami:\n📧 bridgemindgames@gmail.com\n📱 WhatsApp: +34 634 268 663",
+                chatPlaceholder: "Scrivi il tuo messaggio..."
             },
             jp: {
-                titulo: "頭脳ゲームで言語を学ぶ",
-                desc: "AIを活用した神経言語トレーニングシステム。",
-                pilar1: "🎮 アクティブゲーム＆AI", texto1: "AIがリアルタイムで難易度調整。",
-                pilar2: "🧠 認知的リターン", texto2: "記憶力の測定可能な向上。",
-                pilar3: "🏫 教育機関向け", texto3: "貴重な診断ツール。",
-                tituloForm: "組織向けお問い合わせ",
-                label1: "組織", label2: "セクター", label3: "従業員", label4: "国",
-                label5: "連絡先", label6: "メール", label7: "電話", label8: "コメント",
-                boton: "お問い合わせ", exito: "✅ 送信済み! データをGoogle Sheetsに保存しました。",
-                error: "❌ 送信エラー。もう一度お試しいただくか、直接お問い合わせください。",
-                contacto: "お問い合わせ: bridgemindgames@gmail.com",
-                video: "jpn.mp4", img4: "jpnbrg.jpg"
-            },
-            zh: {
-                titulo: "通过智力游戏学习语言",
-                desc: "首个AI驱动的神经语言训练系统。",
-                pilar1: "🎮 主动游戏与AI", texto1: "AI实时调整难度。",
-                pilar2: "🧠 认知回报", texto2: "记忆力可测量提高。",
-                pilar3: "🏫 针对教育中心", texto3: "有价值的诊断工具。",
-                tituloForm: "组织联系",
-                label1: "组织", label2: "行业", label3: "员工", label4: "国家",
-                label5: "联系人", label6: "邮箱", label7: "电话", label8: "评论",
-                boton: "发送咨询", exito: "✅ 已发送! 数据已保存到Google Sheets。",
-                error: "❌ 发送错误。请重试或直接联系。",
-                contacto: "联系方式: bridgemindgames@gmail.com",
-                video: "chn.mp4", img4: "shbr.jpg"
-            },
-            ar: {
-                titulo: "تعلم اللغات بألعاب العقل",
-                desc: "أول نظام تدريب لغوي عصبي بالذكاء الاصطناعي.",
-                pilar1: "🎮 لعب نشط وذكاء اصطناعي", texto1: "يعدل الذكاء الاصطناعي الصعوبة في الوقت الفعلي.",
-                pilar2: "🧠 عائد معرفي", texto2: "تحسن قابل للقياس في الذاكرة.",
-                pilar3: "🏫 للمراكز التعليمية", texto3: "أدوات تشخيص قيمة.",
-                tituloForm: "اتصال للمنظمات",
-                label1: "منظمة", label2: "قطاع", label3: "موظفين", label4: "بلد",
-                label5: "اتصال", label6: "بريد إلكتروني", label7: "هاتف", label8: "تعليقات",
-                boton: "إرسال استفسار", exito: "✅ تم الإرسال! تم حفظ البيانات في Google Sheets.",
-                error: "❌ خطأ في الإرسال. يرجى المحاولة مرة أخرى أو الاتصال مباشرة.",
-                contacto: "للتواصل: bridgemindgames@gmail.com",
-                video: "ara.mp4", img4: "dubr.jpg"
-            }
-        };
-
-        function cambiarIdioma(idioma) {
-            const t = traducciones[idioma];
-            
-            document.getElementById('titulo').textContent = t.titulo;
-            document.getElementById('descripcion').textContent = t.desc;
-            document.getElementById('pilar1').textContent = t.pilar1;
-            document.getElementById('texto1').textContent = t.texto1;
-            document.getElementById('pilar2').textContent = t.pilar2;
-            document.getElementById('texto2').textContent = t.texto2;
-            document.getElementById('pilar3').textContent = t.pilar3;
-            document.getElementById('texto3').textContent = t.texto3;
-            document.getElementById('tituloForm').textContent = t.tituloForm;
-            document.getElementById('label1').textContent = t.label1 + " *";
-            document.getElementById('label2').textContent = t.label2 + " *";
-            document.getElementById('label3').textContent = t.label3 + " *";
-            document.getElementById('label4').textContent = t.label4 + " *";
-            document.getElementById('label5').textContent = t.label5 + " *";
-            document.getElementById('label6').textContent = t.label6 + " *";
-            document.getElementById('label7').textContent = t.label7;
-            document.getElementById('label8').textContent = t.label8;
-            document.getElementById('botonEnviar').textContent = t.boton;
-            document.getElementById('contacto').textContent = t.contacto;
-            
-            const video = document.getElementById('videoPrincipal');
-            const src = document.getElementById('videoSrc');
-            const msg = document.getElementById('mensajeVideo');
-            if (t.video) {
-                src.src = t.video;
-                video.load();
-                video.style.display = 'block';
-                msg.style.display = 'none';
-            } else {
-                video.style.display = 'none';
-                msg.style.display = 'block';
-            }
-            
-            document.getElementById('img4').src = t.img4;
-            document.getElementById('img4').alt = idioma.toUpperCase();
-            
-            if (idioma === 'ar') {
-                document.body.style.direction = 'rtl';
-                document.body.style.textAlign = 'right';
-            } else {
-                document.body.style.direction = 'ltr';
-                document.body.style.textAlign = 'left';
-            }
-            
-            localStorage.setItem('idioma', idioma);
-        }
-
-        cambiarIdioma('es');
-    </script>
-    <script src="chatbot.js"></script>
-</body>
-</html>
+                titulo: "頭
