@@ -3,143 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BridgeMind Education</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
+    <title>BridgeMind Education | Strategic Language Learning</title>
     <style>
-        :root { --blue: #007bff; --dark-blue: #0056b3; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin:0; background:#fff; color:#333; padding-top: 170px; text-align: center; }
+        :root { --blue: #007bff; --dark: #0056b3; --light: #f8f9fa; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding-top: 180px; text-align: center; color: #333; background: #fff; scroll-behavior: smooth; }
         
-        header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: var(--blue); color: white; padding: 15px 0; transition: 0.4s; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        header.scrolled { padding: 5px 0; background: rgba(0, 123, 255, 0.98); }
-        .logo { max-width:200px; height:auto; transition: 0.3s; margin-bottom: 10px; }
+        /* HEADER PROFESIONAL */
+        header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: var(--blue); color: white; padding: 20px 0; transition: all 0.4s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        header.scrolled { padding: 8px 0; background: rgba(0, 86, 179, 0.98); }
+        .logo { max-width: 230px; height: auto; transition: 0.3s; margin-bottom: 12px; }
         header.scrolled .logo { max-width: 150px; }
         
-        .banderas { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; padding: 0 10px; }
-        .bandera { background: rgba(255,255,255,0.2); color:white; border:1px solid white; padding:6px 12px; border-radius:20px; cursor:pointer; font-size: 11px; font-weight: bold; transition: 0.3s; }
-        .bandera:hover { background: white; color: var(--blue); }
-        
-        main { max-width:900px; margin:20px auto; padding:20px; }
-        .imagenes { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin:30px 0; }
-        .imagenes img { width:100%; height:130px; object-fit:cover; border-radius:12px; border:1px solid #ddd; }
-        video { width:100%; border-radius:12px; background: #000; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        
-        .formulario { background:#f8f9fa; padding:30px; border-radius:15px; border: 1px solid #eee; text-align: left; margin-top: 40px; }
-        .campo { margin-bottom:15px; }
-        label { display:block; font-weight:bold; margin-bottom:5px; }
-        input { width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; box-sizing: border-box; }
-        button[type="submit"] { background:#28a745; color:white; border:none; padding:15px; width:100%; border-radius:8px; font-size:18px; cursor:pointer; font-weight: bold; }
+        .banderas { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 0 15px; }
+        .bandera { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 8px 14px; border-radius: 25px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; text-transform: uppercase; }
+        .bandera:hover { background: white; color: var(--blue); transform: translateY(-2px); }
+        .bandera.active { background: white; color: var(--blue); border-color: white; }
 
-        /* CHATBOT */
-        #chat-btn { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--blue); color: white; border: none; font-size: 28px; cursor: pointer; z-index: 9999; }
-        #chat-box { display: none; position: fixed; bottom: 90px; right: 20px; width: 320px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 9998; overflow: hidden; text-align: left; }
-        #chat-header { background: var(--blue); color: white; padding: 15px; display: flex; justify-content: space-between; font-weight: bold; }
-        #chat-body { 
-            padding: 15px; height: 320px; overflow-y: auto; position: relative;
-            background: url('logo.png') no-repeat center; background-size: 50%;
-        }
-        #chat-body::before { content: ""; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.9); z-index: 0; }
-        .msg { position: relative; z-index: 1; background: #eef5ff; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-size: 14px; border: 1px solid #d1e3ff; }
-        .opt { position: relative; z-index: 1; display: block; width: 100%; padding: 10px; margin-bottom: 5px; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; text-align: left; }
+        /* CONTENIDO PRINCIPAL */
+        main { max-width: 1000px; margin: auto; padding: 20px; }
+        h1 { font-size: 2.5rem; color: #222; margin-bottom: 30px; transition: 0.3s; }
+        
+        .grid-galeria { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 30px 0; }
+        .grid-galeria img { width: 100%; height: 150px; object-fit: cover; border-radius: 15px; border: 1px solid #eee; box-shadow: 0 4px 8px rgba(0,0,0,0.05); transition: 0.3s; }
+        .grid-galeria img:hover { transform: scale(1.03); }
 
-        @media (max-width:600px) { .imagenes { grid-template-columns: repeat(2, 1fr); } body { padding-top: 220px; } }
+        .video-box { margin: 40px 0; position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: #000; }
+        video { width: 100%; display: block; }
+
+        /* PILARES ESTRATÉGICOS */
+        .pilares { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 50px 0; }
+        .pilar { background: var(--light); padding: 30px 20px; border-radius: 18px; border-bottom: 5px solid var(--blue); text-align: left; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .pilar:hover { transform: translateY(-10px); background: #fff; box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+        .pilar h3 { margin-top: 0; color: var(--blue); font-size: 1.3rem; }
+        .pilar p { font-size: 0.95rem; line-height: 1.6; color: #555; }
+
+        /* FORMULARIO DE CONTACTO */
+        .seccion-form { background: var(--light); padding: 40px; border-radius: 25px; margin: 60px 0; text-align: left; border: 1px solid #eaeaea; }
+        .seccion-form h2 { margin-top: 0; margin-bottom: 25px; color: #333; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; transition: 0.3s; }
+        input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
+        .btn-enviar { background: #28a745; color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-enviar:hover { background: #218838; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40,167,69,0.3); }
+
+        /* CHATBOT DISEÑO PREMIUM */
+        #chat-trigger { position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px; border-radius: 50%; background: var(--blue); color: white; border: none; font-size: 32px; cursor: pointer; z-index: 9999; box-shadow: 0 6px 20px rgba(0,123,255,0.4); transition: 0.3s; }
+        #chat-trigger:hover { transform: scale(1.1) rotate(5deg); }
+        #chat-window { display: none; position: fixed; bottom: 100px; right: 25px; width: 340px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); z-index: 9998; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); }
+        #chat-header { background: var(--blue); color: white; padding: 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        #chat-body { height: 380px; overflow-y: auto; padding: 20px; position: relative; background: #fff; background-image: url('logo.png'); background-repeat: no-repeat; background-position: center; background-size: 55%; }
+        #chat-body::after { content: ""; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.92); z-index: 1; }
+        .chat-msg { position: relative; z-index: 2; background: #f0f4f8; padding: 14px; border-radius: 15px; border-bottom-left-radius: 2px; margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: #444; border: 1px solid #e1e8ed; }
+        .chat-opt { position: relative; z-index: 2; display: block; width: 100%; padding: 12px; margin-bottom: 8px; background: white; color: var(--blue); border: 2px solid var(--blue); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.3s; text-align: left; }
+        .chat-opt:hover { background: var(--blue); color: white; }
+
+        @media (max-width: 850px) { .pilares { grid-template-columns: 1fr; } .grid-galeria { grid-template-columns: repeat(2, 1fr); } body { padding-top: 220px; } h1 { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
 
-<header id="mainHeader">
-    <img src="logo.png" class="logo">
-    <div class="banderas">
-        <button class="bandera" onclick="updateSite('es')">ES</button>
-        <button class="bandera" onclick="updateSite('en')">EN</button>
-        <button class="bandera" onclick="updateSite('fr')">FR</button>
-        <button class="bandera" onclick="updateSite('de')">DE</button>
-        <button class="bandera" onclick="updateSite('it')">IT</button>
-        <button class="bandera" onclick="updateSite('jp')">JP</button>
-        <button class="bandera" onclick="updateSite('zh')">ZH</button>
-        <button class="bandera" onclick="updateSite('ar')">AR</button>
-    </div>
+<header id="nav">
+    <img src="logo.png" class="logo" alt="BridgeMind">
+    <div class="banderas" id="flag-container">
+        </div>
 </header>
 
 <main>
-    <h1 id="main-h1">Aprenda Idiomas con el Bridge y la IA</h1>
-    <div class="imagenes">
+    <h1 id="txt-h1">Aprenda Idiomas con el Bridge y la IA</h1>
+    
+    <div class="grid-galeria">
         <img src="1.jpeg"> <img src="2.jpeg"> <img src="3.jpg">
-        <img src="esbr.jpg" id="foto4"> </div>
-    <video id="v-player" controls><source id="v-src" src="esp.mp4" type="video/mp4"></video>
+        <img src="esbr.jpg" id="foto-pais">
+    </div>
 
-    <div class="formulario">
-        <h2 id="f-title">Contacto para organizaciones</h2>
+    <div class="video-box">
+        <video id="main-vid" controls><source id="main-src" src="esp.mp4" type="video/mp4"></video>
+    </div>
+
+    <div class="pilares">
+        <div class="pilar">
+            <h3 id="p1-t">🃏 Bridge Estratégico</h3>
+            <p id="p1-d">Utilizamos la lógica del Bridge para acelerar la comprensión gramatical y estratégica del nuevo idioma.</p>
+        </div>
+        <div class="pilar">
+            <h3 id="p2-t">🤖 IA Personalizada</h3>
+            <p id="p2-d">Nuestra IA genera ejercicios y textos adaptados al progreso real de cada estudiante en tiempo real.</p>
+        </div>
+        <div class="pilar">
+            <h3 id="p3-t">📈 Programa de 6 Meses</h3>
+            <p id="p3-d">Un viaje estructurado diseñado para alcanzar fluidez operativa mediante la práctica constante y lúdica.</p>
+        </div>
+    </div>
+
+    <div class="seccion-form">
+        <h2 id="f-h2">Contacto para organizaciones</h2>
         <form action="https://formsubmit.co/bridgemindgames@gmail.com" method="POST">
-            <div class="campo"><label id="l-org">Organización *</label><input name="organizacion" type="text" required></div>
-            <div class="campo"><label id="l-pais">País *</label><input name="pais" type="text" required></div>
-            <div class="campo"><label id="l-email">Email *</label><input name="email" type="email" required></div>
-            <button type="submit" id="f-btn">Enviar consulta</button>
+            <div class="form-group"><label id="l-org">Nombre de la Organización *</label><input type="text" name="org" required></div>
+            <div class="form-group"><label id="l-pais">País de Residencia *</label><input type="text" name="pais" required></div>
+            <div class="form-group"><label id="l-mail">Correo Electrónico *</label><input type="email" name="email" required></div>
+            <button type="submit" class="btn-enviar" id="f-btn">Solicitar Información</button>
         </form>
     </div>
 </main>
 
-<button id="chat-btn" onclick="toggleChat()">💬</button>
-<div id="chat-box">
-    <div id="chat-header">BridgeMind Assistant <span onclick="toggleChat()" style="cursor:pointer">×</span></div>
-    <div id="chat-body"></div>
+<button id="chat-trigger" onclick="toggleChat()">💬</button>
+<div id="chat-window">
+    <div id="chat-header">BridgeMind Assistant <span onclick="toggleChat()" style="cursor:pointer; font-size: 20px;">&times;</span></div>
+    <div id="chat-body" id="chat-content"></div>
 </div>
 
 <script>
-    const db = {
-        es: { h1: "Aprenda Idiomas con el Bridge y la IA", img: "esbr.jpg", vid: "esp.mp4", f1: "Organización *", f2: "País *", f3: "Email *", f4: "Enviar consulta", ft: "Contacto para organizaciones", q: "¿Cómo funciona?", a: "Sistema dual Bridge + Idioma. IA por clase. Mínimo 6 meses. Sin prueba gratuita." },
-        en: { h1: "Learn Languages with Bridge & AI", img: "enbr.jpg", vid: "eng.mp4", f1: "Organization *", f2: "Country *", f3: "Email *", f4: "Send Inquiry", ft: "Contact for organizations", q: "How it works?", a: "Dual system Bridge + Language. AI per class. 6-month minimum. No free trial." },
-        fr: { h1: "Apprendre les langues avec Bridge & IA", img: "frbr.jpg", vid: "fr.mp4", f1: "Organisation *", f2: "Pays *", f3: "Email *", f4: "Envoyer", ft: "Contact pour les organisations", q: "Comment ça marche?", a: "Système dual. IA par classe. 6 mois minimum. Pas d'essai gratuit." },
-        de: { h1: "Sprachen lernen mit Bridge & KI", img: "debr.jpg", vid: "de.mp4", f1: "Organisation *", f2: "Land *", f3: "E-Mail *", f4: "Absenden", ft: "Kontakt für Organisationen", q: "Wie funktioniert es?", a: "Duales System. KI pro Unterricht. Mindestens 6 Monate. Keine Testversion." },
-        it: { h1: "Impara le lingue con Bridge e IA", img: "itbr.jpg", vid: "it.mp4", f1: "Organizzazione *", f2: "Paese *", f3: "Email *", f4: "Invia", ft: "Contatto per organizzazioni", q: "Come funziona?", a: "Sistema duale. IA per lezione. Minimo 6 mesi. Nessuna prova gratuita." },
-        jp: { h1: "ブリッジとAIで言語を学ぶ", img: "jpbr.jpg", vid: "jp.mp4", f1: "組織名 *", f2: "国 *", f3: "メール *", f4: "送信する", ft: "組織向け連絡先", q: "どのように機能しますか？", a: "ブリッジと言語の二重システム。最短6ヶ月。無料トライアルなし。" },
-        zh: { h1: "通过桥牌和人工智能学习语言", img: "zhbr.jpg", vid: "zh.mp4", f1: "组织 *", f2: "国家 *", f3: "电子邮件 *", f4: "发送", ft: "组织联系方式", q: "它是如何工作的？", a: "双系统桥牌+语言。至少6个月。无免费试用。" },
-        ar: { h1: "تعلم اللغات مع البريدج والذكاء الاصطناعي", img: "arbr.jpg", vid: "ar.mp4", f1: "المنظمة *", f2: "البلد *", f3: "البريد الإلكتروني *", f4: "إرسال", ft: "الاتصال للمنظمات", q: "كيف يعمل؟", a: "نظام مزدوج بريدج + لغة. 6 أشهر كحد أدنى. لا توجد تجربة مجانية." }
+    const langDB = {
+        es: { 
+            h1: "Aprenda Idiomas con el Bridge y la IA", img: "esbr.jpg", vid: "esp.mp4",
+            p1t: "🃏 Bridge Estratégico", p1d: "Lógica del Bridge para acelerar la gramática.",
+            p2t: "🤖 IA Personalizada", p2d: "Contenido generado por IA en tiempo real.",
+            p3t: "📈 Programa de 6 Meses", p3d: "Fluidez operativa en tiempo récord.",
+            fh: "Contacto para organizaciones", l1: "Organización *", l2: "País *", l3: "Email *", fb: "Solicitar Información",
+            cq: "¿Cómo funciona el programa?", ca: "Sistema dual (Bridge + Idioma). IA por clase. Mínimo 6 meses. Sin prueba gratuita (demo pagada disponible)."
+        },
+        en: { 
+            h1: "Learn Languages with Bridge & AI", img: "enbr.jpg", vid: "eng.mp4",
+            p1t: "🃏 Strategic Bridge", p1d: "Bridge logic to accelerate grammar learning.",
+            p2t: "🤖 Personalized AI", p2d: "AI-generated content in real-time.",
+            p3t: "📈 6-Month Program", p3d: "Operational fluency in record time.",
+            fh: "Contact for organizations", l1: "Organization *", l2: "Country *", l3: "Email *", fb: "Request Information",
+            cq: "How does the program work?", ca: "Dual system (Bridge + Language). AI per session. 6-month minimum. No free trial (paid demo available)."
+        },
+        fr: { 
+            h1: "Apprendre les langues via le Bridge & l'IA", img: "frbr.jpg", vid: "fr.mp4",
+            p1t: "🃏 Bridge Stratégique", p1d: "Logique du Bridge pour booster la grammaire.",
+            p2t: "🤖 IA Personnalisée", p2d: "Contenu IA généré en temps réel.",
+            p3t: "📈 Programme de 6 Mois", p3d: "Fluidité opérationnelle rapide.",
+            fh: "Contact pour les organisations", l1: "Organisation *", l2: "Pays *", l3: "Email *", fb: "Demander des infos",
+            cq: "Comment ça marche ?", ca: "Système dual. IA par classe. 6 mois minimum. Pas d'essai gratuit."
+        },
+        de: { h1: "Sprachen lernen mit Bridge & KI", img: "debr.jpg", vid: "de.mp4", p1t: "🃏 Strategisches Bridge", p1d: "Bridge-Logik für Grammatik.", p2t: "🤖 KI-Unterstützung", p2d: "Echtzeit-KI-Inhalte.", p3t: "📈 6-Monats-Programm", p3d: "Schnelle operative Fließfähigkeit.", fh: "Kontakt", l1: "Organisation *", l2: "Land *", l3: "E-Mail *", fb: "Anfrage senden", cq: "Wie funktioniert es?", ca: "Duales System. KI pro Klasse. Mindestens 6 Monate." },
+        it: { h1: "Impara le lingue con Bridge e IA", img: "itbr.jpg", vid: "it.mp4", p1t: "🃏 Bridge Strategico", p1d: "Logica per la grammatica.", p2t: "🤖 IA Dedicata", p2d: "Contenuti IA in tempo reale.", p3t: "📈 Programma 6 Mesi", p3d: "Fluidità operativa rapida.", fh: "Contatto", l1: "Organizzazione *", l2: "Paese *", l3: "Email *", fb: "Invia Richiesta", cq: "Come funziona?", ca: "Sistema duale. IA per lezione. Minimo 6 mesi." },
+        jp: { h1: "ブリッジとAIで言語を学ぶ", img: "jpbr.jpg", vid: "jp.mp4", p1t: "🃏 戦略的ブリッジ", p1d: "文法を加速する論理。", p2t: "🤖 専用AI", p2d: "リアルタイムAI教材。", p3t: "📈 6ヶ月プログラム", p3d: "最短で流暢に。", fh: "組織向け窓口", l1: "組織名 *", l2: "国名 *", l3: "メール *", fb: "情報をリクエスト", cq: "仕組みは？", ca: "二重システム。最短6ヶ月。無料トライアルなし。" },
+        zh: { h1: "通过桥牌和人工智能学习语言", img: "zhbr.jpg", vid: "zh.mp4", p1t: "🃏 战略桥牌", p1d: "加速语法的逻辑。", p2t: "🤖 个性化AI", p2d: "实时生成的AI内容。", p3t: "📈 6个月计划", p3d: "创纪录的流畅度。", fh: "组织联系", l1: "组织 *", l2: "国家 *", l3: "邮箱 *", fb: "提交申请", cq: "如何运作？", ca: "双系统。每节课AI。至少6个月。" },
+        ar: { h1: "تعلم اللغات عبر البريدج والذكاء الاصطناعي", img: "arbr.jpg", vid: "ar.mp4", p1t: "🃏 البريدج الاستراتيجي", p1d: "منطق البريدج لتسريع القواعد.", p2t: "🤖 ذكاء اصطناعي مخصص", p2d: "محتوى فوري لكل حصة.", p3t: "📈 برنامج 6 أشهر", p3d: "طلاقة تشغيلية قياسية.", fh: "اتصال المنظمات", l1: "المنظمة *", l2: "البلد *", l3: "الإيميل *", fb: "طلب معلومات", cq: "كيف يعمل البرنامج؟", ca: "نظام مزدوج. ذكاء اصطناعي. 6 أشهر كحد أدنى." }
     };
 
-    let curLang = 'es';
+    let activeL = 'es';
 
-    function updateSite(lang) {
-        curLang = lang;
-        const d = db[lang];
+    function initFlags() {
+        const container = document.getElementById('flag-container');
+        Object.keys(langDB).forEach(lang => {
+            const btn = document.createElement('button');
+            btn.className = `bandera ${lang === 'es' ? 'active' : ''}`;
+            btn.innerText = lang;
+            btn.onclick = () => switchLang(lang, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function switchLang(lang, btnElement) {
+        activeL = lang;
+        const d = langDB[lang];
         
-        document.getElementById('main-h1').innerText = d.h1;
-        document.getElementById('foto4').src = d.img + "?v=" + Date.now();
+        // Estética botones
+        document.querySelectorAll('.bandera').forEach(b => b.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        // Textos principales
+        document.getElementById('txt-h1').innerText = d.h1;
+        document.getElementById('foto-pais').src = d.img + "?v=" + Date.now();
         
-        const v = document.getElementById('v-player');
-        document.getElementById('v-src').src = d.vid + "?v=" + Date.now();
+        // Video
+        const v = document.getElementById('main-vid');
+        document.getElementById('main-src').src = d.vid + "?v=" + Date.now();
         v.load();
 
-        // Traducción Formulario
-        document.getElementById('f-title').innerText = d.ft;
-        document.getElementById('l-org').innerText = d.f1;
-        document.getElementById('l-pais').innerText = d.f2;
-        document.getElementById('l-email').innerText = d.f3;
-        document.getElementById('f-btn').innerText = d.f4;
+        // Pilares
+        document.getElementById('p1-t').innerText = d.p1t; document.getElementById('p1-d').innerText = d.p1d;
+        document.getElementById('p2-t').innerText = d.p2t; document.getElementById('p2-d').innerText = d.p2d;
+        document.getElementById('p3-t').innerText = d.p3t; document.getElementById('p3-d').innerText = d.p3d;
 
-        if(document.getElementById('chat-box').style.display === 'block') renderChat();
+        // Formulario
+        document.getElementById('f-h2').innerText = d.fh;
+        document.getElementById('l-org').innerText = d.l1;
+        document.getElementById('l-pais').innerText = d.l2;
+        document.getElementById('l-mail').innerText = d.l3;
+        document.getElementById('f-btn').innerText = d.fb;
+
+        if(document.getElementById('chat-window').style.display === 'block') refreshChat();
     }
 
     function toggleChat() {
-        const b = document.getElementById('chat-box');
-        b.style.display = (b.style.display === 'block') ? 'none' : 'block';
-        if(b.style.display === 'block') renderChat();
+        const w = document.getElementById('chat-window');
+        w.style.display = (w.style.display === 'block') ? 'none' : 'block';
+        if(w.style.display === 'block') refreshChat();
     }
 
-    function renderChat() {
-        const d = db[curLang];
-        document.getElementById('chat-body').innerHTML = `<div class="msg">BridgeMind AI</div><button class="opt" onclick="showA()">${d.q}</button>`;
+    function refreshChat() {
+        const d = langDB[activeL];
+        document.getElementById('chat-body').innerHTML = `
+            <div class="chat-msg">Hello! I am the BridgeMind virtual assistant.</div>
+            <button class="chat-opt" onclick="ans()">${d.cq}</button>
+        `;
     }
 
-    function showA() {
-        const d = db[curLang];
-        document.getElementById('chat-body').innerHTML = `<div class="msg">${d.a}</div><button class="opt" onclick="renderChat()">Back / Volver</button>`;
+    function ans() {
+        const d = langDB[activeL];
+        document.getElementById('chat-body').innerHTML = `
+            <div class="chat-msg">${d.ca}</div>
+            <button class="chat-opt" onclick="refreshChat()">← Back / Volver</button>
+        `;
     }
 
     window.onscroll = function() {
-        const h = document.getElementById("mainHeader");
-        if (window.pageYOffset > 50) h.classList.add("scrolled");
-        else h.classList.remove("scrolled");
+        const nav = document.getElementById("nav");
+        if (window.pageYOffset > 50) nav.classList.add("scrolled");
+        else nav.classList.remove("scrolled");
     };
+
+    window.onload = initFlags;
 </script>
 </body>
 </html>
