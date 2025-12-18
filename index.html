@@ -1,91 +1,431 @@
-(function() {
-    var style = document.createElement('style');
-    style.textContent = `
-        #chat-btn {position:fixed;bottom:20px;right:20px;width:60px;height:60px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;display:flex;align-items:center;justify-content:center;}
-        #chat-box {position:fixed;bottom:90px;right:20px;width:360px;height:500px;background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none;flex-direction:column;z-index:9998;}
-        #chat-box.show {display:flex;}
-        .chat-header {background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;}
-        .chat-body {flex:1;overflow-y:auto;padding:20px;background:#f8f9fa;}
-        .msg {margin-bottom:16px;display:flex;}
-        .msg.bot {justify-content:flex-start;}
-        .msg.user {justify-content:flex-end;}
-        .msg-txt {max-width:75%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.4;}
-        .msg.bot .msg-txt {background:white;box-shadow:0 2px 4px rgba(0,0,0,0.1);}
-        .msg.user .msg-txt {background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
-    `;
-    document.head.appendChild(style);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeMind Education</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+body {font-family: Arial; margin:0; background:#fff; color:#333; padding-top: 155px !important;}
 
-    var html = `
-        <button id="chat-btn">
-            <svg viewBox="0 0 24 24" style="width:30px;height:30px;fill:white;">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-            </svg>
-        </button>
-        <div id="chat-box">
-            <div class="chat-header">
-                <div>
-                    <h3 style="margin:0;font-size:18px;">BridgeMind Assistant</h3>
-                    <div style="font-size:12px;opacity:0.9;">Online</div>
-                </div>
-                <button onclick="document.getElementById('chat-box').classList.remove('show')" style="background:none;border:none;color:white;font-size:28px;cursor:pointer;line-height:1;">×</button>
-            </div>
-            <div class="chat-body" id="msgs"></div>
-            <div style="padding:16px;background:white;border-top:1px solid #e0e0e0;display:flex;gap:8px;">
-                <input type="text" id="chat-inp" placeholder="Escribe tu mensaje..." style="flex:1;border:2px solid #e0e0e0;border-radius:24px;padding:12px 16px;font-size:14px;outline:none;">
-                <button onclick="window.sendChatMsg()" style="background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:white;width:44px;height:44px;border-radius:50%;cursor:pointer;">▶</button>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', html);
+/* ========== HEADER FIJO CON EFECTO ========== */
+header {
+position: fixed !important;
+top: 0 !important;
+left: 0 !important;
+width: 100% !important;
+z-index: 1000 !important;
+background: #007bff !important;
+color: white !important;
+padding: 15px 0 !important;
+text-align: center !important;
+transition: all 0.3s ease !important;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
 
-    document.getElementById('chat-btn').onclick = function() {
-        var box = document.getElementById('chat-box');
-        box.classList.toggle('show');
-        if (box.classList.contains('show') && !window.chatStarted) {
-            setTimeout(function() {
-                addChatMsg('¡Hola! 👋 Soy el asistente de BridgeMind Education.\n\n¿En qué puedo ayudarte?', 'bot');
-                window.chatStarted = true;
-            }, 300);
-        }
-    };
+header.scrolled {
+padding: 8px 0 !important;
+box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+}
 
-    function addChatMsg(text, type) {
-        var msgs = document.getElementById('msgs');
-        var div = document.createElement('div');
-        div.className = 'msg ' + type;
-        var txt = document.createElement('div');
-        txt.className = 'msg-txt';
-        txt.innerHTML = text.replace(/\n/g, '<br>');
-        div.appendChild(txt);
-        msgs.appendChild(div);
-        msgs.scrollTop = msgs.scrollHeight;
-    }
+.logo {max-width:250px; height:auto; margin-bottom:10px; transition: all 0.3s ease;}
+header.scrolled .logo {max-width:200px; margin-bottom:5px;}
 
-    window.sendChatMsg = function() {
-        var inp = document.getElementById('chat-inp');
-        var msg = inp.value.trim();
-        if (!msg) return;
-        
-        addChatMsg(msg, 'user');
-        inp.value = '';
-        
-        setTimeout(function() {
-            var resp = '¡Gracias! 🎉\n\nContáctanos:\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com';
-            
-            if (msg.toLowerCase().includes('demo')) {
-                resp = '¡Excelente! 🎉\n\nDemo GRATUITA incluye:\n• 1 día completo\n• 4 participantes\n• Aprenden Bridge\n\n📱 WhatsApp: +34 634 268 663';
-            } else if (msg.toLowerCase().includes('info') || msg.toLowerCase().includes('qué')) {
-                resp = 'BridgeMind enseña idiomas con Bridge 🃏\n\n• 4 alumnos/mesa\n• 6 horas/semana\n• Programa de 1 año\n\nContacto:\n📱 +34 634 268 663';
-            } else if (msg.toLowerCase().includes('humano') || msg.toLowerCase().includes('persona')) {
-                resp = '¡Por supuesto! 👤\n\nHabla con nosotros:\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com';
-            }
-            
-            addChatMsg(resp, 'bot');
-        }, 800);
-    };
+.banderas {display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:15px; transition: all 0.3s ease;}
+header.scrolled .banderas {margin:8px; gap:6px;}
 
-    document.getElementById('chat-inp').onkeypress = function(e) {
-        if (e.key === 'Enter') window.sendChatMsg();
-    };
-})();
+.bandera {background:#0056b3; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; transition: all 0.3s ease;}
+header.scrolled .bandera {padding:6px 10px; font-size:14px;}
+.bandera:hover {background:#003d80;}
+/* ========== FIN HEADER FIJO ========== */
+
+main {max-width:900px; margin:20px auto; padding:20px; background:white; box-shadow:0 0 10px rgba(0,0,0,0.1); border-radius:8px;}
+h1 {color:#007bff; text-align:center;}
+.imagenes {display:flex; justify-content:center; gap:15px; margin:30px 0; flex-wrap:wrap;}
+.imagenes img {width:180px; height:120px; object-fit:cover; border-radius:8px; border:2px solid #ddd;}
+.video-container {text-align:center; margin:30px 0;}
+video {max-width:100%; border-radius:8px;}
+.pilares {display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin:30px 0;}
+.pilar {background:#f8f9fa; padding:15px; border-radius:8px; border-left:4px solid #007bff;}
+.formulario {background:#f8f9fa; padding:25px; border-radius:10px; margin-top:30px;}
+.campo {margin-bottom:15px;}
+label {display:block; font-weight:bold; margin-bottom:5px;}
+input, select, textarea {width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;}
+button[type="submit"] {background:#28a745; color:white; border:none; padding:12px; width:100%; border-radius:5px; font-size:16px;}
+#mensaje {padding:12px; margin:15px 0; border-radius:5px; display:none;}
+.exito {background:#d4edda; color:#155724;}
+.error {background:#f8d7da; color:#721c24;}
+footer {text-align:center; padding:25px; background:#333; color:white; margin-top:40px;}
+@media (max-width:768px) {
+.pilares {grid-template-columns:1fr;}
+.imagenes img {width:45%;}
+body {padding-top: 160px !important;}
+header.scrolled .logo {max-width:180px;}
+}
+</style>
+</head>
+<body>
+<header id="mainHeader">
+<img src="logo.png" alt="BridgeMind Logo" class="logo">
+<div class="banderas">
+<button class="bandera" onclick="cambiarIdioma('es')"><span class="flag-icon flag-icon-es"></span> ES</button>
+<button class="bandera" onclick="cambiarIdioma('en')"><span class="flag-icon flag-icon-gb"></span> EN</button>
+<button class="bandera" onclick="cambiarIdioma('fr')"><span class="flag-icon flag-icon-fr"></span> FR</button>
+<button class="bandera" onclick="cambiarIdioma('de')"><span class="flag-icon flag-icon-de"></span> DE</button>
+<button class="bandera" onclick="cambiarIdioma('it')"><span class="flag-icon flag-icon-it"></span> IT</button>
+<button class="bandera" onclick="cambiarIdioma('jp')"><span class="flag-icon flag-icon-jp"></span> JP</button>
+<button class="bandera" onclick="cambiarIdioma('zh')"><span class="flag-icon flag-icon-cn"></span> ZH</button>
+<button class="bandera" onclick="cambiarIdioma('ar')"><span class="flag-icon flag-icon-sa"></span> AR</button>
+</div>
+</header>
+
+<main>
+<h1 id="titulo">Aprenda Idiomas con Juegos Mentales</h1>
+<p id="descripcion" style="text-align:center;">Neuro-Lingüística e IA para todas las edades.</p>
+
+<div class="imagenes">
+<img src="1.jpeg" alt="Juegos de niños" id="img1">
+<img src="2.jpeg" alt="Juegos de adultos" id="img2">
+<img src="3.jpg" alt="Collage de educación" id="img3">
+<img src="esbr.jpg" alt="España" id="img4">
+</div>
+
+<div class="video-container">
+<video controls id="videoPrincipal">
+<source id="videoSrc" src="esp.mp4" type="video/mp4">
+Tu navegador no soporta video.
+</video>
+<p id="mensajeVideo" style="display:none; color:#856404;">Video no disponible</p>
+</div>
+
+<div class="pilares">
+<div class="pilar"><h3 id="pilar1">🎮 Juego Activo e IA</h3><p id="texto1">La IA adapta la dificultad en tiempo real.</p></div>
+<div class="pilar"><h3 id="pilar2">🧠 Retorno Cognitivo</h3><p id="texto2">Mejora medible en memoria y lógica.</p></div>
+<div class="pilar"><h3 id="pilar3">🏫 Para Centros Educativos</h3><p id="texto3">Herramientas de diagnóstico valiosas.</p></div>
+</div>
+
+<div class="formulario">
+<h2 id="tituloForm">Contacto para organizaciones</h2>
+<div id="mensaje"></div>
+<form id="formulario" action="https://formsubmit.co/bridgemindgames@gmail.com" method="POST">
+<input type="hidden" name="_subject" value="Nuevo contacto desde BridgeMind">
+<input type="hidden" name="_captcha" value="false">
+<div class="campo"><label id="label1">Organización *</label><input name="organizacion" type="text" id="organizacion" required></div>
+<div class="campo"><label id="label2">Sector *</label>
+<select name="sector" id="sector" required><option value="">-- Seleccione --</option>
+<option value="edu">Educación</option><option value="tech">Tecnología</option>
+<option value="salud">Salud</option><option value="otros">Otros</option>
+</select>
+</div>
+<div class="campo"><label id="label3">Empleados *</label><input name="empleados" type="number" id="empleados" required></div>
+<div class="campo"><label id="label4">País *</label><input name="pais" type="text" id="pais" required></div>
+<div class="campo"><label id="label5">Contacto *</label><input name="contacto" type="text" id="contacto" required></div>
+<div class="campo"><label id="label6">Email *</label><input name="email" type="email" id="email" required></div>
+<div class="campo"><label id="label7">Teléfono</label><input name="telefono" type="tel" id="telefono"></div>
+<div class="campo"><label id="label8">Comentarios</label><textarea name="comentarios" id="comentarios" rows="3"></textarea></div>
+<button type="submit" id="botonEnviar">Enviar consulta</button>
+</form>
+</div>
+</main>
+
+<footer>
+<p id="contacto">Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</p>
+<p>BridgeMind Education © 2024</p>
+</footer>
+
+<!-- CHATBOT 24/7 -->
+<script>
+window.botpressWebChat.init({
+host: 'https://cdn.botpress.cloud/webchat/v2',
+botId: '1e648085-d4da-43ea-bc5d-2b6e4b0aa88a',
+clientId: '1e648085-d4da-43ea-bc5d-2b6e4b0aa88a',
+theme: {
+primaryColor: '#007bff',
+secondaryColor: '#0056b3',
+backgroundColor: '#ffffff'
+},
+position: 'bottom-right',
+persistentMenu: ['preguntas-frecuentes', 'agendar-cita', 'juego-demo'],
+language: 'auto'
+});
+</script>
+<script src="https://cdn.botpress.cloud/webchat/v2/js/botpress.js"></script>
+
+<script>
+// ========== CONFIGURACIÓN GOOGLE SHEETS ==========
+// ⚠️ REEMPLAZA ESTA URL POR LA TUYA
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR2QsiF4-OQr5LkpyAN2sLOLUO35l2bWJik2HDk9pbJxceKipZbETsVnTJfT1sW1tU/exec";
+
+// ========== HEADER FIJO - EFECTO SCROLL ==========
+window.addEventListener('DOMContentLoaded', function() {
+const header = document.getElementById('mainHeader');
+
+window.addEventListener('scroll', function() {
+if (window.scrollY > 50) {
+header.classList.add('scrolled');
+} else {
+header.classList.remove('scrolled');
+}
+});
+});
+
+const traducciones = {
+es: {
+titulo: "Aprenda Idiomas con Juegos Mentales: Neuro-Lingüística e IA",
+desc: "El primer sistema de Entrenamiento Neuro-Lingüístico impulsado por IA.",
+pilar1: "🎮 Juego Activo e IA", texto1: "La IA adapta la dificultad en tiempo real.",
+pilar2: "🧠 Retorno Cognitivo", texto2: "Mejora medible en memoria y lógica.",
+pilar3: "🏫 Para Centros Educativos", texto3: "Herramientas de diagnóstico valiosas.",
+tituloForm: "Contacto para organizaciones",
+label1: "Organización", label2: "Sector", label3: "Empleados", label4: "País",
+label5: "Contacto", label6: "Email", label7: "Teléfono", label8: "Comentarios",
+boton: "Enviar consulta", exito: "✅ ¡Enviado! Los datos se guardaron en Google Sheets.",
+error: "❌ Error al enviar. Intente nuevamente o contacte directamente.",
+contacto: "Contacto: bridgemindgames@gmail.com",
+video: "esp.mp4", img4: "esbr.jpg"
+},
+en: {
+titulo: "Learn Languages with Mind Games: Neuro-Linguistics and AI",
+desc: "First AI-powered Neuro-Linguistic Training system.",
+pilar1: "🎮 Active Play & AI", texto1: "AI adapts difficulty in real-time.",
+pilar2: "🧠 Cognitive Return", texto2: "Measurable improvement in memory.",
+pilar3: "🏫 For Educational Centers", texto3: "Valuable diagnostic tools.",
+tituloForm: "Contact for organizations",
+label1: "Organization", label2: "Sector", label3: "Employees", label4: "Country",
+label5: "Contact", label6: "Email", label7: "Phone", label8: "Comments",
+boton: "Send inquiry", exito: "✅ Sent! Data saved to Google Sheets.",
+error: "❌ Send error. Please try again or contact directly.",
+contacto: "Contact: bridgemindgames@gmail.com",
+video: "aus.mp4", img4: "enbr.jpg"
+},
+fr: {
+titulo: "Apprenez des langues avec des jeux cérébraux",
+desc: "Premier système d'Entraînement Neuro-Linguistique avec IA.",
+pilar1: "🎮 Jeu Actif & IA", texto1: "L'IA adapte la difficulté en temps réel.",
+pilar2: "🧠 Retour Cognitif", texto2: "Amélioration mesurable de la mémoire.",
+pilar3: "🏫 Pour les Centres Éducatifs", texto3: "Outils de diagnostic précieux.",
+tituloForm: "Contact pour organisations",
+label1: "Organisation", label2: "Secteur", label3: "Employés", label4: "Pays",
+label5: "Contact", label6: "Email", label7: "Téléphone", label8: "Commentaires",
+boton: "Envoyer demande", exito: "✅ Envoyé! Données sauvegardées dans Google Sheets.",
+error: "❌ Erreur d'envoi. Veuillez réessayer ou contacter directement.",
+contacto: "Contact : bridgemindgames@gmail.com",
+video: "fra.mp4", img4: "frbr.jpg"
+},
+de: {
+titulo: "Sprachen lernen mit Gedankenspielen",
+desc: "Erstes KI-gestütztes Neuro-Linguistisches Training.",
+pilar1: "🎮 Aktives Spiel & KI", texto1: "KI passt Schwierigkeit in Echtzeit an.",
+pilar2: "🧠 Kognitiver Ertrag", texto2: "Messbare Verbesserung des Gedächtnisses.",
+pilar3: "🏫 Für Bildungseinrichtungen", texto3: "Wertvolle Diagnosewerkzeuge.",
+tituloForm: "Kontakt für Organisationen",
+label1: "Organisation", label2: "Branche", label3: "Mitarbeiter", label4: "Land",
+label5: "Kontakt", label6: "E-Mail", label7: "Telefon", label8: "Kommentare",
+boton: "Anfrage senden", exito: "✅ Gesendet! Daten in Google Sheets gespeichert.",
+error: "❌ Sende-Fehler. Bitte erneut versuchen oder direkt kontaktieren.",
+contacto: "Kontakt: bridgemindgames@gmail.com",
+video: "ale.mp4", img4: "alebr.jpg"
+},
+it: {
+titulo: "Imparare le lingue con giochi mentali",
+desc: "Primo sistema di Allenamento Neuro-Linguistico con IA.",
+pilar1: "🎮 Gioco Attivo & IA", texto1: "IA adatta difficoltà in tempo reale.",
+pilar2: "🧠 Ritorno Cognitivo", texto2: "Miglioramento misurabile della memoria.",
+pilar3: "🏫 Per Centri Educativi", texto3: "Strumenti diagnostici preziosi.",
+tituloForm: "Contatto per organizzazioni",
+label1: "Organizzazione", label2: "Settore", label3: "Dipendenti", label4: "Paese",
+label5: "Contatto", label6: "Email", label7: "Telefono", label8: "Commenti",
+boton: "Invia richiesta", exito: "✅ Inviato! Dati salvati in Google Sheets.",
+error: "❌ Errore invio. Riprovare o contattare direttamente.",
+contacto: "Contatto: bridgemindgames@gmail.com",
+video: "ita.mp4", img4: "itabr.jpg"
+},
+jp: {
+titulo: "頭脳ゲームで言語を学ぶ",
+desc: "AIを活用した神経言語トレーニングシステム。",
+pilar1: "🎮 アクティブゲーム＆AI", texto1: "AIがリアルタイムで難易度調整。",
+pilar2: "🧠 認知的リターン", texto2: "記憶力の測定可能な向上。",
+pilar3: "🏫 教育機関向け", texto3: "貴重な診断ツール。",
+tituloForm: "組織向けお問い合わせ",
+label1: "組織", label2: "セクター", label3: "従業員", label4: "国",
+label5: "連絡先", label6: "メール", label7: "電話", label8: "コメント",
+boton: "お問い合わせ", exito: "✅ 送信済み! データをGoogle Sheetsに保存しました。",
+error: "❌ 送信エラー。もう一度お試しいただくか、直接お問い合わせください。",
+contacto: "お問い合わせ: bridgemindgames@gmail.com",
+video: "jpn.mp4", img4: "jpnbrg.jpg"
+},
+zh: {
+titulo: "通过智力游戏学习语言",
+desc: "首个AI驱动的神经语言训练系统。",
+pilar1: "🎮 主动游戏与AI", texto1: "AI实时调整难度。",
+pilar2: "🧠 认知回报", texto2: "记忆力可测量提高。",
+pilar3: "🏫 针对教育中心", texto3: "有价值的诊断工具。",
+tituloForm: "组织联系",
+label1: "组织", label2: "行业", label3: "员工", label4: "国家",
+label5: "联系人", label6: "邮箱", label7: "电话", label8: "评论",
+boton: "发送咨询", exito: "✅ 已发送! 数据已保存到Google Sheets。",
+error: "❌ 发送错误。请重试或直接联系。",
+contacto: "联系方式: bridgemindgames@gmail.com",
+video: "chn.mp4", img4: "shbr.jpg"
+},
+ar: {
+titulo: "تعلم اللغات بألعاب العقل",
+desc: "أول نظام تدريب لغوي عصبي بالذكاء الاصطناعي.",
+pilar1: "🎮 لعب نشط وذكاء اصطناعي", texto1: "يعدل الذكاء الاصطناعي الصعوبة في الوقت الفعلي.",
+pilar2: "🧠 عائد معرفي", texto2: "تحسن قابل للقياس في الذاكرة.",
+pilar3: "🏫 للمراكز التعليمية", texto3: "أدوات تشخيص قيمة.",
+tituloForm: "اتصال للمنظمات",
+label1: "منظمة", label2: "قطاع", label3: "موظفين", label4: "بلد",
+label5: "اتصال", label6: "بريد إلكتروني", label7: "هاتف", label8: "تعليقات",
+boton: "إرسال استفسار", exito: "✅ تم الإرسال! تم حفظ البيانات في Google Sheets.",
+error: "❌ خطأ في الإرسال. يرجى المحاولة مرة أخرى أو الاتصال مباشرة.",
+contacto: "للتواصل: bridgemindgames@gmail.com",
+video: "ara.mp4", img4: "dubr.jpg"
+}
+};
+
+function cambiarIdioma(idioma) {
+const t = traducciones[idioma];
+
+// Textos
+document.getElementById('titulo').textContent = t.titulo;
+document.getElementById('descripcion').textContent = t.desc;
+document.getElementById('pilar1').textContent = t.pilar1;
+document.getElementById('texto1').textContent = t.texto1;
+document.getElementById('pilar2').textContent = t.pilar2;
+document.getElementById('texto2').textContent = t.texto2;
+document.getElementById('pilar3').textContent = t.pilar3;
+document.getElementById('texto3').textContent = t.texto3;
+document.getElementById('tituloForm').textContent = t.tituloForm;
+document.getElementById('label1').textContent = t.label1 + " *";
+document.getElementById('label2').textContent = t.label2 + " *";
+document.getElementById('label3').textContent = t.label3 + " *";
+document.getElementById('label4').textContent = t.label4 + " *";
+document.getElementById('label5').textContent = t.label5 + " *";
+document.getElementById('label6').textContent = t.label6 + " *";
+document.getElementById('label7').textContent = t.label7;
+document.getElementById('label8').textContent = t.label8;
+document.getElementById('botonEnviar').textContent = t.boton;
+document.getElementById('contacto').textContent = t.contacto;
+
+// Video
+const video = document.getElementById('videoPrincipal');
+const src = document.getElementById('videoSrc');
+const msg = document.getElementById('mensajeVideo');
+if (t.video) {
+src.src = t.video;
+video.load();
+video.style.display = 'block';
+msg.style.display = 'none';
+} else {
+video.style.display = 'none';
+msg.style.display = 'block';
+}
+
+// Cambiar 4ª imagen según idioma
+document.getElementById('img4').src = t.img4;
+document.getElementById('img4').alt = idioma.toUpperCase();
+
+// Dirección árabe
+if (idioma === 'ar') {
+document.body.style.direction = 'rtl';
+document.body.style.textAlign = 'right';
+} else {
+document.body.style.direction = 'ltr';
+document.body.style.textAlign = 'left';
+}
+
+localStorage.setItem('idioma', idioma);
+}
+
+// ========== FORMULARIO QUE SÍ FUNCIONA ==========
+/* DESACTIVADO PARA USAR FORMSUBMIT - document.getElementById('formulario').addEventListener('submit', async function(e) {
+           e.preventDefault();
+           
+           const mensaje = document.getElementById('mensaje');
+           const boton = document.getElementById('botonEnviar');
+           const idioma = localStorage.getItem('idioma') || 'es';
+           
+           // Validar campos
+           const campos = ['organizacion', 'sector', 'empleados', 'pais', 'contacto', 'email'];
+           for (const campo of campos) {
+               const input = document.getElementById(campo);
+               if (!input.value.trim()) {
+                   mensaje.textContent = "Complete todos los campos obligatorios (*)";
+                   mensaje.className = "error";
+                   mensaje.style.display = "block";
+                   input.focus();
+                   return;
+               }
+           }
+           
+           // Validar email
+           const email = document.getElementById('email').value;
+           if (!email.includes('@') || !email.includes('.')) {
+               mensaje.textContent = "Ingrese un email válido";
+               mensaje.className = "error";
+               mensaje.style.display = "block";
+               return;
+           }
+           
+           boton.textContent = "Enviando...";
+           boton.disabled = true;
+           
+           try {
+               // Preparar datos
+               const datos = {
+                   organizacion: document.getElementById('organizacion').value,
+                   sector: document.getElementById('sector').value,
+                   empleados: document.getElementById('empleados').value,
+                   pais: document.getElementById('pais').value,
+                   contacto: document.getElementById('contacto').value,
+                   cargo: "",
+                   email: email,
+                   telefono: document.getElementById('telefono').value || "",
+                   comentarios: document.getElementById('comentarios').value || "",
+               idioma: 'es',                    origen: 'BridgeMind Website'
+               };
+               
+               // Enviar (VERSIÓN SIMPLE QUE F'es',
+               const response = await fetch(GOOGLE_SCRIPT_URL, {
+                   method: 'POST',
+                   body: JSON.stringify(datos)
+               });
+               
+               const resultado = await response.json();
+               
+               if (resultado.success) {
+                   mensaje.textContent = traducciones[idioma].exito;
+                   mensaje.className = "exito";
+                   mensaje.style.display = "block";
+                   this.reset(); // Limpiar formulario
+               } else {
+                   throw new Error(resultado.message || 'Error del servidor');
+               }
+               
+           } catch (error) {
+               console.error('Error:', error);
+               mensaje.textContent = traducciones[idioma].error;
+               mensaje.className = "error";
+               mensaje.style.display = "block";
+           } finally {
+               boton.textContent = traducciones[idioma].boton;
+               boton.disabled = false;
+               
+               setTimeout(() => {
+                   mensaje.style.display = "none";
+               }, 5000);
+           }
+       }); */
+
+// Iniciar en español
+cambiarIdioma('es');
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>
+
+
+
+
