@@ -3,30 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
 <title>BridgeMind Education</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 body {font-family: Arial; margin:0; background:#fff; color:#333; padding-top: 155px !important;}
-
-header {
-position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important;
-z-index: 1000 !important; background: #007bff !important; color: white !important;
-padding: 15px 0 !important; text-align: center !important; transition: all 0.3s ease !important;
-box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-}
-
+header {position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; z-index: 1000 !important; background: #007bff !important; color: white !important; padding: 15px 0 !important; text-align: center !important; transition: all 0.3s ease !important; box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;}
 header.scrolled {padding: 8px 0 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;}
 .logo {max-width:250px; height:auto; margin-bottom:10px; transition: all 0.3s ease;}
 header.scrolled .logo {max-width:200px; margin-bottom:5px;}
-
 .banderas {display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:15px; transition: all 0.3s ease;}
 header.scrolled .banderas {margin:8px; gap:6px;}
-
 .bandera {background:#0056b3; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; transition: all 0.3s ease;}
 header.scrolled .bandera {padding:6px 10px; font-size:14px;}
 .bandera:hover {background:#003d80;}
-
 main {max-width:900px; margin:20px auto; padding:20px; background:white; box-shadow:0 0 10px rgba(0,0,0,0.1); border-radius:8px;}
 h1 {color:#007bff; text-align:center;}
 .imagenes {display:flex; justify-content:center; gap:15px; margin:30px 0; flex-wrap:wrap;}
@@ -44,13 +37,7 @@ button[type="submit"] {background:#28a745; color:white; border:none; padding:12p
 .exito {background:#d4edda; color:#155724;}
 .error {background:#f8d7da; color:#721c24;}
 footer {text-align:center; padding:25px; background:#333; color:white; margin-top:40px;}
-
-@media (max-width:768px) {
-.pilares {grid-template-columns:1fr;}
-.imagenes img {width:45%;}
-body {padding-top: 160px !important;}
-header.scrolled .logo {max-width:180px;}
-}
+@media (max-width:768px) {.pilares {grid-template-columns:1fr;}.imagenes img {width:45%;}.body {padding-top: 160px !important;}}
 </style>
 </head>
 <body>
@@ -76,7 +63,7 @@ header.scrolled .logo {max-width:180px;}
 <img src="1.jpeg" alt="Juegos de niños" id="img1">
 <img src="2.jpeg" alt="Juegos de adultos" id="img2">
 <img src="3.jpg" alt="Collage de educación" id="img3">
-<img src="esbr.jpg" alt="España" id="img4">
+<img src="3.jpg" alt="País" id="img4">
 </div>
 
 <div class="video-container">
@@ -118,19 +105,7 @@ header.scrolled .logo {max-width:180px;}
 
 <footer>
 <p id="contacto">Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</p>
-<button onclick="window.open('chatbot.html', '_blank', 'width=500,height=700')" style="
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 15px 0;
-    transition: all 0.3s ease;
-" onmouseover="this.style.background='#0056b3'" onmouseout="this.style.background='#007bff'">
-    💬 Chat con IA
-</button>
+<button onclick="window.open('chatbot.html', '_blank', 'width=500,height=700')" style="background: #007bff;color: white;border: none;padding: 12px 30px;font-size: 16px;border-radius: 8px;cursor: pointer;margin: 15px 0;transition: all 0.3s ease;" onmouseover="this.style.background='#0056b3'" onmouseout="this.style.background='#007bff'">💬 Chat con IA</button>
 <p>BridgeMind Education © 2024</p>
 </footer>
 
@@ -138,36 +113,19 @@ header.scrolled .logo {max-width:180px;}
 window.addEventListener('DOMContentLoaded', function() {
 const header = document.getElementById('mainHeader');
 window.addEventListener('scroll', function() {
-if (window.scrollY > 50) {header.classList.add('scrolled');} 
-else {header.classList.remove('scrolled');}
+if (window.scrollY > 50) {header.classList.add('scrolled');} else {header.classList.remove('scrolled');}
 });
 });
 
 const traducciones = {
-es: {
-titulo: "Aprenda Idiomas con Juegos Mentales: Neuro-Lingüística e IA",
-desc: "El primer sistema de Entrenamiento Neuro-Lingüístico impulsado por IA.",
-pilar1: "🎮 Juego Activo e IA", texto1: "La IA adapta la dificultad en tiempo real.",
-pilar2: "🧠 Retorno Cognitivo", texto2: "Mejora medible en memoria y lógica.",
-pilar3: "🏫 Para Centros Educativos", texto3: "Herramientas de diagnóstico valiosas.",
-tituloForm: "Contacto para organizaciones",
-label1: "Organización", label2: "Sector", label3: "Empleados", label4: "País",
-label5: "Contacto", label6: "Email", label7: "Teléfono", label8: "Comentarios",
-boton: "Enviar consulta", contacto: "Contacto: bridgemindgames@gmail.com",
-video: "esp.mp4", img4: "esbr.jpg"
-},
-en: {
-titulo: "Learn Languages with Mind Games: Neuro-Linguistics and AI",
-desc: "First AI-powered Neuro-Linguistic Training system.",
-pilar1: "🎮 Active Play & AI", texto1: "AI adapts difficulty in real-time.",
-pilar2: "🧠 Cognitive Return", texto2: "Measurable improvement in memory.",
-pilar3: "🏫 For Educational Centers", texto3: "Valuable diagnostic tools.",
-tituloForm: "Contact for organizations",
-label1: "Organization", label2: "Sector", label3: "Employees", label4: "Country",
-label5: "Contact", label6: "Email", label7: "Phone", label8: "Comments",
-boton: "Send inquiry", contacto: "Contact: bridgemindgames@gmail.com",
-video: "aus.mp4", img4: "enbr.jpg"
-}
+es: {titulo: "Aprenda Idiomas con Juegos Mentales", desc: "Neuro-Lingüística e IA para todas las edades.", pilar1: "🎮 Juego Activo e IA", texto1: "La IA adapta la dificultad en tiempo real.", pilar2: "🧠 Retorno Cognitivo", texto2: "Mejora medible en memoria y lógica.", pilar3: "🏫 Para Centros Educativos", texto3: "Herramientas de diagnóstico valiosas.", tituloForm: "Contacto para organizaciones", label1: "Organización", label2: "Sector", label3: "Empleados", label4: "País", label5: "Contacto", label6: "Email", label7: "Teléfono", label8: "Comentarios", boton: "Enviar consulta", contacto: "Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663", video: "esp.mp4", img4: "3.jpg"},
+en: {titulo: "Learn Languages with Mind Games", desc: "Neuro-Linguistics and AI for all ages.", pilar1: "🎮 Active Play & AI", texto1: "AI adapts difficulty in real-time.", pilar2: "🧠 Cognitive Return", texto2: "Measurable improvement in memory and logic.", pilar3: "🏫 For Educational Centers", texto3: "Valuable diagnostic tools.", tituloForm: "Contact for organizations", label1: "Organization", label2: "Sector", label3: "Employees", label4: "Country", label5: "Contact", label6: "Email", label7: "Phone", label8: "Comments", boton: "Send inquiry", contacto: "Contact: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663", video: "esp.mp4", img4: "3.jpg"},
+fr: {titulo: "Apprenez les langues avec jeux mentaux", desc: "Neuro-linguistique et IA.", pilar1: "🎮 Jeu Actif & IA", texto1: "IA adapte difficulté en temps réel.", tituloForm: "Contact organisations", label1: "Organisation", label2: "Secteur", label3: "Employés", label4: "Pays", label5: "Contact", label6: "Email", label7: "Téléphone", label8: "Commentaires", boton: "Envoyer", video: "esp.mp4", img4: "3.jpg"},
+de: {titulo: "Sprachen mit Geistes-Spielen lernen", desc: "Neuro-Linguistik und KI.", pilar1: "🎮 Aktives Spiel & KI", texto1: "KI passt Schwierigkeit in Echtzeit an.", tituloForm: "Kontakt für Organisationen", label1: "Organisation", label2: "Sektor", label3: "Mitarbeiter", label4: "Land", label5: "Kontakt", label6: "Email", label7: "Telefon", label8: "Kommentare", boton: "Senden", video: "esp.mp4", img4: "3.jpg"},
+it: {titulo: "Impara lingue con giochi mentali", desc: "Neuro-linguistica e IA.", pilar1: "🎮 Gioco Attivo & IA", texto1: "IA adatta difficoltà in tempo reale.", tituloForm: "Contatto organizzazioni", label1: "Organizzazione", label2: "Settore", label3: "Dipendenti", label4: "Paese", label5: "Contatto", label6: "Email", label7: "Telefono", label8: "Commenti", boton: "Invia", video: "esp.mp4", img4: "3.jpg"},
+jp: {titulo: "メンタルゲームで言語学習", desc: "神経言語学とAI。", pilar1: "🎮 アクティブゲーム & AI", texto1: "AIがリアルタイムで難易度を調整。", tituloForm: "組織向け連絡", label1: "組織", label2: "セクター", label3: "従業員数", label4: "国", label5: "連絡先", label6: "メール", label7: "電話", label8: "コメント", boton: "送信", video: "esp.mp4", img4: "3.jpg"},
+zh: {titulo: "用脑力游戏学语言", desc: "神经语言学与AI。", pilar1: "🎮 主动游戏 & AI", texto1: "AI实时调整难度。", tituloForm: "组织联系", label1: "组织", label2: "行业", label3: "员工数", label4: "国家", label5: "联系人", label6: "邮箱", label7: "电话", label8: "评论", boton: "发送", video: "esp.mp4", img4: "3.jpg"},
+ar: {titulo: "تعلم اللغات بألعاب ذهنية", desc: "عصبية-لغوية وذكاء اصطناعي.", pilar1: "🎮 لعب نشط & AI", texto1: "الذكاء الاصطناعي يعدل الصعوبة في الوقت الفعلي.", tituloForm: "اتصال بالمنظمات", label1: "منظمة", label2: "قطاع", label3: "موظفين", label4: "دولة", label5: "جهة اتصال", label6: "بريد إلكتروني", label7: "هاتف", label8: "تعليقات", boton: "إرسال", video: "esp.mp4", img4: "3.jpg"}
 };
 
 function cambiarIdioma(idioma) {
@@ -181,12 +139,12 @@ document.getElementById('texto2').textContent = t.texto2;
 document.getElementById('pilar3').textContent = t.pilar3;
 document.getElementById('texto3').textContent = t.texto3;
 document.getElementById('tituloForm').textContent = t.tituloForm;
-document.getElementById('label1').textContent = t.label1 + " *";
-document.getElementById('label2').textContent = t.label2 + " *";
-document.getElementById('label3').textContent = t.label3 + " *";
-document.getElementById('label4').textContent = t.label4 + " *";
-document.getElementById('label5').textContent = t.label5 + " *";
-document.getElementById('label6').textContent = t.label6 + " *";
+document.getElementById('label1').textContent = t.label1 + ' *';
+document.getElementById('label2').textContent = t.label2 + ' *';
+document.getElementById('label3').textContent = t.label3 + ' *';
+document.getElementById('label4').textContent = t.label4 + ' *';
+document.getElementById('label5').textContent = t.label5 + ' *';
+document.getElementById('label6').textContent = t.label6 + ' *';
 document.getElementById('label7').textContent = t.label7;
 document.getElementById('label8').textContent = t.label8;
 document.getElementById('botonEnviar').textContent = t.boton;
@@ -194,7 +152,7 @@ document.getElementById('contacto').textContent = t.contacto;
 
 const video = document.getElementById('videoPrincipal');
 const src = document.getElementById('videoSrc');
-if (t.video) {src.src = t.video; video.load();}
+src.src = t.video; video.load();
 
 document.getElementById('img4').src = t.img4;
 
@@ -203,10 +161,10 @@ document.body.style.direction = 'rtl';
 } else {
 document.body.style.direction = 'ltr';
 }
+localStorage.setItem('idioma', idioma);
 }
 
 cambiarIdioma('es');
 </script>
-
 </body>
 </html>
