@@ -9,226 +9,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        /* [ESTILOS GENERALES Y LAYOUT] */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .logo-container {
-            text-align: center;
-            padding: 10px 0;
-        }
-        .main-logo {
-            max-width: 250px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .language-selector {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .lang-button {
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .lang-button:hover {
-            background-color: #003d80;
-        }
-        .lang-button .flag-icon {
-            font-size: 1.2rem;
-        }
-        main {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h1, h2 {
-            color: #007bff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h3 { 
-            color: #0056b3; 
-        }
-
-        /* VIDEO RESPONSIVE */
-        .video-container {
-            margin: 30px auto;
-            text-align: center;
-            max-width: 800px;
-        }
-        #intro-video {
-            width: 100% !important;
-            height: auto !important;
-            max-width: 100% !important;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: block;
-        }
-
-        section {
-            margin-top: 40px;
-        }
-        article {
-            background-color: #f8f8f8;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border-left: 5px solid #007bff;
-        }
-
-        /* IMÁGENES MOTIVACIONALES */
-        #motivational-images {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 30px;
-            gap: 15px;
-        }
-        #motivational-images img { 
-            max-width: 23%; 
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
-        }
-        #motivational-images img:hover {
-            transform: scale(1.05);
-        }
-
-        /* FOOTER Y BOTONES CONTACTO */
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background-color: #333;
-            color: white;
-        }
-        .contact-actions {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .action-button {
-            background-color: #ffc107;
-            color: #333;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background-color 0.3s ease;
-        }
-        .action-button:hover {
-            background-color: #e0a800;
-        }
-        .action-button i {
-            font-size: 1.2rem;
-        }
-        #chatbot-container {
-            margin-top: 20px;
-        }
-
-        /* FORMULARIO PARA ORGANIZACIONES (MULTILINGÜE) */
-        #org-contact {
-            margin-top: 30px;
-            text-align: left;
-        }
-        #org-contact h2 {
-            color: #ffc107;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        #org-contact .campo {
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        #org-contact label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        #org-contact input,
-        #org-contact select,
-        #org-contact textarea {
-            width: 100%;
-            padding: 6px 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        #org-contact button[type="submit"] {
-            margin-top: 10px;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        #org-contact button[type="submit"]:hover {
-            background-color: #218838;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .language-selector {
-                padding: 0 10px;
-                justify-content: space-around;
-            }
-            .lang-button {
-                flex-grow: 1;
-                font-size: 0.9rem;
-                padding: 6px 10px;
-            }
-            main {
-                margin: 10px;
-                padding: 15px;
-            }
-            #motivational-images img { 
-                max-width: 48%;
-            }
-        }
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #ffffff; color: #333; line-height: 1.6; }
+        header { background-color: #007bff; color: white; padding: 1rem 0; text-align: center; }
+        .logo-container { text-align: center; padding: 10px 0; }
+        .main-logo { max-width: 250px; height: auto; margin-bottom: 10px; }
+        .language-selector { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .lang-button { background-color: #0056b3; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 5px; transition: background-color 0.3s ease; }
+        .lang-button:hover { background-color: #003d80; }
+        .lang-button .flag-icon { font-size: 1.2rem; }
+        main { max-width: 900px; margin: 20px auto; padding: 20px; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        h1, h2 { color: #007bff; text-align: center; margin-bottom: 20px; }
+        h3 { color: #0056b3; }
+        .video-container { margin: 30px auto; text-align: center; max-width: 800px; }
+        #intro-video { width: 100% !important; height: auto !important; max-width: 100% !important; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: block; }
+        section { margin-top: 40px; }
+        article { background-color: #f8f8f8; padding: 20px; margin-bottom: 20px; border-radius: 8px; border-left: 5px solid #007bff; }
+        #motivational-images { display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 30px; gap: 15px; }
+        #motivational-images img { max-width: 23%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); transition: transform 0.3s ease; }
+        #motivational-images img:hover { transform: scale(1.05); }
+        footer { text-align: center; padding: 20px; margin-top: 40px; background-color: #333; color: white; }
+        .contact-actions { display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap; }
+        .action-button { background-color: #ffc107; color: #333; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: background-color 0.3s ease; }
+        .action-button:hover { background-color: #e0a800; }
+        .action-button i { font-size: 1.2rem; }
+        #chatbot-container { margin-top: 20px; }
+        #org-contact { margin-top: 30px; text-align: left; }
+        #org-contact h2 { color: #ffc107; margin-bottom: 15px; text-align: center; }
+        #org-contact .campo { margin-bottom: 10px; text-align: left; }
+        #org-contact label { display: block; font-weight: bold; margin-bottom: 4px; }
+        #org-contact input, #org-contact select, #org-contact textarea { width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        #org-contact button[type="submit"] { margin-top: 10px; background-color: #28a745; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+        #org-contact button[type="submit"]:hover { background-color: #218838; }
+        @media (max-width: 768px) { .language-selector { padding: 0 10px; justify-content: space-around; } .lang-button { flex-grow: 1; font-size: 0.9rem; padding: 6px 10px; } main { margin: 10px; padding: 15px; } #motivational-images img { max-width: 48%; } }
     </style>
 </head>
 <body>
     <header>
         <div class="logo-container">
-            <img src="img/bmg.jpg" alt="BridgeMind Education Logo" class="main-logo">
+            <img src="bmg.jpg" alt="BridgeMind Education Logo" class="main-logo">
         </div>
-        
         <nav class="language-selector">
             <button class="lang-button" data-lang="es"><span class="flag-icon flag-icon-es"></span> ES</button>
             <button class="lang-button" data-lang="en"><span class="flag-icon flag-icon-gb"></span> EN</button>
@@ -246,485 +65,82 @@
         <p id="main-description"></p>
 
         <div id="motivational-images">
-            <img src="img/1.jpeg" alt="Juegos de niños">
-            <img src="img/2.jpeg" alt="Juegos de adultos">
-            <img src="img/3.jpg" alt="Collage de educación">
-            <!-- 4ª imagen dinámica según idioma -->
-            <img id="country-image" src="img/esbr.jpg" alt="País / Idioma">
+            <img src="1.jpeg" alt="Juegos de niños">
+            <img src="2.jpeg" alt="Juegos de adultos">
+            <img src="3.jpg" alt="Collage de educación">
+            <img id="country-image" src="esbr.jpg" alt="País / Idioma">
         </div>
 
         <div class="video-container">
             <video id="intro-video" controls>
                 <source id="video-source" src="" type="video/mp4">
             </video>
-            <div id="video-status-message" style="
-                text-align: center; 
-                padding: 40px 10px; 
-                margin-top: 10px;
-                background-color: #fff3cd; 
-                color: #856404; 
-                border: 1px solid #ffeeba; 
-                border-radius: 5px;
-                font-weight: bold;
-                font-size: 1.2em;
-                display: none;">
-            </div>
+            <div id="video-status-message" style="text-align: center; padding: 40px 10px; margin-top: 10px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 5px; font-weight: bold; font-size: 1.2em; display: none;"></div>
         </div>
 
         <section id="pilares-section">
             <h2 id="pillars-heading"></h2>
-            
-            <article>
-                <h3 id="pillar1-title"></h3>
-                <p id="pillar1-description"></p>
-            </article>
-            <article>
-                <h3 id="pillar2-title"></h3>
-                <p id="pillar2-description"></p>
-            </article>
-            <article>
-                <h3 id="pillar3-title"></h3>
-                <p id="pillar3-description"></p>
-            </article>
+            <article><h3 id="pillar1-title"></h3><p id="pillar1-description"></p></article>
+            <article><h3 id="pillar2-title"></h3><p id="pillar2-description"></p></article>
+            <article><h3 id="pillar3-title"></h3><p id="pillar3-description"></p></article>
         </section>
     </main>
 
     <footer>
         <p id="contact-info"></p>
-        
         <div class="contact-actions">
             <a id="video-call-button" class="action-button" href="[AQUÍ VA TU URL DE CALENDARIO/ZOOM/MEET]" target="_blank"></a>
             <button id="chatbot-toggle-button" class="action-button" onclick="toggleChatbot()"></button>
         </div>
-        
         <div id="chatbot-container" style="display:none;">
             <p style="color:white; padding-top:10px;">(El Chatbot se cargará aquí al hacer clic en el botón)</p>
         </div>
 
-        <!-- FORMULARIO PARA ORGANIZACIONES Y EMPRESAS (MULTILINGÜE) -->
         <section id="org-contact">
-          <h2 id="form-title">Contacto para organizaciones y empresas</h2>
-          <form id="org-form" method="post" action="AQUI_VA_LA_URL_DE_TU_SCRIPT">
-            <div class="campo">
-              <label id="label-org" for="org">Nombre de la organización / centro</label>
-              <input type="text" id="org" name="org" required>
-            </div>
-            <div class="campo">
-              <label id="label-persona" for="persona">Persona de contacto</label>
-              <input type="text" id="persona" name="persona" required>
-            </div>
-            <div class="campo">
-              <label id="label-cargo" for="cargo">Cargo</label>
-              <input type="text" id="cargo" name="cargo">
-            </div>
-            <div class="campo">
-              <label id="label-pais" for="pais">País / Ciudad</label>
-              <input type="text" id="pais" name="pais">
-            </div>
-            <div class="campo">
-              <label id="label-email" for="email">Correo electrónico</label>
-              <input type="email" id="email" name="email" required>
-            </div>
-            <div class="campo">
-              <label id="label-telefono" for="telefono">Teléfono (opcional)</label>
-              <input type="tel" id="telefono" name="telefono">
-            </div>
-            <div class="campo">
-              <label id="label-tipo" for="tipo">Interés principal</label>
-              <select id="tipo" name="tipo">
-                <option id="opt-escuelas" value="escuelas">Programa para colegios / institutos</option>
-                <option id="opt-universidades" value="universidades">Universidades</option>
-                <option id="opt-empresa" value="empresa">Empresas / formación interna</option>
-                <option id="opt-patrocinio" value="patrocinio">Patrocinio / colaboración</option>
-                <option id="opt-otros" value="otros">Otros</option>
-              </select>
-            </div>
-            <div class="campo">
-              <label id="label-mensaje" for="mensaje">Mensaje</label>
-              <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
-            </div>
-            <button id="form-submit" type="submit">Enviar consulta</button>
-          </form>
+            <h2 id="form-title">Contacto para organizaciones y empresas</h2>
+            <form id="org-form" method="post" action="https://formsubmit.co/bridgemindgames@gmail.com">
+                <input type="hidden" name="_subject" value="Nuevo contacto desde BridgeMind">
+                <input type="hidden" name="_captcha" value="false">
+                <div class="campo"><label id="label-org" for="org">Nombre de la organización / centro</label><input type="text" id="org" name="org" required></div>
+                <div class="campo"><label id="label-persona" for="persona">Persona de contacto</label><input type="text" id="persona" name="persona" required></div>
+                <div class="campo"><label id="label-cargo" for="cargo">Cargo</label><input type="text" id="cargo" name="cargo"></div>
+                <div class="campo"><label id="label-pais" for="pais">País / Ciudad</label><input type="text" id="pais" name="pais"></div>
+                <div class="campo"><label id="label-email" for="email">Correo electrónico</label><input type="email" id="email" name="email" required></div>
+                <div class="campo"><label id="label-telefono" for="telefono">Teléfono (opcional)</label><input type="tel" id="telefono" name="telefono"></div>
+                <div class="campo"><label id="label-tipo" for="tipo">Interés principal</label>
+                    <select id="tipo" name="tipo">
+                        <option id="opt-escuelas" value="escuelas">Programa para colegios / institutos</option>
+                        <option id="opt-universidades" value="universidades">Universidades</option>
+                        <option id="opt-empresa" value="empresa">Empresas / formación interna</option>
+                        <option id="opt-patrocinio" value="patrocinio">Patrocinio / colaboración</option>
+                        <option id="opt-otros" value="otros">Otros</option>
+                    </select>
+                </div>
+                <div class="campo"><label id="label-mensaje" for="mensaje">Mensaje</label><textarea id="mensaje" name="mensaje" rows="4" required></textarea></div>
+                <button id="form-submit" type="submit">Enviar consulta</button>
+            </form>
         </section>
     </footer>
 
     <script>
-        // MOSTRAR/OCULTAR CHATBOT
         function toggleChatbot() {
             const chatbotContainer = document.getElementById('chatbot-container');
-            if (chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '') {
-                chatbotContainer.style.display = 'block';
-            } else {
-                chatbotContainer.style.display = 'none';
-            }
+            chatbotContainer.style.display = chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '' ? 'block' : 'none';
         }
         
-        // TRADUCCIONES
         const translations = {
             es: {
                 title: "Aprenda Idiomas con Juegos Mentales: Neuro-Lingüística e IA para todas las edades.",
                 description: "El primer sistema de Entrenamiento Neuro-Lingüístico impulsado por IA. Fluidez garantizada, memoria potenciada y aprendizaje divertido para centros y usuarios individuales.",
                 pillarsHeading: "NUESTROS PILARES (EDUCACIÓN, JUEGO Y MENTE)",
-                pillar1Title: "🎮 Juego Activo e IA",
-                pillar1Description: "La IA adapta la dificultad en tiempo real, integrando el juego complejo con la corrección lingüística avanzada y la escalabilidad eficiente.",
-                pillar2Title: "🧠 Retorno Cognitivo",
-                pillar2Description: "Mejora medible en la memoria, lógica y velocidad de decisión (ROI cognitivo) además de la fluidez lingüística garantizada.",
-                pillar3Title: "🏫 Para Centros Educativos",
-                pillar3Description: "Herramientas de diagnóstico de rendimiento cerebral y progreso lingüístico valiosas para profesores, padres y directivos.",
-                videoSrc: "vid/esp.mp4", 
-                videoFallback: "Tu navegador no soporta la etiqueta de video.",
-                videoStatus: "", 
-                videoCallBtn: "Agendar Videollamada",
-                chatbotBtn: "Chatear con AI",
-                contact: "Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
-                /* FORMULARIO */
-                formTitle: "Contacto para organizaciones y empresas",
-                formOrgLabel: "Nombre de la organización / centro",
-                formPersonLabel: "Persona de contacto",
-                formRoleLabel: "Cargo",
-                formCountryLabel: "País / Ciudad",
-                formEmailLabel: "Correo electrónico",
-                formPhoneLabel: "Teléfono (opcional)",
-                formInterestLabel: "Interés principal",
-                formMessageLabel: "Mensaje",
-                formOptEscuelas: "Programa para colegios / institutos",
-                formOptUniversidades: "Universidades",
-                formOptEmpresa: "Empresas / formación interna",
-                formOptPatrocinio: "Patrocinio / colaboración",
-                formOptOtros: "Otros",
-                formSubmit: "Enviar consulta"
+                pillar1Title: "🎮 Juego Activo e IA", pillar1Description: "La IA adapta la dificultad en tiempo real, integrando el juego complejo con la corrección lingüística avanzada y la escalabilidad eficiente.",
+                pillar2Title: "🧠 Retorno Cognitivo", pillar2Description: "Mejora medible en la memoria, lógica y velocidad de decisión (ROI cognitivo) además de la fluidez lingüística garantizada.",
+                pillar3Title: "🏫 Para Centros Educativos", pillar3Description: "Herramientas de diagnóstico de rendimiento cerebral y progreso lingüístico valiosas para profesores, padres y directivos.",
+                videoSrc: "esp.mp4", videoFallback: "Tu navegador no soporta la etiqueta de video.", videoStatus: "",
+                videoCallBtn: "Agendar Videollamada", chatbotBtn: "Chatear con AI", contact: "Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
+                formTitle: "Contacto para organizaciones y empresas", formOrgLabel: "Nombre de la organización / centro", formPersonLabel: "Persona de contacto", formRoleLabel: "Cargo",
+                formCountryLabel: "País / Ciudad", formEmailLabel: "Correo electrónico", formPhoneLabel: "Teléfono (opcional)", formInterestLabel: "Interés principal", formMessageLabel: "Mensaje",
+                formOptEscuelas: "Programa para colegios / institutos", formOptUniversidades: "Universidades", formOptEmpresa: "Empresas / formación interna", formOptPatrocinio: "Patrocinio / colaboración", formOptOtros: "Otros", formSubmit: "Enviar consulta"
             },
-            en: {
-                title: "Learn Languages with Mind Games: Neuro-Linguistics and AI for all ages.",
-                description: "The first AI-powered Neuro-Linguistic Training system. Guaranteed fluency, enhanced memory, and fun learning for centers and individual users.",
-                pillarsHeading: "OUR PILLARS (EDUCATION, GAME, AND MIND)",
-                pillar1Title: "🎮 Active Play and AI",
-                pillar1Description: "AI adapts difficulty in real-time, integrating complex games with advanced linguistic correction and efficient scalability.",
-                pillar2Title: "🧠 Cognitive Return",
-                pillar2Description: "Measurable improvement in memory, logic, and decision speed (cognitive ROI) in addition to guaranteed linguistic fluency.",
-                pillar3Title: "🏫 For Educational Centers",
-                pillar3Description: "Valuable tools for brain performance diagnosis and linguistic progress for teachers, parents, and administrators.",
-                videoSrc: "vid/aus.mp4", 
-                videoFallback: "Your browser does not support the video tag.",
-                videoStatus: "", 
-                videoCallBtn: "Schedule Video Call",
-                chatbotBtn: "Chat with AI",
-                contact: "Contact: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
-                formTitle: "Contact for organizations and companies",
-                formOrgLabel: "Name of organization / center",
-                formPersonLabel: "Contact person",
-                formRoleLabel: "Position / role",
-                formCountryLabel: "Country / City",
-                formEmailLabel: "Email",
-                formPhoneLabel: "Phone (optional)",
-                formInterestLabel: "Main interest",
-                formMessageLabel: "Message",
-                formOptEscuelas: "Program for schools / high schools",
-                formOptUniversidades: "Universities",
-                formOptEmpresa: "Companies / in-company training",
-                formOptPatrocinio: "Sponsorship / partnership",
-                formOptOtros: "Other",
-                formSubmit: "Send inquiry"
-            },
-            fr: {
-                title: "Apprenez des langues avec des jeux cérébraux : Neuro-Linguistique et IA pour tous les âges.",
-                description: "Le premier système d'Entraînement Neuro-Linguistique alimenté par l'IA. Fluidité garantie, mémoire améliorée et apprentissage ludique pour les centres et les utilisateurs individuels.",
-                pillarsHeading: "NOS PILIERS (ÉDUCATION, JEU ET ESPRIT)",
-                pillar1Title: "🎮 Jeu Actif et IA",
-                pillar1Description: "L'IA adapte la difficulté en temps réel, intégrant des jeux complexes avec une correction linguistique avancée et une évolutivité efficace.",
-                pillar2Title: "🧠 Retour Cognitif",
-                pillar2Description: "Amélioration mesurable de la mémoire, de la logique et de la vitesse de décision (ROI cognitif) en plus de la fluidité linguistique garantie.",
-                pillar3Title: "🏫 Pour les Centres Éducatifs",
-                pillar3Description: "Outils précieux de diagnostic des performances cérébrales et de progression linguistique pour les enseignants, les parents et les administrateurs.",
-                videoSrc: "vid/fra.mp4", 
-                videoFallback: "Votre navigateur ne supporte pas la balise vidéo.",
-                videoStatus: "",
-                videoCallBtn: "Planifier un appel vidéo",
-                chatbotBtn: "Discuter avec l'IA",
-                contact: "Contact : bridgemindgames@gmail.com | WhatsApp : +34 634 268 663",
-                formTitle: "Contact pour organisations et entreprises",
-                formOrgLabel: "Nom de l'organisation / du centre",
-                formPersonLabel: "Personne de contact",
-                formRoleLabel: "Fonction",
-                formCountryLabel: "Pays / Ville",
-                formEmailLabel: "E-mail",
-                formPhoneLabel: "Téléphone (optionnel)",
-                formInterestLabel: "Intérêt principal",
-                formMessageLabel: "Message",
-                formOptEscuelas: "Programme pour écoles / lycées",
-                formOptUniversidades: "Universités",
-                formOptEmpresa: "Entreprises / formation interne",
-                formOptPatrocinio: "Parrainage / collaboration",
-                formOptOtros: "Autres",
-                formSubmit: "Envoyer la demande"
-            },
-            de: {
-                title: "Sprachen lernen mit Gedankenspielen: Neuro-Linguistik und KI für jedes Alter.",
-                description: "Das erste KI-gestützte neuro-linguistische Trainingssystem. Garantierte Sprachgewandtheit, gesteigertes Gedächtnis und spielerisches Lernen für Schulen und Einzelnutzer.",
-                pillarsHeading: "UNSERE SÄULEN (BILDUNG, SPIEL UND GEIST)",
-                pillar1Title: "🎮 Aktives Spiel und KI",
-                pillar1Description: "Die KI passt den Schwierigkeitsgrad in Echtzeit an und integriert komplexe Spiele mit fortgeschrittener Sprachkorrektur und effizienter Skalierbarkeit.",
-                pillar2Title: "🧠 Kognitiver Ertrag",
-                pillar2Description: "Messbare Verbesserung von Gedächtnis, Logik und Entscheidungsgeschwindigkeit (kognitiver ROI) zusätzlich zur garantierten sprachlichen Gewandtheit.",
-                pillar3Title: "🏫 Für Bildungseinrichtungen",
-                pillar3Description: "Wertvolle Werkzeuge zur Diagnose der Gehirnleistung und des sprachlichen Fortschritts für Lehrer, Eltern und Führungskräfte.",
-                videoSrc: "vid/ale.mp4", 
-                videoFallback: "Ihr Browser unterstützt das Video-Tag nicht.",
-                videoStatus: "",
-                videoCallBtn: "Videoanruf vereinbaren",
-                chatbotBtn: "Mit KI chatten",
-                contact: "Kontakt: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
-                formTitle: "Kontakt für Organisationen und Unternehmen",
-                formOrgLabel: "Name der Organisation / Einrichtung",
-                formPersonLabel: "Ansprechperson",
-                formRoleLabel: "Position",
-                formCountryLabel: "Land / Stadt",
-                formEmailLabel: "E-Mail",
-                formPhoneLabel: "Telefon (optional)",
-                formInterestLabel: "Hauptinteresse",
-                formMessageLabel: "Nachricht",
-                formOptEscuelas: "Programm für Schulen / Gymnasien",
-                formOptUniversidades: "Universitäten",
-                formOptEmpresa: "Unternehmen / Inhouse-Schulungen",
-                formOptPatrocinio: "Sponsoring / Zusammenarbeit",
-                formOptOtros: "Sonstiges",
-                formSubmit: "Anfrage senden"
-            },
-            it: {
-                title: "Imparare le lingue con i giochi mentali: Neuro-Linguistica e IA per tutte le età.",
-                description: "Il primo sistema di Allenamento Neuro-Linguistico potenziato dall'IA. Fluidità garantita, memoria potenziata e apprendimento divertente per centri e utenti individuali.",
-                pillarsHeading: "I NOSTRI PILASTRI (EDUCAZIONE, GIOCO E MENTE)",
-                pillar1Title: "🎮 Gioco attivo e IA",
-                pillar1Description: "L'IA adatta la difficoltà in tempo reale, integrando giochi complessi con correzione linguistica avanzata e scalabilità efficiente.",
-                pillar2Title: "🧠 Ritorno cognitivo",
-                pillar2Description: "Miglioramento misurabile della memoria, della logica e della velocità decisionale (ROI cognitivo), oltre alla fluidità linguistica garantita.",
-                pillar3Title: "🏫 Per i centri educativi",
-                pillar3Description: "Strumenti preziosi per la diagnosi delle prestazioni cerebrali e dei progressi linguistici per insegnanti, genitori e dirigenti.",
-                videoSrc: "vid/ita.mp4", 
-                videoFallback: "Il tuo browser non supporta il tag video.",
-                videoStatus: "", 
-                videoCallBtn: "Pianifica una videochiamata",
-                chatbotBtn: "Chatta con l'IA",
-                contact: "Contatto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
-                formTitle: "Contatto per organizzazioni e aziende",
-                formOrgLabel: "Nome dell'organizzazione / centro",
-                formPersonLabel: "Persona di contatto",
-                formRoleLabel: "Ruolo",
-                formCountryLabel: "Paese / Città",
-                formEmailLabel: "E-mail",
-                formPhoneLabel: "Telefono (opzionale)",
-                formInterestLabel: "Interesse principale",
-                formMessageLabel: "Messaggio",
-                formOptEscuelas: "Programma per scuole / licei",
-                formOptUniversidades: "Università",
-                formOptEmpresa: "Aziende / formazione interna",
-                formOptPatrocinio: "Sponsorizzazione / collaborazione",
-                formOptOtros: "Altro",
-                formSubmit: "Invia richiesta"
-            },
-            jp: {
-                title: "頭脳ゲームで言語を学ぶ：ニューロ言語学とAIであらゆる年齢層に対応。",
-                description: "AIを活用した初のニューロ言語トレーニングシステム。流暢さ、記憶力の向上、そして楽しい学習を学校や個人ユーザーに保証します。",
-                pillarsHeading: "私たちの柱 (教育、ゲーム、精神)",
-                pillar1Title: "🎮 アクティブなゲームとAI",
-                pillar1Description: "AIがリアルタイムで難易度を調整し、複雑なゲームを高度な言語修正と効率的なスケーラビリティに統合します。",
-                pillar2Title: "🧠 認知的リターン",
-                pillar2Description: "言語の流暢さに加え、記憶力、論理、意思決定速度（認知的ROI）の測定可能な向上を保証します。",
-                pillar3Title: "🏫 教育機関向け",
-                pillar3Description: "教師、保護者、管理者にとって価値のある、脳のパフォーマンス診断および言語進捗のツールを提供します。",
-                videoSrc: "vid/jap.mp4", 
-                videoFallback: "お使いのブラウザはビデオタグをサポートしていません。",
-                videoStatus: "", 
-                videoCallBtn: "ビデオ通話を予約",
-                chatbotBtn: "AIとチャット",
-                contact: "お問い合わせ: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663",
-                formTitle: "組織・企業向けお問い合わせ",
-                formOrgLabel: "組織 / センター名",
-                formPersonLabel: "担当者名",
-                formRoleLabel: "役職",
-                formCountryLabel: "国 / 都市",
-                formEmailLabel: "メールアドレス",
-                formPhoneLabel: "電話番号（任意）",
-                formInterestLabel: "主な関心分野",
-                formMessageLabel: "メッセージ",
-                formOptEscuelas: "学校 / 高校向けプログラム",
-                formOptUniversidades: "大学",
-                formOptEmpresa: "企業 / 社内研修",
-                formOptPatrocinio: "スポンサー / 協賛",
-                formOptOtros: "その他",
-                formSubmit: "送信"
-            },
-            zh: {
-                title: "通过智力游戏学习语言：针对所有年龄段的神经语言学与人工智能。",
-                description: "首个由人工智能驱动的神经语言训练系统。为学校和个人用户保证流畅性、增强记忆力，并提供有趣的学习体验。",
-                pillarsHeading: "我们的支柱（教育、游戏和思维）",
-                pillar1Title: "🎮 主动游戏与人工智能",
-                pillar1Description: "人工智能实时调整难度，将复杂游戏与高级语言纠正和高效的可扩展性相结合。",
-                pillar2Title: "🧠 认知回报",
-                pillar2Description: "除了保证语言流畅性之外，还可测量记忆力、逻辑和决策速度的提高（认知投资回报率）。",
-                pillar3Title: "🏫 针对教育中心",
-                pillar3Description: "为教师、家长和管理人员提供有价值的脑性能诊断和语言进度工具。",
-                videoSrc: "vid/chn.mp4", 
-                videoFallback: "您的浏览器不支持视频标签。",
-                videoStatus: "",
-                videoCallBtn: "安排视频通话",
-                chatbotBtn: "与AI聊天",
-                contact: "联系方式: bridgemindgames@gmail.com | 微信 (WeChat): Aquí tu ID de WeChat",
-                formTitle: "机构和企业联系表",
-                formOrgLabel: "机构 / 中心名称",
-                formPersonLabel: "联系人",
-                formRoleLabel: "职位",
-                formCountryLabel: "国家 / 城市",
-                formEmailLabel: "电子邮箱",
-                formPhoneLabel: "电话（可选）",
-                formInterestLabel: "主要兴趣",
-                formMessageLabel: "留言",
-                formOptEscuelas: "学校 / 中学项目",
-                formOptUniversidades: "大学",
-                formOptEmpresa: "企业 / 内部培训",
-                formOptPatrocinio: "赞助 / 合作",
-                formOptOtros: "其他",
-                formSubmit: "发送咨询"
-            },
-            ar: {
-                title: "تعلم اللغات بألعاب العقل: اللغويات العصبية والذكاء الاصطناعي لجميع الأعمار.",
-                description: "أول نظام تدريب لغوي عصبي مدعوم بالذكاء الاصطناعي. ضمان الطلاقة، وتقوية الذاكرة، والتعلم الممتع للمراكز والمستخدمين الأفراد.",
-                pillarsHeading: "أركاننا (التعليم واللعب والعقل)",
-                pillar1Title: "🎮 اللعب النشط والذكاء الاصطناعي",
-                pillar1Description: "يقوم الذكاء الاصطناعي بتكييف الصعوبة في الوقت الفعلي، ودمج الألعاب المعقدة مع التصحيح اللغوي المتقدم وقابلية التوسع الفعالة.",
-                pillar2Title: "🧠 العائد المعرفي",
-                pillar2Description: "تحسن ملموس في الذاكرة والمنطق وسرعة اتخاذ القرار (العائد على الاستثمار المعرفي) بالإضافة إلى الطلاقة اللغوية المضمونة.",
-                pillar3Title: "🏫 للمراكز التعليمية",
-                pillar3Description: "أدوات قيمة لتشخيص أداء الدماغ والتقدم اللغوي للمعلمين وأولياء الأمور والمديرين.",
-                videoSrc: "vid/ara.mp4", 
-                videoFallback: "متصفحك لا يدعم علامة الفيديو.",
-                videoStatus: "", 
-                videoCallBtn: "جدولة مكالمة فيديو",
-                chatbotBtn: "الدردشة مع الذكاء الاصطناعي",
-                contact: "للاتصال: bridgemindgames@gmail.com | واتساب: +34 634 268 663",
-                formTitle: "نموذج الاتصال للمؤسسات والشركات",
-                formOrgLabel: "اسم المؤسسة / المركز",
-                formPersonLabel: "شخص الاتصال",
-                formRoleLabel: "المنصب",
-                formCountryLabel: "البلد / المدينة",
-                formEmailLabel: "البريد الإلكتروني",
-                formPhoneLabel: "الهاتف (اختياري)",
-                formInterestLabel: "الاهتمام الرئيسي",
-                formMessageLabel: "الرسالة",
-                formOptEscuelas: "برنامج للمدارس / المعاهد",
-                formOptUniversidades: "الجامعات",
-                formOptEmpresa: "الشركات / التدريب الداخلي",
-                formOptPatrocinio: "الرعاية / التعاون",
-                formOptOtros: "أخرى",
-                formSubmit: "إرسال الطلب"
-            }
-        };
-
-        // Cambiar solo la 4ª imagen según idioma
-        function updateCountryImage(lang) {
-            const img = document.getElementById('country-image');
-            const map = {
-                es: 'img/esbr.jpg',
-                en: 'img/enbr.jpg',
-                fr: 'img/frbr.jpg',   // ajusta si tu archivo se llama frbt.jpg
-                de: 'img/alebr.jpg',
-                it: 'img/itabr.jpg',
-                jp: 'img/jpnbr.jpg',
-                zh: 'img/shbr.jpg',
-                ar: 'img/dubr.jpg'    // ajusta si tu archivo se llama duba.jpg
-            };
-            img.src = map[lang] || 'img/esbr.jpg';
-        }
-
-        // Actualizar contenido (texto, vídeo, botones, formulario)
-        function updateContent(lang) {
-            const t = translations[lang];
-            
-            // Dirección del texto
-            if (lang === 'ar') {
-                document.body.style.direction = 'rtl';
-                document.body.style.textAlign = 'right';
-            } else {
-                document.body.style.direction = 'ltr';
-                document.body.style.textAlign = 'left';
-            }
-
-            // Títulos y descripciones
-            document.title = t.title;
-            document.documentElement.lang = lang; 
-            document.getElementById('page-title').textContent = t.title;
-            document.getElementById('main-title').textContent = t.title;
-            document.getElementById('main-description').textContent = t.description;
-            
-            // Vídeo
-            const videoElement = document.getElementById('intro-video');
-            const videoSource = document.getElementById('video-source');
-            const statusMessageDiv = document.getElementById('video-status-message');
-            
-            if (!t.videoSrc) {
-                videoElement.style.display = 'none';
-                statusMessageDiv.style.display = 'block';
-                statusMessageDiv.textContent = t.videoStatus;
-                videoElement.pause(); 
-                videoSource.src = "";
-            } else {
-                videoElement.style.display = 'block';
-                statusMessageDiv.style.display = 'none';
-                videoSource.src = t.videoSrc; 
-                videoElement.load(); 
-            }
-
-            // Pilares y contacto
-            document.getElementById('pillars-heading').textContent = t.pillarsHeading;
-            document.getElementById('pillar1-title').textContent = t.pillar1Title;
-            document.getElementById('pillar1-description').textContent = t.pillar1Description;
-            document.getElementById('pillar2-title').textContent = t.pillar2Title;
-            document.getElementById('pillar2-description').textContent = t.pillar2Description;
-            document.getElementById('pillar3-title').textContent = t.pillar3Title;
-            document.getElementById('pillar3-description').textContent = t.pillar3Description;
-            document.getElementById('contact-info').textContent = t.contact;
-
-            // Botones de contacto
-            document.getElementById('video-call-button').innerHTML = `<i class="fas fa-video"></i> ${t.videoCallBtn}`;
-            document.getElementById('chatbot-toggle-button').innerHTML = `<i class="fas fa-comments"></i> ${t.chatbotBtn}`;
-            
-            // 4ª foto
-            updateCountryImage(lang);
-
-            // FORMULARIO multilingüe
-            document.getElementById('form-title').textContent = t.formTitle;
-            document.getElementById('label-org').textContent = t.formOrgLabel;
-            document.getElementById('label-persona').textContent = t.formPersonLabel;
-            document.getElementById('label-cargo').textContent = t.formRoleLabel;
-            document.getElementById('label-pais').textContent = t.formCountryLabel;
-            document.getElementById('label-email').textContent = t.formEmailLabel;
-            document.getElementById('label-telefono').textContent = t.formPhoneLabel;
-            document.getElementById('label-tipo').textContent = t.formInterestLabel;
-            document.getElementById('label-mensaje').textContent = t.formMessageLabel;
-
-            document.getElementById('opt-escuelas').textContent = t.formOptEscuelas;
-            document.getElementById('opt-universidades').textContent = t.formOptUniversidades;
-            document.getElementById('opt-empresa').textContent = t.formOptEmpresa;
-            document.getElementById('opt-patrocinio').textContent = t.formOptPatrocinio;
-            document.getElementById('opt-otros').textContent = t.formOptOtros;
-
-            document.getElementById('form-submit').textContent = t.formSubmit;
-
-            localStorage.setItem('selectedLang', lang); 
-        }
-        
-        // INICIALIZACIÓN
-        document.addEventListener('DOMContentLoaded', () => {
-            const initialLang = localStorage.getItem('selectedLang') || 'es';
-            
-            document.querySelectorAll('.lang-button').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const lang = event.currentTarget.dataset.lang;
-                    updateContent(lang);
-                });
-            });
-            updateContent(initialLang);
-        });
-    </script>
-</body>
-</html>
+            en: { title: "Learn Languages with Mind Games: Neuro-Linguistics and AI for all ages.", description: "The first AI-powered Neuro-Linguistic Training system. Guaranteed fluency, enhanced memory, and fun learning for centers and individual users.",
+                pillarsHeading: "OUR PILLARS (EDUCATION, GAME, AND MIND)", pillar1Title: "
