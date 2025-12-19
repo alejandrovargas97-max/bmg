@@ -45,34 +45,6 @@ button[type="submit"] {background:#28a745; color:white; border:none; padding:12p
 .error {background:#f8d7da; color:#721c24;}
 footer {text-align:center; padding:25px; background:#333; color:white; margin-top:40px;}
 
-/* BOTÓN CHATBOT FIJO */
-.boton-chat-fijo {
-    text-align: center;
-    margin: 40px 0;
-    padding: 20px;
-    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-    border-radius: 15px;
-    border: 2px solid #007bff;
-}
-
-.boton-chat-fijo button {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    border: none;
-    padding: 20px 50px;
-    font-size: 22px;
-    font-weight: bold;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 6px 20px rgba(0,123,255,0.4);
-    transition: all 0.3s ease;
-}
-
-.boton-chat-fijo button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,123,255,0.6);
-}
-
 @media (max-width:768px) {
 .pilares {grid-template-columns:1fr;}
 .imagenes img {width:45%;}
@@ -120,16 +92,6 @@ header.scrolled .logo {max-width:180px;}
 <div class="pilar"><h3 id="pilar3">🏫 Para Centros Educativos</h3><p id="texto3">Herramientas de diagnóstico valiosas.</p></div>
 </div>
 
-<!-- ========== BOTÓN CHATBOT FIJO ========== -->
-<div class="boton-chat-fijo">
-    <h2 style="color:#007bff; margin-bottom:15px;">💬 ¿Tienes preguntas?</h2>
-    <p style="color:#666; margin-bottom:20px;">Chatea con nuestro asistente virtual</p>
-    <button onclick="window.open('chatbot.html', '_blank', 'width=500,height=700')">
-        Abrir Chat
-    </button>
-</div>
-<!-- ========================================= -->
-
 <div class="formulario">
 <h2 id="tituloForm">Contacto para organizaciones</h2>
 <div id="mensaje"></div>
@@ -156,6 +118,19 @@ header.scrolled .logo {max-width:180px;}
 
 <footer>
 <p id="contacto">Contacto: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</p>
+<button onclick="window.open('chatbot.html', '_blank', 'width=500,height=700')" style="
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+" onmouseover="this.style.background='#0056b3'" onmouseout="this.style.background='#007bff'">
+    💬 Chat con IA
+</button>
 <p>BridgeMind Education © 2024</p>
 </footer>
 
