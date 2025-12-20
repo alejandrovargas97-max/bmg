@@ -15,46 +15,196 @@
             transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         header.scrolled { padding: 10px 0; }
-        .lang-switcher { display: flex; justify-content: center; gap: 10px; }
-        .lang-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+        
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .welcome-message {
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            padding: 0 20px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+        
+        .lang-switcher { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            flex-wrap: wrap;
+        }
+        .lang-btn { 
+            background: rgba(255,255,255,0.2); 
+            border: none; 
+            color: white; 
+            padding: 10px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            font-size: 16px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .lang-btn:hover, .lang-btn.active { background: rgba(255,255,255,0.4); }
         
         .hero { text-align: center; padding: 50px 20px; color: white; }
         .hero h1 { font-size: 3em; margin-bottom: 20px; }
         .hero p { font-size: 1.2em; max-width: 600px; margin: 0 auto; }
         
-        .images-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px 20px; }
-        .image-wrapper { position: relative; overflow: hidden; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .image-wrapper img { width: 100%; height: 250px; object-fit: cover; transition: transform 0.3s; }
-        .image-wrapper:hover img { transform: scale(1.1); }
-        .zoom-icon { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 50%; opacity: 0; transition: 0.3s; }
+        .images-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+            padding: 40px 20px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .image-wrapper { 
+            position: relative; 
+            overflow: hidden; 
+            border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        .image-wrapper:hover { transform: translateY(-5px); }
+        .image-wrapper img { 
+            width: 100%; 
+            height: 250px; 
+            object-fit: cover; 
+            transition: transform 0.3s;
+        }
+        .image-wrapper:hover img { transform: scale(1.05); }
+        .zoom-icon { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background: rgba(0,0,0,0.7); 
+            color: white; 
+            padding: 8px; 
+            border-radius: 50%; 
+            opacity: 0; 
+            transition: 0.3s;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .image-wrapper:hover .zoom-icon { opacity: 1; }
         
-        .video-container { padding: 40px 20px; text-align: center; background: white; margin: 40px 0; }
-        #intro-video { max-width: 100%; max-height: 400px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .video-container { 
+            padding: 40px 20px; 
+            text-align: center; 
+            background: white; 
+            margin: 40px 0; 
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 10px;
+        }
+        #intro-video { 
+            width: 100%; 
+            max-width: 800px; 
+            border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+        }
         
         .form-section { padding: 60px 20px; background: #f8f9fa; }
-        form { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .form-container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .chatbot-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+        
+        .chatbot-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
         label { display: block; margin: 20px 0 5px; font-weight: bold; color: #333; }
         input, textarea, select { width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; }
         input:focus, textarea:focus, select:focus { outline: none; border-color: #667eea; }
-        button { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; width: 100%; margin-top: 20px; }
-        button:hover { transform: translateY(-2px); }
+        button[type="submit"] { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        button[type="submit"]:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
         
-        @media (max-width: 768px) { .hero h1 { font-size: 2em; } body { padding-top: 100px; } }
+        @media (max-width: 768px) { 
+            .hero h1 { font-size: 2em; } 
+            body { padding-top: 140px; }
+            .welcome-message { font-size: 12px; }
+            .form-container { padding: 25px; }
+        }
+        
+        @media (max-width: 480px) {
+            .images-grid {
+                grid-template-columns: 1fr;
+            }
+            .lang-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="lang-switcher">
-            <button class="lang-btn active" data-lang="es">🇪🇸</button>
-            <button class="lang-btn" data-lang="en">🇬🇧</button>
-            <button class="lang-btn" data-lang="fr">🇫🇷</button>
-            <button class="lang-btn" data-lang="de">🇩🇪</button>
-            <button class="lang-btn" data-lang="it">🇮🇹</button>
-            <button class="lang-btn" data-lang="ja">🇯🇵</button>
-            <button class="lang-btn" data-lang="zh">🇨🇳</button>
-            <button class="lang-btn" data-lang="ar">🇸🇦</button>
+        <div class="header-content">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="es" title="Español">🇪🇸</button>
+                <button class="lang-btn" data-lang="en" title="English">🇬🇧</button>
+                <button class="lang-btn" data-lang="fr" title="Français">🇫🇷</button>
+                <button class="lang-btn" data-lang="de" title="Deutsch">🇩🇪</button>
+                <button class="lang-btn" data-lang="it" title="Italiano">🇮🇹</button>
+                <button class="lang-btn" data-lang="ja" title="日本語">🇯🇵</button>
+                <button class="lang-btn" data-lang="zh" title="中文">🇨🇳</button>
+                <button class="lang-btn" data-lang="ar" title="العربية">🇸🇦</button>
+            </div>
+            <div class="welcome-message" data-lang data-key="welcome-header">
+                Bienvenido a BridgeMind Education
+            </div>
         </div>
     </header>
 
@@ -65,108 +215,320 @@
 
     <div class="images-grid">
         <div class="image-wrapper">
-            <img src="1.jpeg" alt="Juegos de niños">
+            <!-- Para funcionar localmente y en GitHub -->
+            <img src="./img/1.jpeg" onerror="this.src='1.jpeg'" alt="Juegos de niños">
             <div class="zoom-icon"><i class="fas fa-search-plus"></i></div>
         </div>
         <div class="image-wrapper">
-            <img src="2.jpeg" alt="Juegos de adultos">
+            <img src="./img/2.jpeg" onerror="this.src='2.jpeg'" alt="Juegos de adultos">
             <div class="zoom-icon"><i class="fas fa-search-plus"></i></div>
         </div>
         <div class="image-wrapper">
-            <img src="3.jpg" alt="Educación">
+            <img src="./img/3.jpg" onerror="this.src='3.jpg'" alt="Educación">
             <div class="zoom-icon"><i class="fas fa-search-plus"></i></div>
         </div>
         <div class="image-wrapper" data-img-dynamic="true">
-            <img id="country-image" src="esbr.jpg" alt="País">
+            <!-- La imagen del país cambiará dinámicamente -->
+            <img id="country-image" src="./img/esbr.jpg" onerror="this.src='esbr.jpg'" alt="España">
             <div class="zoom-icon"><i class="fas fa-search-plus"></i></div>
         </div>
     </div>
 
     <div class="video-container">
         <video id="intro-video" controls preload="metadata">
-            <source id="video-source" src="esp.mp4" type="video/mp4">
+            <!-- El video cambiará dinámicamente -->
+            <source id="video-source" src="./vid/esp.mp4" type="video/mp4">
+            <track id="video-subtitles" kind="subtitles" src="" label="Subtítulos" default>
             Tu navegador no soporta video.
         </video>
     </div>
 
     <section class="form-section">
-        <form id="org-form" method="post" action="https://formsubmit.co/bridgermindgames@gmail.com">
-            <input type="hidden" name="_lang" id="form-lang" value="es">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://alejandrovargas97-max.github.io/bmg/thanks.html">
+        <div class="form-container">
+            <form id="org-form" method="post" action="https://formsubmit.co/bridgermindgames@gmail.com">
+                <!-- Campos ocultos adicionales para mejor organización -->
+                <input type="hidden" name="_lang" id="form-lang" value="es">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://alejandrovargas97-max.github.io/bmg/thanks.html">
+                <input type="hidden" name="_subject" value="Nuevo contacto BridgeMind Education">
+                <input type="hidden" name="_template" value="table">
+                
+                <label data-lang data-key="name-label">Nombre:</label>
+                <input type="text" name="nombre" required>
+                
+                <label data-lang data-key="email-label">Email:</label>
+                <input type="email" name="email" required>
+                
+                <label data-lang data-key="org-label">Organización:</label>
+                <input type="text" name="organizacion">
+                
+                <label data-lang data-key="msg-label">Mensaje:</label>
+                <textarea name="mensaje" rows="5" required></textarea>
+                
+                <button type="submit" data-lang data-key="submit-btn">Enviar Mensaje</button>
+            </form>
             
-            <label data-lang data-key="name-label">Nombre:</label>
-            <input type="text" name="nombre" required>
-            
-            <label data-lang data-key="email-label">Email:</label>
-            <input type="email" name="email" required>
-            
-            <label data-lang data-key="org-label">Organización:</label>
-            <input type="text" name="organizacion">
-            
-            <label data-lang data-key="msg-label">Mensaje:</label>
-            <textarea name="mensaje" rows="5" required></textarea>
-            
-            <button type="submit" data-lang data-key="submit-btn">Enviar Mensaje</button>
-        </form>
+            <div class="chatbot-info">
+                <div class="chatbot-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div>
+                    <span data-lang data-key="chatbot-text">Chatbot disponible 24/7</span>
+                    <br>
+                    <small data-lang data-key="chatbot-subtext">Implementándose en todos los idiomas</small>
+                </div>
+            </div>
+        </div>
     </section>
 
     <script>
+        // Textos para todos los idiomas - AÑADIDO EL NUEVO TEXTO PARA EL CHATBOT
         const texts = {
             es: {
                 title: 'BridgeMind Education',
                 welcome: 'Bienvenido al futuro del aprendizaje lingüístico con Bridge',
+                'welcome-header': 'Bienvenido a BridgeMind Education',
                 'name-label': 'Nombre:',
                 'email-label': 'Email:',
                 'org-label': 'Organización:',
                 'msg-label': 'Mensaje:',
-                'submit-btn': 'Enviar Mensaje'
+                'submit-btn': 'Enviar Mensaje',
+                'chatbot-text': 'Chatbot disponible 24/7',
+                'chatbot-subtext': 'Implementándose en todos los idiomas'
             },
             en: {
                 title: 'BridgeMind Education',
                 welcome: 'Welcome to the future of linguistic learning with Bridge',
+                'welcome-header': 'Welcome to BridgeMind Education',
                 'name-label': 'Name:',
                 'email-label': 'Email:',
                 'org-label': 'Organization:',
                 'msg-label': 'Message:',
-                'submit-btn': 'Send Message'
+                'submit-btn': 'Send Message',
+                'chatbot-text': 'Chatbot available 24/7',
+                'chatbot-subtext': 'Being implemented in all languages'
             },
-            fr: { title: 'BridgeMind Education', welcome: 'Bienvenue dans l\'avenir de l\'apprentissage linguistique avec Bridge', 'name-label': 'Nom:', 'email-label': 'Email:', 'org-label': 'Organisation:', 'msg-label': 'Message:', 'submit-btn': 'Envoyer' },
-            de: { title: 'BridgeMind Education', welcome: 'Willkommen in der Zukunft des Sprachlernens mit Bridge', 'name-label': 'Name:', 'email-label': 'Email:', 'org-label': 'Organisation:', 'msg-label': 'Nachricht:', 'submit-btn': 'Senden' },
-            it: { title: 'BridgeMind Education', welcome: 'Benvenuto nel futuro dell\'apprendimento linguistico con Bridge', 'name-label': 'Nome:', 'email-label': 'Email:', 'org-label': 'Organizzazione:', 'msg-label': 'Messaggio:', 'submit-btn': 'Invia' },
-            ja: { title: 'BridgeMind Education', welcome: 'ブリッジを使った言語学習の未来へようこそ', 'name-label': '名前:', 'email-label': 'メール:', 'org-label': '組織:', 'msg-label': 'メッセージ:', 'submit-btn': '送信' },
-            zh: { title: 'BridgeMind Education', welcome: '欢迎体验桥牌语言学习未来', 'name-label': '姓名:', 'email-label': '邮箱:', 'org-label': '组织:', 'msg-label': '消息:', 'submit-btn': '发送' },
-            ar: { title: 'BridgeMind Education', welcome: 'مرحبا بك في مستقبل تعلم اللغات مع البريدج', 'name-label': 'الاسم:', 'email-label': 'البريد:', 'org-label': 'المنظمة:', 'msg-label': 'الرسالة:', 'submit-btn': 'إرسال' }
+            fr: { 
+                title: 'BridgeMind Education', 
+                welcome: 'Bienvenue dans l\'avenir de l\'apprentissage linguistique avec Bridge',
+                'welcome-header': 'Bienvenue à BridgeMind Education',
+                'name-label': 'Nom:', 
+                'email-label': 'Email:', 
+                'org-label': 'Organisation:', 
+                'msg-label': 'Message:', 
+                'submit-btn': 'Envoyer',
+                'chatbot-text': 'Chatbot disponible 24h/24 et 7j/7',
+                'chatbot-subtext': 'En cours d\'implémentation dans toutes les langues'
+            },
+            de: { 
+                title: 'BridgeMind Education', 
+                welcome: 'Willkommen in der Zukunft des Sprachlernens mit Bridge',
+                'welcome-header': 'Willkommen bei BridgeMind Education',
+                'name-label': 'Name:', 
+                'email-label': 'Email:', 
+                'org-label': 'Organisation:', 
+                'msg-label': 'Nachricht:', 
+                'submit-btn': 'Senden',
+                'chatbot-text': 'Chatbot 24/7 verfügbar',
+                'chatbot-subtext': 'Wird in allen Sprachen implementiert'
+            },
+            it: { 
+                title: 'BridgeMind Education', 
+                welcome: 'Benvenuto nel futuro dell\'apprendimento linguistico con Bridge',
+                'welcome-header': 'Benvenuto in BridgeMind Education',
+                'name-label': 'Nome:', 
+                'email-label': 'Email:', 
+                'org-label': 'Organizzazione:', 
+                'msg-label': 'Messaggio:', 
+                'submit-btn': 'Invia',
+                'chatbot-text': 'Chatbot disponibile 24/7',
+                'chatbot-subtext': 'In fase di implementazione in tutte le lingue'
+            },
+            ja: { 
+                title: 'BridgeMind Education', 
+                welcome: 'ブリッジを使った言語学習の未来へようこそ',
+                'welcome-header': 'BridgeMind Educationへようこそ',
+                'name-label': '名前:', 
+                'email-label': 'メール:', 
+                'org-label': '組織:', 
+                'msg-label': 'メッセージ:', 
+                'submit-btn': '送信',
+                'chatbot-text': '24時間365日利用可能なチャットボット',
+                'chatbot-subtext': 'すべての言語で実装中'
+            },
+            zh: { 
+                title: 'BridgeMind Education', 
+                welcome: '欢迎体验桥牌语言学习未来',
+                'welcome-header': '欢迎来到BridgeMind Education',
+                'name-label': '姓名:', 
+                'email-label': '邮箱:', 
+                'org-label': '组织:', 
+                'msg-label': '消息:', 
+                'submit-btn': '发送',
+                'chatbot-text': '24/7全天候聊天机器人',
+                'chatbot-subtext': '正在所有语言中实施'
+            },
+            ar: { 
+                title: 'BridgeMind Education', 
+                welcome: 'مرحبا بك في مستقبل تعلم اللغات مع البريدج',
+                'welcome-header': 'مرحبًا بك في BridgeMind Education',
+                'name-label': 'الاسم:', 
+                'email-label': 'البريد:', 
+                'org-label': 'المنظمة:', 
+                'msg-label': 'الرسالة:', 
+                'submit-btn': 'إرسال',
+                'chatbot-text': 'شات بوت متاح على مدار الساعة',
+                'chatbot-subtext': 'يجري تنفيذه في جميع اللغات'
+            }
         };
 
-        const imgMap = { es: 'esbr.jpg', en: 'enbr.jpg', fr: 'frbr.jpg', de: 'alebr.jpg', it: 'itabr.jpg', ja: 'jpnbr.jpg', zh: 'shbr.jpg', ar: 'dubr.jpg' };
-        const videoMap = { es: 'esp.mp4', en: 'aus.mp4', fr: 'fr.mp4', de: 'de.mp4', it: 'it.mp4', ja: 'jpn.mp4', zh: 'zh.mp4', ar: 'ar.mp4' };
+        // Mapeo de imágenes del país - CON RUTAS DUALES
+        const imgMap = { 
+            es: ['./img/esbr.jpg', 'esbr.jpg'],
+            en: ['./img/enbr.jpg', 'enbr.jpg'], 
+            fr: ['./img/frbr.jpg', 'frbr.jpg'], 
+            de: ['./img/alebr.jpg', 'alebr.jpg'], 
+            it: ['./img/itabr.jpg', 'itabr.jpg'], 
+            ja: ['./img/jpnbr.jpg', 'jpnbr.jpg'], 
+            zh: ['./img/shbr.jpg', 'shbr.jpg'], 
+            ar: ['./img/dubr.jpg', 'dubr.jpg']
+        };
+        
+        // Mapeo de videos - CON RUTAS DUALES
+        const videoMap = { 
+            es: ['./vid/esp.mp4', 'esp.mp4'],
+            en: ['./vid/aus.mp4', 'aus.mp4'], 
+            fr: ['./vid/fr.mp4', 'fr.mp4'], 
+            de: ['./vid/de.mp4', 'de.mp4'], 
+            it: ['./vid/it.mp4', 'it.mp4'], 
+            ja: ['./vid/jpn.mp4', 'jpn.mp4'], 
+            zh: ['./vid/zh.mp4', 'zh.mp4'], 
+            ar: ['./vid/ar.mp4', 'ar.mp4']
+        };
 
-        function updateContent(lang) {
-            document.getElementById('form-lang').value = lang;
-            document.title = texts[lang].title;
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                el.textContent = texts[lang][el.dataset.key] || el.textContent;
-            });
-            document.getElementById('country-image').src = imgMap[lang];
-            document.getElementById('video-source').src = videoMap[lang];
-            document.getElementById('intro-video').load();
-            document.querySelector('.lang-btn.active').classList.remove('active');
-            event.target.classList.add('active');
+        // Texto alternativo para imágenes del país
+        const altMap = {
+            es: 'España',
+            en: 'Reino Unido',
+            fr: 'Francia',
+            de: 'Alemania',
+            it: 'Italia',
+            ja: 'Japón',
+            zh: 'China',
+            ar: 'Arabia Saudita'
+        };
+
+        // Función para cargar una imagen con respaldo
+        function loadImageWithFallback(imgElement, primarySrc, fallbackSrc) {
+            imgElement.onerror = function() {
+                this.onerror = null; // Prevenir bucles infinitos
+                this.src = fallbackSrc;
+            };
+            imgElement.src = primarySrc;
         }
 
+        // Función para cambiar el idioma
+        function updateContent(lang) {
+            // Actualizar el lenguaje del formulario
+            document.getElementById('form-lang').value = lang;
+            
+            // Actualizar el título de la página
+            document.title = texts[lang].title;
+            
+            // Actualizar todos los textos con data-lang
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (texts[lang][key]) {
+                    el.textContent = texts[lang][key];
+                }
+            });
+            
+            // Actualizar la imagen del país con sistema dual
+            const countryImage = document.getElementById('country-image');
+            if (countryImage && imgMap[lang]) {
+                loadImageWithFallback(countryImage, imgMap[lang][0], imgMap[lang][1]);
+                countryImage.alt = altMap[lang] || 'País';
+            }
+            
+            // Actualizar el video con sistema dual
+            const videoSource = document.getElementById('video-source');
+            if (videoSource && videoMap[lang]) {
+                // Intentar con la ruta de carpeta primero
+                videoSource.src = videoMap[lang][0];
+                
+                // Si hay error, cargar la ruta raíz
+                videoSource.onerror = function() {
+                    this.onerror = null;
+                    this.src = videoMap[lang][1];
+                    document.getElementById('intro-video').load();
+                };
+                
+                document.getElementById('intro-video').load();
+            }
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Guardar el idioma seleccionado en localStorage
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
+            // Configurar event listeners para los botones de idioma
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const lang = this.dataset.lang;
+                    const lang = this.getAttribute('data-lang');
                     updateContent(lang);
                 });
             });
-            updateContent('es');
-        });
-
-        window.addEventListener('scroll', () => {
-            document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
+            
+            // Cargar el idioma guardado o español por defecto
+            const savedLang = localStorage.getItem('preferred-language') || 'es';
+            updateContent(savedLang);
+            
+            // Actualizar el botón activo según el idioma guardado
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Configurar el scroll del header
+            window.addEventListener('scroll', () => {
+                document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
+            });
+            
+            // Mejorar el formulario para capturar el idioma en el mensaje
+            const form = document.getElementById('org-form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    // Agregar el idioma actual al cuerpo del mensaje automáticamente
+                    const langField = document.getElementById('form-lang');
+                    const messageField = form.querySelector('textarea[name="mensaje"]');
+                    
+                    if (messageField && langField) {
+                        const lang = langField.value;
+                        const langName = {
+                            'es': 'Español', 'en': 'Inglés', 'fr': 'Francés', 
+                            'de': 'Alemán', 'it': 'Italiano', 'ja': 'Japonés',
+                            'zh': 'Chino', 'ar': 'Árabe'
+                        }[lang] || lang;
+                        
+                        // Solo agregar si no está ya en el mensaje
+                        if (!messageField.value.includes('Idioma:')) {
+                            messageField.value = `Idioma: ${langName}\n\n${messageField.value}`;
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
