@@ -3,273 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BridgeMind Games Education</title>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <title>BridgeMindGames BMG - Global</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #fff; color: #333; line-height: 1.6; }
+        :root { --primary: #007bff; --secondary: #28a745; --accent: #ffc107; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
         
-        header { 
-            background-color: #007bff; color: white; padding: 1rem 0; text-align: center; 
-            position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        /* MEJORA VISUAL DEL LOGO: No tapa el formulario al hacer scroll */
-        .logo-container { text-align: center; padding: 5px 0; transition: all 0.3s ease; }
-        .main-logo { 
-            max-width: 180px; height: auto; margin-bottom: 5px; 
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2));
-        }
-
-        .language-selector { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 5px; }
-        .lang-button { 
-            background-color: #0056b3; color: white; border: none; padding: 8px 12px; 
-            border-radius: 5px; cursor: pointer; font-size: 0.9rem; display: flex; 
-            align-items: center; gap: 5px; transition: 0.3s;
-        }
-        .lang-button.active { background-color: #ffc107; color: #333; font-weight: bold; }
-        .lang-button:hover { background-color: #003d80; }
-
-        main { max-width: 900px; margin: 20px auto; padding: 20px; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
-        h1, h2 { color: #007bff; text-align: center; }
+        /* HEADER Y LOGO */
+        header { background: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { width: 150px; transition: 0.3s; }
         
-        /* IMÁGENES MOTIVACIONALES */
-        #motivational-images { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; margin-top: 20px; }
-        #motivational-images img { max-width: 23%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.3s; cursor: pointer; }
-        #motivational-images img:hover { transform: scale(1.05); }
+        /* SECCIÓN BANDERAS */
+        .lang-bar { background: #333; padding: 10px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .flag { cursor: pointer; font-size: 1.5rem; transition: transform 0.2s; }
+        .flag:hover { transform: scale(1.3); }
 
-        /* VIDEO */
-        .video-container { margin: 30px auto; text-align: center; max-width: 800px; }
-        #intro-video { width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        /* CONTENIDO PRINCIPAL */
+        .container { max-width: 900px; margin: 20px auto; padding: 20px; background: white; border-radius: 10px; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-bottom: 20px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px; }
 
-        /* FORMULARIO BMG - Ajustado para que el logo no moleste */
-        #org-contact { margin-top: 50px; padding-top: 20px; border-top: 2px solid #eee; }
-        #org-contact h2 { color: #007bff; margin-bottom: 20px; }
-        .campo { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
-        
-        button#form-submit { 
-            width: 100%; background-color: #28a745; color: white; border: none; 
-            padding: 15px; border-radius: 5px; cursor: pointer; font-size: 1.1rem; font-weight: bold;
-        }
+        /* FORMULARIO */
+        form { display: grid; gap: 15px; }
+        input, textarea, select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; width: 100%; box-sizing: border-box; }
+        button { background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { opacity: 0.9; }
 
-        /* CHATBOT */
-        #chatbot-container {
-            display: none; position: fixed; bottom: 20px; right: 20px; width: 320px;
-            background: #fff; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-            z-index: 1001; overflow: hidden; border: 1px solid #007bff;
-        }
-        .bot-header { background: #007bff; color: white; padding: 15px; display: flex; justify-content: space-between; }
-        #chatbot-messages { height: 300px; overflow-y: auto; padding: 15px; background: #f9f9f9; display: flex; flex-direction: column; }
-        .bot-message { background: #e9ecef; color: #333; padding: 8px 12px; border-radius: 15px 15px 15px 0; margin-bottom: 10px; align-self: flex-start; max-width: 85%; font-size: 0.9rem; }
-        .user-message { background: #007bff; color: white; padding: 8px 12px; border-radius: 15px 15px 0 15px; margin-bottom: 10px; align-self: flex-end; max-width: 85%; font-size: 0.9rem; }
-        
-        .chat-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; gap: 5px; }
-        .chat-input-area input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
-
-        footer { text-align: center; padding: 30px; background-color: #333; color: white; margin-top: 50px; }
-        .action-button { background-color: #ffc107; color: #333; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin: 10px; }
-
-        @media (max-width:768px){ #motivational-images img{max-width:45%;} #chatbot-container { width: 90%; right: 5%; } }
+        /* CHATBOT FLOTANTE */
+        #chatbot-btn { position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; }
+        #chat-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 450px; background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 9999; border: 1px solid #ddd; }
+        .chat-header { background: var(--primary); color: white; padding: 15px; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; }
+        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 80%; font-size: 0.9rem; }
+        .bot { background: #e1f5fe; align-self: flex-start; }
+        .user { background: var(--accent); align-self: flex-end; }
     </style>
 </head>
 <body>
 
-<header id="main-header">
-    <div class="logo-container" id="logo-box">
-        <img src="bmg.jpg" alt="BridgeMind Games Logo" class="main-logo">
-    </div>
-    <nav class="language-selector">
-        <button class="lang-button active" data-lang="es"><span class="flag-icon flag-icon-es"></span> ES</button>
-        <button class="lang-button" data-lang="en"><span class="flag-icon flag-icon-gb"></span> EN</button>
-        <button class="lang-button" data-lang="fr"><span class="flag-icon flag-icon-fr"></span> FR</button>
-        <button class="lang-button" data-lang="de"><span class="flag-icon flag-icon-de"></span> DE</button>
-        <button class="lang-button" data-lang="it"><span class="flag-icon flag-icon-it"></span> IT</button>
-        <button class="lang-button" data-lang="jp"><span class="flag-icon flag-icon-jp"></span> JP</button>
-        <button class="lang-button" data-lang="ch"><span class="flag-icon flag-icon-cn"></span> CH</button>
-        <button class="lang-button" data-lang="ar"><span class="flag-icon flag-icon-sa"></span> AR</button>
-    </nav>
+<header>
+    <img src="TU_LOGO_URL_AQUI" alt="BMG Logo" class="logo" id="main-logo">
 </header>
 
-<main>
-    <h1 id="main-title">BridgeMind Games Education</h1>
-    <div id="welcome-msg">¡Bienvenido!</div>
-    <p id="main-description">Cargando contenido...</p>
+<div class="lang-bar">
+    <span class="flag" onclick="changeLang('es')">🇪🇸</span>
+    <span class="flag" onclick="changeLang('en')">🇺🇸</span>
+    <span class="flag" onclick="changeLang('fr')">🇫🇷</span>
+    <span class="flag" onclick="changeLang('de')">🇩🇪</span>
+    <span class="flag" onclick="changeLang('it')">🇮🇹</span>
+    <span class="flag" onclick="changeLang('jp')">🇯🇵</span>
+    <span class="flag" onclick="changeLang('ch')">🇨🇳</span>
+    <span class="flag" onclick="changeLang('ar')">🇸🇦</span>
+</div>
 
-    <div id="motivational-images">
-        <img src="1.jpeg" alt="BMG 1">
-        <img src="2.jpeg" alt="BMG 2">
-        <img src="3.jpg" alt="BMG 3">
-        <img id="country-image" src="esbr.jpg" alt="Idioma">
-    </div>
-
+<div class="container">
+    <h2 id="title">Contacto BridgeMindGames</h2>
     <div class="video-container">
-        <video id="intro-video" controls>
-            <source id="video-source" src="esp.mp4" type="video/mp4">
-        </video>
+        <iframe src="https://www.youtube.com/embed/TU_ID_VIDEO" frameborder="0" allowfullscreen></iframe>
     </div>
 
-    <section id="org-contact">
-        <h2 id="form-title">Contacto para organizaciones</h2>
-        <form id="bmg-form">
-            <input type="hidden" id="form-lang" name="idioma" value="es">
-            <div class="campo">
-                <label id="label-org" for="org">Organización</label>
-                <input type="text" id="org" name="organizacion" required>
-            </div>
-            <div class="campo">
-                <label id="label-persona" for="persona">Nombre</label>
-                <input type="text" id="persona" name="persona" required>
-            </div>
-            <div class="campo">
-                <label id="label-email" for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="campo">
-                <label id="label-tipo" for="tipo">Preferencia de reunión</label>
-                <select id="tipo" name="tipo_reunion">
-                    <option value="videollamada_es">Videollamada (Español)</option>
-                    <option value="videollamada_en">Video Call (English)</option>
-                    <option value="presencial">Reunión Presencial</option>
-                </select>
-            </div>
-            <div class="campo">
-                <label id="label-mensaje" for="mensaje">Mensaje / Pregunta específica</label>
-                <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
-            </div>
-            <button id="form-submit" type="submit">Enviar a BridgeMindGames</button>
-        </form>
-    </section>
-</main>
+    <form id="bmg-form">
+        <input type="hidden" name="idioma" id="form-lang" value="es">
+        <input type="text" name="organizacion" id="label-org" placeholder="Organización / Colegio" required>
+        <input type="text" name="persona" id="label-name" placeholder="Nombre de contacto" required>
+        <input type="email" name="email" id="label-email" placeholder="Correo electrónico" required>
+        <select name="tipo_reunion" id="label-type">
+            <option value="Información">Solicitar Información</option>
+            <option value="Videollamada">Agendar Videollamada</option>
+            <option value="Demo">Solicitar Demo</option>
+        </select>
+        <textarea name="mensaje" id="label-msg" rows="4" placeholder="Tu mensaje..."></textarea>
+        <button type="submit" id="btn-send">ENVIAR FORMULARIO</button>
+    </form>
+</div>
 
-<div id="chatbot-container">
-    <div class="bot-header">
-        <span id="chatbot-title">BMG Assistant</span>
-        <button onclick="toggleChatbot()" style="background:none; border:none; color:white; cursor:pointer;">✕</button>
+<div id="chatbot-btn" onclick="toggleChat()"><i class="fas fa-comments"></i></div>
+<div id="chat-window">
+    <div class="chat-header">
+        <span>BMG AI Assistant</span>
+        <span style="cursor:pointer" onclick="toggleChat()">&times;</span>
     </div>
-    <div id="chatbot-messages">
-        <div class="bot-message" id="bot-welcome">Hola, ¿en qué puedo ayudarte?</div>
+    <div id="chat-messages">
+        <div class="msg bot">Hola, soy el asistente de BridgeMindGames. ¿En qué puedo ayudarte hoy?</div>
     </div>
-    <div class="chat-input-area">
+    <div style="padding:10px; display:flex; gap:5px; border-top:1px solid #eee">
         <input type="text" id="chat-input" placeholder="Pregunta algo...">
-        <button onclick="sendChat()" style="background:#28a745; border:none; color:white; border-radius:5px; padding:0 10px;"><i class="fas fa-paper-plane"></i></button>
+        <button onclick="sendChat()" style="padding:10px"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
-<footer>
-    <div class="contact-actions">
-        <a class="action-button" href="https://wa.me/34634268663" target="_blank">
-            <i class="fab fa-whatsapp"></i> WhatsApp Directo
-        </a>
-        <button class="action-button" onclick="toggleChatbot()">
-            <i class="fas fa-comments"></i> <span id="chatbot-text">Asistente AI</span>
-        </button>
-    </div>
-    <p id="contact-info">bridgemindgames@gmail.com | +34 634 268 663</p>
-</footer>
-
 <script>
-    // 1. CONFIGURACIÓN DE IDIOMAS Y TRADUCCIONES (Mantenido y ampliado)
+    // URL DE TU SCRIPT DE GOOGLE (PEGALA AQUÍ)
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyiSsc-U1I4zS819uVj9E-jD_YQf34D6kHn1U4h7X6_f5Y1A/exec'; 
+
     const translations = {
-        es: { title: "BridgeMind Games Education", welcome: "¡Bienvenido a BMG!", description: "Entrenamiento Neuro-Lingüístico con IA.", formTitle: "Contacto para Organizaciones", submit: "Enviar Consulta", botWelcome: "Hola! Soy el asistente de BMG. ¿Quieres saber sobre precios, demos o programas?" },
-        en: { title: "BridgeMind Games Education", welcome: "Welcome to BMG!", description: "AI-powered Neuro-Linguistic Training.", formTitle: "Contact for Organizations", submit: "Send Inquiry", botWelcome: "Hello! I am the BMG assistant. Would you like to know about prices, demos, or programs?" },
-        // ... (Se pueden añadir los otros 6 idiomas aquí siguiendo el mismo patrón)
+        es: { title: "Contacto BridgeMindGames", org: "Organización", name: "Nombre", type: "Tipo de cita", msg: "Mensaje", btn: "ENVIAR", success: "¡Enviado con éxito!" },
+        en: { title: "Contact BridgeMindGames", org: "Organization", name: "Name", type: "Meeting Type", msg: "Message", btn: "SEND", success: "Sent successfully!" },
+        // ... (puedes completar las etiquetas para los 8 idiomas aquí)
     };
 
-    // 2. LÓGICA DE CAMBIO DE IDIOMA (Mantenida)
-    document.querySelectorAll('.lang-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const lang = btn.dataset.lang;
-            document.querySelectorAll('.lang-button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            updateLanguage(lang);
-        });
-    });
+    const bmgInfo = {
+        es: { concept: "BMG usa IA y Neurociencia para mejorar el aprendizaje.", precios: "Precios flexibles. Usa el form para un presupuesto.", default: "Para más detalles usa el formulario." },
+        en: { concept: "BMG uses AI and Neuroscience to enhance learning.", precios: "Flexible pricing. Use the form for a quote.", default: "For more details, use the form." }
+    };
 
-    function updateLanguage(lang) {
-        const t = translations[lang] || translations.es;
-        document.getElementById('main-title').innerText = t.title;
-        document.getElementById('welcome-msg').innerText = t.welcome;
-        document.getElementById('main-description').innerText = t.description;
-        document.getElementById('form-title').innerText = t.formTitle;
-        document.getElementById('form-submit').innerText = t.submit;
+    function changeLang(lang) {
         document.getElementById('form-lang').value = lang;
-        document.getElementById('bot-welcome').innerText = t.botWelcome;
+        const t = translations[lang] || translations.es;
+        document.getElementById('title').innerText = t.title;
+        document.getElementById('label-org').placeholder = t.org;
+        document.getElementById('btn-send').innerText = t.btn;
     }
 
-    // 3. CHATBOT INTELIGENTE (Mejorado con 8 idiomas)
-    function toggleChatbot() {
-        const chat = document.getElementById('chatbot-container');
-        chat.style.display = chat.style.display === 'block' ? 'none' : 'block';
+    // ENVÍO DE FORMULARIO SIN DESAPARECER
+    const form = document.getElementById('bmg-form');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-send');
+        btn.disabled = true;
+        btn.innerText = "Sincronizando...";
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+            const lang = document.getElementById('form-lang').value;
+            alert(translations[lang]?.success || "¡Enviado!");
+            form.reset();
+            btn.disabled = false;
+            btn.innerText = translations[lang]?.btn || "ENVIAR";
+        })
+        .catch(error => alert("Error!"));
+    });
+
+    // CHATBOT LOGIC
+    function toggleChat() {
+        const win = document.getElementById('chat-window');
+        win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
     }
 
     function sendChat() {
         const input = document.getElementById('chat-input');
-        const msg = input.value.trim();
-        if(!msg) return;
+        const box = document.getElementById('chat-messages');
+        const lang = document.getElementById('form-lang').value;
+        if(!input.value) return;
 
-        addMessage(msg, 'user-message');
-        input.value = '';
+        box.innerHTML += `<div class="msg user">${input.value}</div>`;
+        
+        let reply = bmgInfo[lang]?.default || bmgInfo.es.default;
+        const text = input.value.toLowerCase();
+        
+        if(text.includes("bmg") || text.includes("qué es")) reply = bmgInfo[lang]?.concept || bmgInfo.es.concept;
+        if(text.includes("precio")) reply = bmgInfo[lang]?.precios || bmgInfo.es.precios;
 
-        // Lógica de respuesta simplificada (puedes ampliarla)
         setTimeout(() => {
-            let res = "Para esa pregunta específica, por favor llena el formulario arriba y te responderé personalmente.";
-            if(msg.toLowerCase().includes("precio")) res = "Los precios dependen del número de alumnos. Déjanos tu mail en el form y te enviamos el PDF.";
-            addMessage(res, 'bot-message');
-        }, 800);
+            box.innerHTML += `<div class="msg bot">${reply}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }, 500);
+        input.value = '';
     }
-
-    function addMessage(text, className) {
-        const div = document.createElement('div');
-        div.className = className;
-        div.innerText = text;
-        const box = document.getElementById('chatbot-messages');
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
-    }
-
-    // 4. ENVÍO A PLANILLA (Corregido: Ahora llena la fila)
-    document.getElementById('bmg-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('form-submit');
-        btn.innerText = "Enviando...";
-        btn.disabled = true;
-
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-
-        // TU URL DE GOOGLE APPS SCRIPT
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwH1ZPr9YD2SLyaOA4QBRElX4KMROTRh_ZD70s9hlHGYokDrvr_7VYMGLOT6zphg6KXew/exec';
-
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors', // Importante para Google Scripts
-            body: new URLSearchParams(formData) 
-        })
-        .then(() => {
-            alert("¡Recibido! Datos guardados en la planilla de BMG.");
-            btn.innerText = "¡Enviado con éxito!";
-            this.reset();
-        })
-        .catch(error => {
-            console.error('Error!', error.message);
-            btn.disabled = false;
-            btn.innerText = "Reintentar envío";
-        });
-    });
-
-    // ACHICAR LOGO AL HACER SCROLL PARA QUE NO TAPE
-    window.onscroll = function() {
-        const logo = document.querySelector('.main-logo');
-        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-            logo.style.maxWidth = "80px";
-        } else {
-            logo.style.maxWidth = "180px";
-        }
-    };
 </script>
 
 </body>
