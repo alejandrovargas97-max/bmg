@@ -143,8 +143,7 @@
     <p id="contact-info"></p>
     <div class="contact-actions">
         <!-- ELIMINADO CALENDLY - Usamos email directo -->
-        <a id="video-call-button" class="action-button" href="#org-contact"bridgemindgames@gmail.com?subject=Agendar%20Videollamada%20BridgeMind&body=Hola,%20me%20gustar%C3%ADa%20agendar%20una%20videollamada." target="_blank">
-            <i class="fas fa-video"></i> <span id="video-call-text"></span>
+            <a id="video-call-button" class="action-button" href="javascript:void(0);" onclick="toggleContactForm()">            <i class="fas fa-video"></i> <span id="video-call-text"></span>
         </a>
         <button id="chatbot-toggle-button" class="action-button" onclick="toggleChatbot()">
             <i class="fas fa-comments"></i> <span id="chatbot-text"></span>
@@ -685,6 +684,22 @@
         const body = emailBodies[currentLang] || emailBodies['en'];
         window.location.href = `mailto:bridgemindgames@gmail.com?subject=${subject}&body=${body}`;
     }
+
+    // Función para mostrar/ocultar el formulario de contacto
+function toggleContactForm() {
+    const form = document.getElementById('org-contact');
+    if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+        // Scroll suave hacia el formulario
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Enfocar el primer campo
+        setTimeout(() => {
+            document.getElementById('org').focus();
+        }, 500);
+    } else {
+        form.style.display = 'none';
+    }
+}
 </script>
 </body>
 </html>
