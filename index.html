@@ -28,7 +28,8 @@
                                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .logo-container { text-align: center; padding: 10px 0; }
-    .main-logo { max-width: 120px; height: auto; margin-bottom: 10px; }
+        .main-logo { max-width: 250px; height: auto; margin-bottom: 10px; transition: max-width 0.3s ease; }
+        .main-logo.small { max-width: 80px; }
 
     .language-selector { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
     .lang-button { background-color: #0056b3; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 5px; transition: background-color 0.3s; }
@@ -643,9 +644,23 @@
             img.src = file;
         });
     });
+
+                    // Achica el logo cuando haces scroll hacia el formulario
+    window.addEventListener('scroll', function() {
+        const logo = document.querySelector('.main-logo');
+        const scrollPosition = window.scrollY;
+        
+        // Si el scroll pasa 300px, achica el logo
+        if (scrollPosition > 300) {
+            logo.classList.add('small');
+        } else {
+            logo.classList.remove('small');
+        }
+    });
 </script>
 </body>
 </html>
+
 
 
 
