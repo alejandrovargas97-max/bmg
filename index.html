@@ -657,9 +657,38 @@
             logo.classList.remove('small');
         }
     });
+
+        // Función para enviar email en el idioma seleccionado
+    function sendLocalizedEmail() {
+        const currentLang = document.documentElement.lang;
+        const emailSubjects = {
+            'es': 'Solicitud de videollamada - BridgeMind Games',
+            'en': 'Video call request - BridgeMind Games',
+            'fr': 'Demande d\'appel vidéo - BridgeMind Games',
+            'de': 'Videoanruf-Anfrage - BridgeMind Games',
+            'it': 'Richiesta videochiamata - BridgeMind Games',
+            'ja': 'ビデオ通話リクエスト - BridgeMind Games',
+            'zh': '视频通话请求 - BridgeMind Games',
+            'ar': 'طلب مكالمة فيديو - BridgeMind Games'
+        };
+        const emailBodies = {
+            'es': '¡Hola!%0A%0AMe gustaría agendar una videollamada.',
+            'en': 'Hello!%0A%0AI would like to schedule a video call.',
+            'fr': 'Bonjour!%0A%0AJe voudrais programmer un appel vidéo.',
+            'de': 'Hallo!%0A%0AIch möchte einen Videoanruf vereinbaren.',
+            'it': 'Ciao!%0A%0AVorrei programmare una videochiamata.',
+            'ja': 'こんにちは！%0A%0Aビデオ通話を予定したいです。',
+            'zh': '你好！%0A%0A我想安排一次视频通话。',
+            'ar': 'مرحبا!%0A%0Aأرغب في جدولة مكالمة فيديو.'
+        };
+        const subject = emailSubjects[currentLang] || emailSubjects['en'];
+        const body = emailBodies[currentLang] || emailBodies['en'];
+        window.location.href = `mailto:bridgemindgames@gmail.com?subject=${subject}&body=${body}`;
+    }
 </script>
 </body>
 </html>
+
 
 
 
