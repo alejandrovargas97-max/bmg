@@ -192,7 +192,7 @@
         </div>
     </div>
 
-    <section id="org-contact">
+    <section id="org-contact" style="display:none;">
         <h2 id="form-title"></h2>
         <!-- REEMPLAZA ESTA URL CON TU GOOGLE APPS SCRIPT -->
         <form id="org-form" method="POST" action="https://script.google.com/macros/s/AKfycbwY7ZJq.../exec">
@@ -401,7 +401,7 @@
         );
         
         // Abrir cliente de email con plantilla
-        window.location.href = `mailto:bridgemindgames@gmail.com?subject=${subject}&body=${body}`;
+        const formSection = document.getElementById('org-contact'); formSection.style.display = 'block'; formSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => { document.getElementById('org').focus(); }, 500);
     }
 
     // ==================== TRADUCCIONES ====================
@@ -791,3 +791,4 @@
 </script>
 </body>
 </html>
+
