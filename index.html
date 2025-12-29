@@ -363,24 +363,33 @@
     }
 
     function toggleChatbot() {
+        function toggleChatbot() {
         const chatbot = document.getElementById('chatbot-container');
         const isVisible = chatbot.style.display === 'block';
         chatbot.style.display = isVisible ? 'none' : 'block';
         
-        // Actualizar mensaje inicial según idioma
         if (!isVisible) {
-            const currentLang = document.querySelector('.lang-button.active')?.dataset.lang || 'es';
-            const responses = chatbotResponses[currentLang] || chatbotResponses.es;
-            const initialMsg = responses.hola || responses.hello || responses.bonjour || responses.hallo || responses.ciao || responses["こんにちは"] || responses["你好"] || responses["مرحبا"] || "¡Hola! ¿En qué puedo ayudarte?";
-            document.getElementById('initial-chatbot-msg').textContent = initialMsg;
-            
-            // Enfocar input
+            // Ponemos el foco en el cuadro de texto
             setTimeout(() => {
-                document.getElementById('chatbot-input').focus();
+                const input = document.getElementById('chatbot-input');
+                if (input) input.focus();
             }, 100);
+            
+            // Mensaje de bienvenida dinámico simple
+            const currentLang = document.querySelector('.lang-button.active')?.dataset.lang || 'es';
+            const welcomeMsg = document.getElementById('initial-chatbot-msg');
+            if (welcomeMsg) {
+                welcomeMsg.textContent = (currentLang === 'es') 
+                    ? "¡Hola! Soy el asistente de BridgeMind Games BGM. ¿En qué nivel te gustaría entrenar hoy?" 
+                    : "Hello! I'm the BridgeMind Games BGM assistant. Which level would you like to train today?";
+            }
         }
     }
 
+    // Activar el envío con la tecla ENTER
+    document.getElementById('chatbot-input')?.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendChatMessage();
+    });
     // ==================== FORMULARIO DE CITA ====================
     function openAppointmentForm() {
         const currentLang = document.querySelector('.lang-button.active')?.dataset.lang || 'es';
@@ -791,4 +800,5 @@
 </script>
 </body>
 </html>
+
 
