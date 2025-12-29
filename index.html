@@ -796,9 +796,80 @@
                 submitBtn.disabled = false;
             }, 1500);
         });
+    });// --- NUEVA LÓGICA BRIDGEMIND GAMES BGM ---
+    window.currentLang = 'es'; 
+
+    // Control de Banderas e Idioma
+    document.querySelectorAll('.lang-button').forEach(button => {
+        button.addEventListener('click', () => {
+            window.currentLang = button.getAttribute('data-lang');
+            document.querySelectorAll('.lang-button').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+            if (typeof updateLanguage === 'function') updateLanguage(window.currentLang);
+        });
     });
-</script>
+
+    // Abrir Chat y achicar el Logo automáticamente
+    window.toggleChatbot = function() {
+        const chatbot = document.getElementById('chatbot-container');
+        const header = document.querySelector('header');
+        const logo = document.querySelector('.main-logo');
+        const isVisible = chatbot.style.display === 'block';
+        
+        chatbot.style.display = isVisible ? 'none' : 'block';
+        
+        if (!isVisible) {
+            if (header) header.style.padding = "5px 0";
+            if (logo) logo.style.maxWidth = "120px";
+            setTimeout(() => { document.getElementById('chatbot-input')?.focus(); }, 100);
+        } else {
+            if (header) header.style.padding = "1rem 0";
+            if (logo) logo.style.maxWidth = "250px";
+        }
+    };
+
+    // Configurar Tecla ENTER
+    document.getElementById('chatbot-input')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+</script>// --- LÓGICA DE BRIDGEMIND GAMES BGM ---
+    window.currentLang = 'es'; 
+
+    // Detectar idioma de las banderas
+    document.querySelectorAll('.lang-button').forEach(button => {
+        button.addEventListener('click', () => {
+            window.currentLang = button.getAttribute('data-lang');
+            document.querySelectorAll('.lang-button').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+            if (typeof updateLanguage === 'function') updateLanguage(window.currentLang);
+        });
+    });
+
+    // Función para abrir chat y achicar logo
+    window.toggleChatbot = function() {
+        const chatbot = document.getElementById('chatbot-container');
+        const header = document.querySelector('header');
+        const logo = document.querySelector('.main-logo');
+        const isVisible = chatbot.style.display === 'block';
+        
+        chatbot.style.display = isVisible ? 'none' : 'block';
+        
+        if (!isVisible) {
+            if (header) header.style.padding = "5px 0";
+            if (logo) logo.style.maxWidth = "120px";
+            setTimeout(() => { document.getElementById('chatbot-input')?.focus(); }, 100);
+        } else {
+            if (header) header.style.padding = "1rem 0";
+            if (logo) logo.style.maxWidth = "250px";
+        }
+    };
+
+    // Enviar con ENTER
+    document.getElementById('chatbot-input')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
 </body>
 </html>
+
 
 
