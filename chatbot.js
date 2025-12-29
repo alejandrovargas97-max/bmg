@@ -1,101 +1,111 @@
-// chatbot.js - Motor de Inteligencia para BridgeMind Games BGM
+// chatbot.js - Inteligencia BridgeMind Games BGM con Niveles
 const BridgeBot = {
     config: {
         phone: "34634268663",
-        telegramUser: "BridgeMindGames", // Cambia por tu alias de Telegram
-        wechatId: "BridgeMindBGM"       // Tu ID de WeChat
+        telegram: "BridgeMindGames",
+        wechat: "BridgeMindBGM"
     },
-
-    // Diccionario de Intenciones
+    
+    // Diccionario con lógica de niveles y combinaciones
     dictionary: {
         es: {
-            saludo: ["hola", "buenos dias", "buenas tardes", "saludos"],
-            cita: ["cita", "reunion", "agendar", "demo", "videollamada", "hablar", "entrevista"],
-            info: ["precio", "costo", "programa", "metodo", "ia", "inteligencia"],
-            respuestas: {
-                welcome: "¡Hola! Soy el asistente de BridgeMind Games BGM. ¿Te gustaría agendar una demo o saber más sobre nuestro sistema neuro-lingüístico?",
-                info: "Nuestro sistema usa IA para entrenar el cerebro y el lenguaje simultáneamente. Los costos dependen del número de alumnos/usuarios.",
-                fallback: "Es una excelente pregunta. Como es un tema específico, lo mejor es que hablemos directamente para darte una respuesta exacta."
+            keywords: {
+                "hola": "¡Hola! Soy el asistente de BridgeMind Games BGM. ¿Buscas info sobre nuestros programas educativos o niveles de entrenamiento?",
+                "precio": "Los precios se adaptan a cada institución. ¿Te gustaría recibir una cotización?",
+                "demo": "Podemos agendar una demo por Zoom para mostrarte la IA. ¿Te interesa?",
+                "ia": "Nuestra IA ajusta la dificultad neuro-lingüística según el desempeño del usuario.",
+                // Lógica de Niveles
+                "basico": "En el nivel **Básico**, nos enfocamos en fundamentos lingüísticos y estimulación cognitiva inicial.",
+                "intermedio": "El nivel **Intermedio** combina gramática fluida con retos de memoria y atención rápida.",
+                "avanzado": "El nivel **Avanzado** exige bilingüismo activo y resolución de problemas complejos bajo presión.",
+                "experto": "El nivel **Experto** es nuestra combinación más alta: dominio total del idioma y alta capacidad neuro-cognitiva.",
+                "juego": "Puedes elegir el nivel de **Juego** (Mecánicas) independientemente del nivel de **Idioma**.",
+                "idioma": "Ofrecemos 4 categorías de idioma: Básico, Intermedio, Avanzado y Experto."
             },
-            cta: "Haz clic para comunicarte conmigo ahora:"
+            unresolved: "Es una consulta muy específica. ¿Prefieres que un asesor de BridgeMind te lo explique directamente por chat?",
+            cta: "Contactar con soporte BGM:"
         },
         en: {
-            saludo: ["hello", "hi", "good morning", "hey"],
-            cita: ["appointment", "meeting", "schedule", "demo", "call", "talk", "video call"],
-            info: ["price", "cost", "program", "method", "ai", "intelligence"],
-            respuestas: {
-                welcome: "Hello! I am the BridgeMind Games BGM assistant. Would you like to schedule a demo or learn more about our neuro-linguistic system?",
-                info: "Our system uses AI to train the brain and language simultaneously. Costs depend on the number of students/users.",
-                fallback: "That's a great question. Since it's a specific matter, it's best we talk directly to provide an accurate answer."
+            keywords: {
+                "hello": "Hello! I'm the BridgeMind Games BGM assistant. Looking for info on our programs or training levels?",
+                "price": "Prices are tailored for each institution. Would you like a quote?",
+                "demo": "We can schedule a Zoom demo. Interested?",
+                "ai": "Our AI adjusts neuro-linguistic difficulty based on user performance.",
+                // Levels Logic
+                "basic": "In the **Basic** level, we focus on linguistic foundations and initial cognitive stimulation.",
+                "intermediate": "The **Intermediate** level combines fluent grammar with memory and quick attention challenges.",
+                "advanced": "The **Advanced** level requires active bilingualism and solving complex problems under pressure.",
+                "expert": "The **Expert** level is our highest combination: full language mastery and high neuro-cognitive capacity.",
+                "game": "You can choose the **Game** level (Mechanics) independently from the **Language** level.",
+                "language": "We offer 4 language categories: Basic, Intermediate, Advanced, and Expert."
             },
-            cta: "Click to contact me now:"
+            unresolved: "That's a very specific inquiry. Would you prefer a BridgeMind consultant to explain it via chat?",
+            cta: "Contact BGM support:"
         }
     },
 
-    // Procesador de lógica
-    getResponse: function(message, lang) {
-        const msg = message.toLowerCase();
+    process: function(message, lang) {
+        const text = message.toLowerCase();
         const data = this.dictionary[lang] || this.dictionary.es;
-        
-        // 1. Detectar si pide CITA o CONTACTO
-        const pideCita = data.cita.some(word => msg.includes(word));
-        const pideInfo = data.info.some(word => msg.includes(word));
-        const esSaludo = data.saludo.some(word => msg.includes(word));
+        let response = null;
 
-        if (esSaludo) return { text: data.respuestas.welcome, showLinks: false };
-        if (pideInfo) return { text: data.respuestas.info, showLinks: true };
-        if (pideCita) return { text: "Excelente. Vamos a agendar tu cita.", showLinks: true };
+        // Detección de combinaciones (Ej: "juego intermedio" o "idioma experto")
+        if (text.includes("juego") || text.includes("game")) {
+            if (text.includes("basico") || text.includes("basic")) response = lang === 'es' ? "Configurando: Juego (Básico) + Idioma a elección." : "Setting up: Game (Basic) + Language of choice.";
+            if (text.includes("intermedio") || text.includes("intermediate")) response = lang === 'es' ? "Configurando: Juego (Intermedio). Ideal para usuarios con experiencia previa." : "Setting up: Game (Intermediate). Ideal for experienced users.";
+        }
 
-        // 2. Si no entiende (Fallback)
-        return { text: data.respuestas.fallback, showLinks: true };
-    },
+        // Búsqueda general de palabras clave si no se detectó combinación específica arriba
+        if (!response) {
+            for (let key in data.keywords) {
+                if (text.includes(key)) {
+                    response = data.keywords[key];
+                    break;
+                }
+            }
+        }
 
-    // Generador de enlaces de mensajería
-    getLinks: function(userMsg, lang) {
-        const text = encodeURIComponent(`BridgeMind BGM - Consulta (${lang}): ${userMsg}`);
         return {
-            whatsapp: `https://wa.me/${this.config.phone}?text=${text}`,
-            telegram: `https://t.me/${this.config.telegramUser}`,
-            wechat: `weixin://dl/chat?${this.config.wechatId}` // Nota: WeChat requiere que el usuario te tenga agregado o usar un QR
+            text: response || data.unresolved,
+            isFallback: !response,
+            cta: data.cta
         };
     }
 };
 
-// --- FUNCIÓN DE INTEGRACIÓN CON TU HTML ---
 function sendChatMessage() {
     const input = document.getElementById('chatbot-input');
     const messagesDiv = document.getElementById('chatbot-messages');
     const msg = input.value.trim();
     if (!msg) return;
 
-    // Idioma actual
-    const currentLang = document.querySelector('.lang-button.active')?.dataset.lang || 'es';
-
-    // Mensaje del usuario
-    const uMsg = document.createElement('div');
-    uMsg.className = 'user-message';
-    uMsg.textContent = msg;
-    messagesDiv.appendChild(uMsg);
+    const uDiv = document.createElement('div');
+    uDiv.className = 'user-message';
+    uDiv.textContent = msg;
+    messagesDiv.appendChild(uDiv);
     input.value = '';
 
-    // Respuesta del Bot
+    const lang = document.querySelector('.lang-button.active')?.dataset.lang || 'es';
+
     setTimeout(() => {
-        const response = BridgeBot.getResponse(msg, currentLang);
-        const bMsg = document.createElement('div');
-        bMsg.className = 'bot-message';
-        bMsg.innerHTML = response.text;
-
-        if (response.showLinks) {
-            const links = BridgeBot.getLinks(msg, currentLang);
-            const ctaText = BridgeBot.dictionary[currentLang].cta;
-            bMsg.innerHTML += `<br><br><strong>${ctaText}</strong><br>
-                <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-                    <a href="${links.whatsapp}" target="_blank" style="background:#25d366; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:0.8em;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                    <a href="${links.telegram}" target="_blank" style="background:#0088cc; color:white; padding:5px 10px; border-radius:5px; text-decoration:none; font-size:0.8em;"><i class="fab fa-telegram"></i> Telegram</a>
-                </div>`;
-        }
-
-        messagesDiv.appendChild(bMsg);
+        const res = BridgeBot.process(msg, lang);
+        const bDiv = document.createElement('div');
+        bDiv.className = 'bot-message';
+        
+        let html = `<div>${res.text}</div>`;
+        const encoded = encodeURIComponent(`BridgeMind BGM - Consulta sobre Niveles: "${msg}"`);
+        
+        html += `<div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px;">
+            <small style="font-size:10px; opacity:0.8;">${res.cta}</small><br>
+            <div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap;">
+                <a href="https://wa.me/${BridgeBot.config.phone}?text=${encoded}" target="_blank" style="color:#25d366; text-decoration:none; font-size:12px; font-weight:bold;">WhatsApp</a>
+                <a href="https://t.me/${BridgeBot.config.telegram}" target="_blank" style="color:#0088cc; text-decoration:none; font-size:12px; font-weight:bold;">Telegram</a>
+                <a href="weixin://dl/chat?${BridgeBot.config.wechat}" style="color:#09BB07; text-decoration:none; font-size:12px; font-weight:bold;">WeChat</a>
+            </div>
+        </div>`;
+        
+        bDiv.innerHTML = html;
+        messagesDiv.appendChild(bDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }, 600);
 }
