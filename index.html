@@ -1154,8 +1154,7 @@
             
             try {
                 // URL de tu Google Apps Script - ¡REEMPLAZA ESTA URL!
-                const scriptURL = 'https://script.google.com/macros/s/AKfycbwY7ZJq.../exec';
-                
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxkC-I5rdeStPM1SsgmQpAzy3I_BGbPo0LMaaGUfVAKaeQWSvsxqH_E_EUHcpieb0hM/exec';                
                 const response = await fetch(scriptURL, {
                     method: 'POST',
                     body: formData,
@@ -1294,5 +1293,144 @@
     
     <!-- ARCHIVO EXTERNO DEL CHATBOT INTELIGENTE -->
     <script src="chatbot.js"></script>
+
+    // ==================== FUNCIÓN PARA AUTO-LLENAR EJEMPLOS ==================== 
+// Función para enviar ejemplos automáticamente al cargar la página
+window.fillTestExamples = async function() {
+    const examples = [
+        {
+            lang: 'es',
+            organizacion: 'Colegio Internacional Madrid',
+            persona: 'María García López',
+            cargo: 'Directora Pedagógica',
+            pais: 'España / Madrid',
+            email: 'maria.garcia@colegiomadrid.es',
+            telefono: '+34 912 345 678',
+            interes: 'escuelas',
+            mensaje: 'Estamos interesados en implementar BridgeMind Games en nuestro colegio para estudiantes de primaria y secundaria. Nos gustaría conocer más sobre los programas disponibles y costos.'
+        },
+        {
+            lang: 'en',
+            organizacion: 'International School of London',
+            persona: 'John Smith',
+            cargo: 'Head of Innovation',
+            pais: 'United Kingdom / London',
+            email: 'john.smith@islondon.ac.uk',
+            telefono: '+44 20 7946 0958',
+            interes: 'escuelas',
+            mensaje: 'We are exploring AI-powered language learning solutions for our K-12 students. Would like to schedule a demo to see how BridgeMind Games can integrate with our curriculum.'
+        },
+        {
+            lang: 'fr',
+            organizacion: 'Lycée Victor Hugo Paris',
+            persona: 'Sophie Dubois',
+            cargo: 'Responsable Innovation Pédagogique',
+            pais: 'France / Paris',
+            email: 'sophie.dubois@lycee-hugo.fr',
+            telefono: '+33 1 42 86 82 71',
+            interes: 'escuelas',
+            mensaje: 'Nous cherchons des outils innovants pour améliorer l\'apprentissage des langues. BridgeMind Games semble correspondre à nos besoins. Pouvons-nous organiser une présentation ?'
+        },
+        {
+            lang: 'de',
+            organizacion: 'Goethe Gymnasium Berlin',
+            persona: 'Dr. Klaus Müller',
+            cargo: 'Schulleiter',
+            pais: 'Deutschland / Berlin',
+            email: 'k.mueller@goethe-gym.de',
+            telefono: '+49 30 12345678',
+            interes: 'escuelas',
+            mensaje: 'Wir interessieren uns für innovative Lernmethoden. Können Sie uns mehr Informationen über die Integration von BridgeMind Games in unserem Lehrplan zusenden?'
+        },
+        {
+            lang: 'it',
+            organizacion: 'Università Bocconi Milano',
+            persona: 'Prof. Alessandro Rossi',
+            cargo: 'Direttore Centro Lingue',
+            pais: 'Italia / Milano',
+            email: 'alessandro.rossi@unibocconi.it',
+            telefono: '+39 02 5836 5555',
+            interes: 'universidades',
+            mensaje: 'Cerchiamo soluzioni innovative per l\'insegnamento delle lingue ai nostri studenti universitari. Vorremmo esplorare una possibile collaborazione con BridgeMind Games.'
+        },
+        {
+            lang: 'jp',
+            organizacion: '東京国際学園 Tokyo International School',
+            persona: '田中 太郎 (Tanaka Taro)',
+            cargo: '教育技術部長 (Director of Educational Technology)',
+            pais: '日本 / 東京 (Japan / Tokyo)',
+            email: 'tanaka.taro@tokyo-intl.ac.jp',
+            telefono: '+81 3 1234 5678',
+            interes: 'escuelas',
+            mensaje: 'AI を活用した言語教育プログラムに興味があります。詳細な資料とデモをお願いできますでしょうか。（We are interested in AI-powered language education programs. Could we request detailed materials and a demo?)'
+        },
+        {
+            lang: 'ch',
+            organizacion: '上海国际学校 Shanghai International School',
+            persona: '王明 (Wang Ming)',
+            cargo: '教学创新主管 (Director of Teaching Innovation)',
+            pais: '中国 / 上海 (China / Shanghai)',
+            email: 'wang.ming@shanghai-intl.edu.cn',
+            telefono: '+86 21 6279 8888',
+            interes: 'escuelas',
+            mensaje: '我们希望了解BridgeMind Games如何帮助提高学生的语言学习效果。请提供更多信息和演示机会。(We would like to understand how BridgeMind Games can help improve students\' language learning. Please provide more information and demo opportunities.)'
+        },
+        {
+            lang: 'ar',
+            organizacion: 'مدرسة دبي الدولية Dubai International School',
+            persona: 'أحمد العلي (Ahmed Al Ali)',
+            cargo: 'مدير التطوير التربوي (Director of Educational Development)',
+            pais: 'الإمارات / دبي (UAE / Dubai)',
+            email: 'ahmed.alali@dubai-intl.ae',
+            telefono: '+971 4 123 4567',
+            interes: 'escuelas',
+            mensaje: 'نحن مهتمون بتطبيق تقنيات الذكاء الاصطناعي في تعليم اللغات. نود معرفة المزيد عن برامج BridgeMind Games. (We are interested in implementing AI technologies in language education. We would like to know more about BridgeMind Games programs.)'
+        }
+    ];
+    
+    // Esperar 2 segundos antes de empezar
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    console.log('🎯 Iniciando envío de 8 ejemplos de formularios...');
+    
+    for (let i = 0; i < examples.length; i++) {
+        const example = examples[i];
+        console.log(`📝 Enviando ejemplo ${i + 1}/8: ${example.organizacion} (${example.lang})`);
+        
+        // Crear FormData
+        const formData = new FormData();
+        formData.append('idioma', example.lang);
+        formData.append('organizacion', example.organizacion);
+        formData.append('persona', example.persona);
+        formData.append('cargo', example.cargo);
+        formData.append('pais', example.pais);
+        formData.append('email', example.email);
+        formData.append('telefono', example.telefono);
+        formData.append('interes', example.interes);
+        formData.append('mensaje', example.mensaje);
+        
+        try {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxkC-I5rdeStPM1SsgmQpAzy3I_BGbPo0LMaaGUfVAKaeQWSvsxqH_E_EUHcpieb0hM/exec';
+            await fetch(scriptURL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            });
+            console.log(`✅ Ejemplo ${i + 1} enviado correctamente`);
+        } catch (error) {
+            console.error(`❌ Error enviando ejemplo ${i + 1}:`, error);
+        }
+        
+        // Esperar 1 segundo entre cada envío
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
+    console.log('🎉 ¡Todos los ejemplos han sido enviados!');
+    alert('✅ Se han enviado 8 ejemplos de formularios en 8 idiomas diferentes a tu Google Sheet. Revisa la consola del navegador para ver el progreso.');
+};
+
+// Descomentar la siguiente línea para ejecutar automáticamente al cargar la página
+// window.addEventListener('load', () => { setTimeout(() => window.fillTestExamples(), 3000); });
 </body>
 </html>
+
