@@ -1,113 +1,392 @@
-function normalizeLang(code) {
-    if (!code) return "es";
-    code = code.toLowerCase();
-
-    if (code.startsWith("es")) return "es";
-    if (code.startsWith("en")) return "en";
-    if (code.startsWith("fr")) return "fr";
-    if (code.startsWith("de")) return "de";
-    if (code.startsWith("it")) return "it";
-    if (code.startsWith("ja")) return "ja";
-    if (code.startsWith("zh")) return "zh";
-    if (code.startsWith("ar")) return "ar";
-
-    return "es";
-}
-
-function getLang() {
-    return normalizeLang(localStorage.getItem("selectedLanguage"));
-}
-
-        closeChat.addEventListener('click', () => {
-            chatbotWindow.classList.remove('active');
-        });
-
-        // Mensaje de bienvenida
-        function showWelcomeMessage() {
-            addBotMessage('¡Hola! 👋 Soy el asistente virtual de BridgeMindGames. ¿En qué puedo ayudarte hoy?');
-            
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options';
-            optionsDiv.innerHTML = `
-                <button class="option-button" onclick="askAbout('programa')">📚 ¿Qué es BridgeMindGames?</button>
-                <button class="option-button" onclick="askAbout('idiomas')">🌍 ¿Qué idiomas ofrecen?</button>
-                <button class="option-button" onclick="askAbout('escuelas')">🏫 Programas para escuelas</button>
-                <button class="option-button" onclick="askAbout('contacto')">📞 Información de contacto</button>
-            `;
-            
-            const lastMessage = chatMessages.lastElementChild;
-            lastMessage.appendChild(optionsDiv);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot BridgeMind Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        // Agregar mensaje del bot
+        /* Botón flotante del chatbot */
+        #chatbot-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        #chatbot-button:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbot-button svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        /* Ventana del chatbot */
+        #chatbot-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        #chatbot-window.active {
+            display: flex;
+        }
+
+        /* Header del chatbot */
+        #chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chatbot-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* Área de mensajes */
+        #chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f5f5f5;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            text-align: left;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message-content {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Botones de opciones */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .option-button {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .option-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Área de input */
+        #chat-input-area {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        #send-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Botón de WhatsApp */
+        .whatsapp-button {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin-top: 10px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-button:hover {
+            background: #20BA5A;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Botón flotante -->
+    <div id="chatbot-button">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+    </div>
+
+    <!-- Ventana del chatbot -->
+    <div id="chatbot-window">
+        <div id="chatbot-header">
+            <h3>🎮 BridgeMind Assistant</h3>
+            <button id="close-chat">&times;</button>
+        </div>
+        <div id="chat-messages"></div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Escribe tu pregunta...">
+            <button id="send-button">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        // Referencias a elementos del DOM
+        const chatbotButton = document.getElementById('chatbot-button');
+        const chatbotWindow = document.getElementById('chatbot-window');
+        const closeChat = document.getElementById('close-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+
+        /* ---------------------------------------------------------
+           NORMALIZAR IDIOMA (acepta es-ES, en-US, it-IT, zh-CN, etc.)
+        --------------------------------------------------------- */
+        function normalizeLang(code) {
+            if (!code) return "es";
+            code = code.toLowerCase();
+
+            if (code.startsWith("es")) return "es";
+            if (code.startsWith("en")) return "en";
+            if (code.startsWith("fr")) return "fr";
+            if (code.startsWith("de")) return "de";
+            if (code.startsWith("it")) return "it";
+            if (code.startsWith("ja")) return "ja";
+            if (code.startsWith("zh")) return "zh";
+            if (code.startsWith("ar")) return "ar";
+
+            return "es";
+        }
+
+        function getLang() {
+            return normalizeLang(localStorage.getItem("selectedLanguage"));
+        }
+
+        /* ---------------------------------------------------------
+           BASE DE CONOCIMIENTO MULTI‑IDIOMA
+        --------------------------------------------------------- */
+        const knowledgeBase = {
+            programa: {
+                es: "BridgeMindGames es un sistema de entrenamiento neuro‑lingüístico basado en IA.",
+                en: "BridgeMindGames is an AI‑based neuro‑linguistic training system.",
+                fr: "BridgeMindGames est un système d'entraînement neuro‑linguistique basé sur l'IA.",
+                de: "BridgeMindGames ist ein KI‑basiertes neuro‑linguistisches Trainingssystem.",
+                it: "BridgeMindGames è un sistema di allenamento neuro‑linguistico basato sull'IA.",
+                ja: "BridgeMindGames は AI を活用した神経言語トレーニングシステムです。",
+                zh: "BridgeMindGames 是一个基于人工智能的神经语言训练系统。",
+                ar: "BridgeMindGames هو نظام تدريب عصبي‑لغوي يعتمد على الذكاء الاصطناعي."
+            },
+            idiomas: {
+                es: "Ofrecemos 8 idiomas: Español, Inglés, Francés, Italiano, Alemán, Japonés, Chino y Árabe.",
+                en: "We offer 8 languages: Spanish, English, French, Italian, German, Japanese, Chinese and Arabic.",
+                fr: "Nous proposons 8 langues : espagnol, anglais, français, italien, allemand, japonais, chinois et arabe.",
+                de: "Wir bieten 8 Sprachen an: Spanisch, Englisch, Französisch, Italienisch, Deutsch, Japanisch, Chinesisch und Arabisch.",
+                it: "Offriamo 8 lingue: spagnolo, inglese, francese, italiano, tedesco, giapponese, cinese e arabo.",
+                ja: "8つの言語に対応しています：スペイン語、英語、フランス語、イタリア語、ドイツ語、日本語、中国語、アラビア語。",
+                zh: "我们提供 8 种语言：西班牙语、英语、法语、意大利语、德语、日语、中文和阿拉伯语。",
+                ar: "نقدم 8 لغات: الإسبانية، الإنجليزية، الفرنسية، الإيطالية، الألمانية، اليابانية، الصينية والعربية."
+            },
+            escuelas: {
+                es: "Tenemos programas especializados para escuelas.",
+                en: "We offer specialized programs for schools.",
+                fr: "Nous proposons des programmes spécialisés pour les écoles.",
+                de: "Wir bieten spezialisierte Programme für Schulen.",
+                it: "Offriamo programmi specializzati per le scuole.",
+                ja: "学校向けの特別プログラムを提供しています。",
+                zh: "我们为学校提供专门的课程。",
+                ar: "لدينا برامج مخصصة للمدارس."
+            },
+            contacto: {
+                es: "Puedes contactarnos por WhatsApp o correo. ¿Quieres que te conecte?",
+                en: "You can contact us via WhatsApp or email. Want me to connect you?",
+                fr: "Vous pouvez nous contacter via WhatsApp ou email. Voulez‑vous que je vous connecte?",
+                de: "Sie können uns über WhatsApp oder E‑Mail kontaktieren. Soll ich Sie verbinden?",
+                it: "Puoi contattarci via WhatsApp o email. Vuoi che ti metta in contatto?",
+                ja: "WhatsApp またはメールでお問い合わせいただけます。つなぎましょうか？",
+                zh: "您可以通过 WhatsApp 或电子邮件联系我们。需要我帮您连接吗？",
+                ar: "يمكنك التواصل معنا عبر واتساب أو البريد الإلكتروني. هل تريد أن أوصلك بهم؟"
+            }
+        };
+
+        /* ---------------------------------------------------------
+           RESPUESTAS GENERALES (VARIADAS)
+        --------------------------------------------------------- */
+        const generalResponses = {
+            es: ["¿En qué puedo ayudarte?", "Dime, ¿qué necesitas?", "Estoy aquí para ayudarte."],
+            en: ["How can I help you?", "Tell me what you need.", "I'm here to assist you."],
+            fr: ["Comment puis‑je vous aider?", "Que puis‑je faire pour vous?", "Je suis là pour vous aider."],
+            de: ["Wie kann ich dir helfen?", "Was brauchst du?", "Ich bin hier, um dir zu helfen."],
+            it: ["Come posso aiutarti?", "Di cosa hai bisogno?", "Sono qui per aiutarti."],
+            ja: ["どのようにお手伝いできますか？", "何が必要ですか？", "お手伝いします。"],
+            zh: ["我能帮你什么？", "你需要什么？", "我在这里为你提供帮助。"],
+            ar: ["كيف يمكنني مساعدتك", "ما الذي تحتاجه", "أنا هنا لمساعدتك"]
+        };
+
+        /* ---------------------------------------------------------
+           DETECCIÓN DE INTENCIÓN
+        --------------------------------------------------------- */
+        function detectIntent(text) {
+            text = text.toLowerCase();
+            if (text.includes("program")) return "programa";
+            if (text.includes("idiom") || text.includes("language")) return "idiomas";
+            if (text.includes("school") || text.includes("escuela")) return "escuelas";
+            if (text.includes("contact")) return "contacto";
+            return "general";
+        }
+
+        /* ---------------------------------------------------------
+           GENERAR RESPUESTA
+        --------------------------------------------------------- */
+        function getResponse(text) {
+            const lang = getLang();
+            const intent = detectIntent(text);
+
+            if (intent !== "general") {
+                return knowledgeBase[intent][lang];
+            }
+
+            const options = generalResponses[lang];
+            return options[Math.floor(Math.random() * options.length)];
+        }
+
+        /* ---------------------------------------------------------
+           MOSTRAR MENSAJES
+        --------------------------------------------------------- */
         function addBotMessage(text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot';
-            messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
-            chatMessages.appendChild(messageDiv);
+            const div = document.createElement("div");
+            div.className = "message bot";
+            div.innerHTML = `<div class="message-content">${text}</div>`;
+            chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Agregar mensaje del usuario
         function addUserMessage(text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message user';
-            messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
-            chatMessages.appendChild(messageDiv);
+            const div = document.createElement("div");
+            div.className = "message user";
+            div.innerHTML = `<div class="message-content">${text}</div>`;
+            chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Procesar pregunta
-        function processQuestion(question) {
-            const lowerQuestion = question.toLowerCase();
-            let response = null;
-
-            // Buscar en la base de conocimiento
-            for (const [key, value] of Object.entries(knowledgeBase)) {
-                if (lowerQuestion.includes(key)) {
-                    response = value;
-                    break;
-                }
-            }
-
-            if (response) {
-                setTimeout(() => addBotMessage(response), 500);
-            } else {
-                // No sabe la respuesta - ofrecer WhatsApp
-                setTimeout(() => {
-                    addBotMessage('Lo siento, no tengo información específica sobre eso. 😕 Pero puedo conectarte con nuestro equipo para que te ayuden personalmente.');
-                    
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = 'message bot';
-                    messageDiv.innerHTML = `
-                        <div class="message-content">
-                            ¿Te gustaría contactar directamente?
-                            <a href="https://wa.me/34634268663?text=Hola,%20tengo%20una%20pregunta:%20${encodeURIComponent(question)}" 
-                               class="whatsapp-button" target="_blank">
-                                💬 Chatear por WhatsApp
-                            </a>
-                        </div>
-                    `;
-                    chatMessages.appendChild(messageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 500);
-            }
+        /* ---------------------------------------------------------
+           PROCESAR PREGUNTA
+        --------------------------------------------------------- */
+        function processQuestion(q) {
+            const reply = getResponse(q);
+            setTimeout(() => addBotMessage(reply), 300);
         }
 
-        // Función global para botones de opciones
+        /* ---------------------------------------------------------
+           BOTONES DE OPCIONES (si los usas)
+        --------------------------------------------------------- */
         window.askAbout = function(topic) {
-            addUserMessage(topic.charAt(0).toUpperCase() + topic.slice(1));
+            addUserMessage(topic);
             processQuestion(topic);
         };
 
-        // Enviar mensaje
+        /* ---------------------------------------------------------
+           ENVIAR MENSAJE
+        --------------------------------------------------------- */
         function sendMessage() {
-            const question = chatInput.value.trim();
-            if (question) {
-                addUserMessage(question);
-                chatInput.value = '';
-                processQuestion(question);
-            }
+            const q = chatInput.value.trim();
+            if (!q) return;
+            addUserMessage(q);
+            chatInput.value = "";
+            processQuestion(q);
         }
 
         sendButton.addEventListener('click', sendMessage);
@@ -115,6 +394,77 @@ function getLang() {
             if (e.key === 'Enter') {
                 sendMessage();
             }
+        });
+
+        /* ---------------------------------------------------------
+           BIENVENIDA MULTILINGÜE (NO REPETITIVA)
+        --------------------------------------------------------- */
+        function showWelcomeMessage() {
+            const lang = getLang();
+
+            const welcomeMessages = {
+                es: [
+                    "¡Hola! 👋 Soy tu asistente virtual de BridgeMindGames.",
+                    "¡Bienvenido! 👋 ¿En qué puedo ayudarte hoy?",
+                    "¡Hola! 👋 Estoy aquí para ayudarte con lo que necesites."
+                ],
+                en: [
+                    "Hi! 👋 I'm your BridgeMindGames virtual assistant.",
+                    "Welcome! 👋 How can I help you today?",
+                    "Hello! 👋 I'm here to assist you with anything you need."
+                ],
+                fr: [
+                    "Bonjour ! 👋 Je suis votre assistant virtuel BridgeMindGames.",
+                    "Bienvenue ! 👋 Comment puis‑je vous aider aujourd’hui?",
+                    "Salut ! 👋 Je suis là pour vous aider."
+                ],
+                de: [
+                    "Hallo! 👋 Ich bin dein virtueller BridgeMindGames‑Assistent.",
+                    "Willkommen! 👋 Wie kann ich dir heute helfen?",
+                    "Hi! 👋 Ich bin hier, um dir zu helfen."
+                ],
+                it: [
+                    "Ciao! 👋 Sono il tuo assistente virtuale BridgeMindGames.",
+                    "Benvenuto! 👋 Come posso aiutarti oggi?",
+                    "Ciao! 👋 Sono qui per aiutarti con qualsiasi cosa."
+                ],
+                ja: [
+                    "こんにちは！👋 BridgeMindGames のバーチャルアシスタントです。",
+                    "ようこそ！👋 今日はどのようにお手伝いできますか？",
+                    "こんにちは！👋 必要なことがあれば何でも聞いてください。"
+                ],
+                zh: [
+                    "你好！👋 我是 BridgeMindGames 的虚拟助手。",
+                    "欢迎！👋 今天我能帮你什么？",
+                    "你好！👋 有任何需要我都可以帮你。"
+                ],
+                ar: [
+                    "مرحبًا! 👋 أنا المساعد الافتراضي لـ BridgeMindGames.",
+                    "أهلًا بك! 👋 كيف يمكنني مساعدتك اليوم؟",
+                    "مرحبًا! 👋 أنا هنا لمساعدتك في أي شيء تحتاجه."
+                ]
+            };
+
+            const options = welcomeMessages[lang] || welcomeMessages["es"];
+            const message = options[Math.floor(Math.random() * options.length)];
+
+            addBotMessage(message);
+        }
+
+        /* ---------------------------------------------------------
+           ABRIR / CERRAR CHATBOT
+        --------------------------------------------------------- */
+        chatbotButton.addEventListener('click', () => {
+            chatbotWindow.classList.add('active');
+
+            // Si está vacío, mostramos bienvenida
+            if (chatMessages.children.length === 0) {
+                showWelcomeMessage();
+            }
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatbotWindow.classList.remove('active');
         });
     </script>
 </body>
