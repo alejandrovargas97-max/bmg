@@ -1,3 +1,22 @@
+function normalizeLang(code) {
+    if (!code) return "es";
+    code = code.toLowerCase();
+
+    if (code.startsWith("es")) return "es";
+    if (code.startsWith("en")) return "en";
+    if (code.startsWith("fr")) return "fr";
+    if (code.startsWith("de")) return "de";
+    if (code.startsWith("it")) return "it";
+    if (code.startsWith("ja")) return "ja";
+    if (code.startsWith("zh")) return "zh";
+    if (code.startsWith("ar")) return "ar";
+
+    return "es";
+}
+
+function getLang() {
+    return normalizeLang(localStorage.getItem("selectedLanguage"));
+}
 
         closeChat.addEventListener('click', () => {
             chatbotWindow.classList.remove('active');
