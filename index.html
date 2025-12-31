@@ -3,238 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BridgeMind Games Education | Global System</title>
+    <title>BridgeMind Games Education | Global Alpha System</title>
     
+    <!-- Iconos de Calidad -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        :root { --blue: #007bff; --dark: #0056b3; --yellow: #ffc107; --bg: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; color: #333; background: var(--bg); }
+        :root { 
+            --blue: #007bff; 
+            --dark: #0056b3; 
+            --yellow: #ffc107; 
+            --light: #f8f9fa; 
+        }
 
-        /* HEADER FIJO TOTAL */
-        #fixed-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--blue); z-index: 2000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .logo-container { text-align: center; padding: 10px 0 5px; }
-        .logo-container img { max-width: 200px; transition: 0.4s; }
-        .lang-nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 8px 10px; background: rgba(0,0,0,0.1); }
-        .lang-btn { background: white; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.75rem; transition: 0.2s; }
-        .lang-btn.active { background: var(--yellow); border-color: var(--yellow); font-weight: bold; transform: scale(1.05); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #fff; color: #333; overflow-x: hidden; }
 
-        .header-spacer { height: 160px; }
-        main { max-width: 1100px; margin: 0 auto; padding: 20px; text-align: center; }
-        h1 { font-size: 2.3rem; color: var(--blue); margin-top: 10px; }
+        /* ==========================================
+           HEADER FIJO Y BLOQUEADO (Logo + Banderas)
+           ========================================== */
+        header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            background: var(--blue); 
+            z-index: 10000; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+        }
+        .logo-area { text-align: center; padding: 10px 0; }
+        .logo-area img { max-width: 200px; transition: 0.3s ease; }
+        .logo-area img.shrink { max-width: 100px; }
 
-        /* GALERÍA */
-        .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 30px 0; }
-        .gallery img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        #dynamic-img { border: 4px solid var(--blue); }
+        .nav-languages { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            padding: 10px; 
+            background: rgba(0,0,0,0.15); 
+        }
+        .lang-node { 
+            background: white; 
+            border: 1px solid #ccc; 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 0.85rem; 
+            transition: 0.2s; 
+            font-weight: 500;
+        }
+        .lang-node:hover { background: #f0f0f0; }
+        .lang-node.active { 
+            background: var(--yellow); 
+            border-color: var(--yellow); 
+            color: #222; 
+            font-weight: bold; 
+            transform: scale(1.05); 
+        }
 
-        /* VIDEO */
-        .video-box { background: #000; border-radius: 15px; overflow: hidden; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        video { width: 100%; display: block; max-height: 500px; }
+        /* ESPACIADOR PARA HEADER FIJO */
+        .page-spacer { height: 180px; }
 
-        .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 40px 0; }
-        .pillar-card { background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid var(--blue); text-align: left; }
+        /* CONTENIDO */
+        main { max-width: 1150px; margin: 0 auto; padding: 20px; text-align: center; }
+        h1 { font-size: 2.8rem; color: var(--blue); margin-top: 20px; }
+        .main-desc { font-size: 1.2rem; color: #555; max-width: 850px; margin: 0 auto 40px; }
 
-        .cta-box { display: flex; justify-content: center; gap: 15px; margin: 40px 0; flex-wrap: wrap; }
-        .btn-cta { padding: 15px 25px; border-radius: 30px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.3s; font-size: 1rem; }
-        .btn-blue { background: var(--blue); color: white; }
-        .btn-green { background: #28a745; color: white; }
+        /* MULTIMEDIA DINÁMICA */
+        .multimedia-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 40px 0; }
+        .multimedia-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        #image-target { border: 4px solid var(--blue); }
+
+        .video-box { background: #000; border-radius: 20px; overflow: hidden; margin: 50px 0; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        video { width: 100%; display: block; max-height: 550px; }
+
+        /* PILARES */
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 50px 0; }
+        .pillar-item { background: var(--light); padding: 30px; border-radius: 15px; border-left: 6px solid var(--blue); text-align: left; }
+
+        /* ACCIONES */
+        .action-zone { display: flex; justify-content: center; gap: 20px; margin: 60px 0; flex-wrap: wrap; }
+        .btn-action { padding: 18px 35px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .btn-call { background: var(--blue); color: white; }
+        .btn-info { background: #28a745; color: white; }
+        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
         /* FORMULARIO */
-        #form-section { display: none; background: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin: 30px auto; max-width: 700px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .full { grid-column: span 2; }
-        .submit-btn { background: #28a745; color: white; border: none; padding: 15px; border-radius: 30px; width: 100%; font-weight: bold; cursor: pointer; }
+        #form-container { display: none; background: #fff; padding: 45px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); margin: 40px auto; max-width: 750px; text-align: left; }
+        .form-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        input, textarea { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        .full-width { grid-column: span 2; }
+        .btn-submit { background: #28a745; color: white; border: none; padding: 18px; border-radius: 40px; width: 100%; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn-submit:disabled { background: #ccc; }
 
-        /* CHATBOT */
-        #chat-window { position: fixed; bottom: 95px; right: 20px; width: 330px; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 3000; border: 1px solid #eee; }
-        .chat-header { background: var(--blue); color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-messages { height: 320px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #fdfdfd; }
-        .chat-msg { padding: 10px; border-radius: 12px; font-size: 0.9rem; max-width: 85%; }
-        .chat-msg.bot { align-self: flex-start; background: #eee; }
-        .chat-msg.user { align-self: flex-end; background: var(--blue); color: white; }
+        /* CHATBOT PROFESIONAL */
+        #chat-engine { position: fixed; bottom: 100px; right: 30px; width: 360px; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.25); display: none; flex-direction: column; overflow: hidden; z-index: 11000; border: 1px solid #eee; }
+        .chat-header { background: var(--blue); color: white; padding: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-body { height: 380px; overflow-y: auto; padding: 20px; background: #fdfdfd; display: flex; flex-direction: column; gap: 12px; }
+        .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; max-width: 85%; line-height: 1.4; }
+        .msg-bubble.bot { align-self: flex-start; background: #f0f0f0; color: #333; border-bottom-left-radius: 2px; }
+        .msg-bubble.user { align-self: flex-end; background: var(--blue); color: white; border-bottom-right-radius: 2px; }
+        .chat-input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; background: white; }
+        #user-input { flex: 1; border: none; outline: none; font-size: 1rem; }
         
-        #chat-toggle { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--yellow); border-radius: 50%; border: none; cursor: pointer; font-size: 1.6rem; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 3001; }
-        .social-links { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
-        .soc-btn { padding: 8px; border-radius: 5px; text-decoration: none; color: white; font-size: 0.8rem; text-align: center; font-weight: bold; }
+        #chat-trigger { position: fixed; bottom: 30px; right: 30px; width: 70px; height: 70px; background: var(--yellow); border-radius: 50%; border: none; cursor: pointer; font-size: 2rem; box-shadow: 0 8px 25px rgba(0,0,0,0.3); z-index: 11001; transition: 0.3s; }
+        #chat-trigger:hover { transform: scale(1.1); }
 
-        footer { background: #222; color: #fff; text-align: center; padding: 25px; margin-top: 50px; }
+        /* BOTONES DE ESCAPE RRSS */
+        .escape-box { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .esc-btn { padding: 10px; border-radius: 8px; text-decoration: none; color: white; font-size: 0.9rem; text-align: center; font-weight: bold; transition: 0.3s; }
+        .wa-btn { background: #25d366; } .tg-btn { background: #0088cc; } .wc-btn { background: #07c160; }
+
+        footer { background: #1a1a1a; color: white; padding: 40px; text-align: center; margin-top: 60px; }
+
+        @media (max-width: 768px) {
+            .page-spacer { height: 200px; }
+            .multimedia-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-layout { grid-template-columns: 1fr; }
+            #chat-engine { width: calc(100% - 40px); bottom: 110px; right: 20px; }
+        }
     </style>
 </head>
-<body id="main-body">
+<body id="master-body">
 
-    <header id="fixed-header">
-        <div class="logo-container"><img src="bmg.jpg" alt="Logo" id="logo"></div>
-        <nav class="lang-nav" id="lang-bar"></nav>
+    <header id="main-header">
+        <div class="logo-area">
+            <img src="bmg.jpg" alt="BridgeMind Games Logo" id="logo-img">
+        </div>
+        <nav class="nav-languages" id="language-nav"></nav>
     </header>
 
-    <div class="header-spacer"></div>
+    <div class="page-spacer"></div>
 
     <main>
-        <h1 id="txt-title">...</h1>
-        <p id="txt-desc" style="font-size:1.1rem; color:#666; margin-bottom: 30px;">...</p>
+        <h1 id="ui-title">...</h1>
+        <p class="main-desc" id="ui-desc">...</p>
 
-        <div class="gallery">
-            <img src="1.jpeg" alt="1"> <img src="2.jpeg" alt="2"> <img src="3.jpg" alt="3">
-            <img id="dynamic-img" src="esbr.jpg" alt="Country Flag">
+        <div class="multimedia-grid">
+            <img src="1.jpeg" alt="Edu 1">
+            <img src="2.jpeg" alt="Edu 2">
+            <img src="3.jpg" alt="Edu 3">
+            <img id="image-target" src="esbr.jpg" alt="Dynamic Flag">
         </div>
 
         <div class="video-box">
-            <video id="v-player" controls><source id="v-src" src="esp.mp4" type="video/mp4"></video>
+            <video id="video-node" controls poster="video-poster.jpg">
+                <source id="video-source" src="esp.mp4" type="video/mp4">
+                Tu navegador no soporta el video.
+            </video>
         </div>
 
-        <div class="pillars" id="pillars-box"></div>
+        <div class="pillars-grid" id="pillars-container"></div>
 
-        <div class="cta-box">
-            <button class="btn-cta btn-blue" onclick="window.open('https://wa.me/34634268663')">
-                <i class="fas fa-video"></i> <span id="btn-call">Videollamada</span>
+        <div class="action-zone">
+            <button class="btn-action btn-call" onclick="contactFounder('wa')">
+                <i class="fas fa-video"></i> <span id="ui-btn-call">...</span>
             </button>
-            <button class="btn-cta btn-green" onclick="toggleForm()">
-                <i class="fas fa-file-signature"></i> <span id="btn-info">Solicitar Info</span>
+            <button class="btn-action btn-info" onclick="toggleContactForm()">
+                <i class="fas fa-file-alt"></i> <span id="ui-btn-info">...</span>
             </button>
         </div>
 
-        <section id="form-section">
-            <h2 id="f-head">Contacto</h2>
-            <form id="main-form">
-                <input type="hidden" name="idioma_origen" id="h-lang">
-                <div class="form-grid">
-                    <input type="text" name="organizacion" id="f-org" placeholder="Org" required>
-                    <input type="text" name="persona" id="f-name" placeholder="Nombre" required>
-                    <input type="email" name="email" id="f-email" placeholder="Email" required>
-                    <input type="text" name="pais" id="f-country" placeholder="País" required>
-                    <textarea name="mensaje" id="f-msg" rows="4" class="full" placeholder="..."></textarea>
+        <section id="form-container">
+            <h2 id="ui-form-head" style="color:var(--blue); margin-bottom:30px;">...</h2>
+            <form id="bridge-form">
+                <input type="hidden" name="idioma_origen" id="hidden-lang-field">
+                <div class="form-layout">
+                    <input type="text" name="organizacion" id="f-org" placeholder="..." required>
+                    <input type="text" name="persona" id="f-name" placeholder="..." required>
+                    <input type="email" name="email" id="f-email" placeholder="..." required>
+                    <input type="text" name="pais" id="f-country" placeholder="..." required>
+                    <textarea name="mensaje" id="f-msg" rows="5" class="full-width" placeholder="..."></textarea>
                 </div>
-                <button type="submit" class="submit-btn" id="f-submit-btn">Enviar a Planilla</button>
+                <button type="submit" class="btn-submit" id="ui-form-submit">...</button>
+                <div id="form-feedback" style="margin-top:20px; font-weight:bold; display:none; text-align:center;"></div>
             </form>
-            <div id="form-status" style="margin-top:10px; font-weight:bold; display:none;"></div>
         </section>
     </main>
 
-    <button id="chat-toggle" onclick="toggleChat()"><i class="fas fa-comments"></i></button>
+    <button id="chat-trigger" onclick="toggleChatWindow()"><i class="fas fa-comments"></i></button>
 
-    <div id="chat-window">
-        <div class="chat-header"><strong>BridgeMind Assistant</strong><span onclick="toggleChat()" style="cursor:pointer">✕</span></div>
-        <div class="chat-messages" id="chat-content"></div>
-        <div class="chat-footer" style="padding:10px; border-top:1px solid #eee; display:flex;">
-            <input type="text" id="chat-input" placeholder="..." style="flex:1; border:none; outline:none;">
-            <button onclick="sendMsg()" style="background:none; border:none; color:var(--blue); font-size:1.2rem;"><i class="fas fa-paper-plane"></i></button>
+    <div id="chat-engine">
+        <div class="chat-header">
+            <strong id="ui-chat-name">BridgeMind Assistant</strong>
+            <span style="cursor:pointer; font-size:1.5rem;" onclick="toggleChatWindow()">&times;</span>
+        </div>
+        <div class="chat-body" id="chat-history"></div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="...">
+            <button onclick="handleUserMessage()" style="background:none; border:none; color:var(--blue); font-size:1.5rem; cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
     <footer>
-        <p><strong>BridgeMind Games Education</strong> | España (CET)</p>
-        <p>bridgemindgames@gmail.com | +34 634 268 663</p>
+        <p><strong id="ui-footer-name">BridgeMind Games Education</strong> | España (Sede Global)</p>
+        <p>Email: bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</p>
+        <p>&copy; 2025 BridgeMind Games Education. All rights reserved.</p>
     </footer>
 
     <script>
-        const db = {
-            es: { t: "BridgeMind Games Education", d: "Entrenamiento Neuro-Lingüístico con IA.", v: "esp.mp4", i: "esbr.jpg", bC: "Videollamada", bI: "Más Información", hi: "¡Hola! ¿Cómo puedo ayudarte?", fS: "Enviar", fSent: "Enviando...", fOk: "¡Enviado!", pi: [{t:"🎮 Juego IA", d:"Foco total."},{t:"🧠 Retorno", d:"Resultados."}, {t:"🏫 Centros", d:"Adaptable."}] },
-            en: { t: "BridgeMind Games Education", d: "AI Neuro-Linguistic Training.", v: "aus.mp4", i: "enbr.jpg", bC: "Video Call", bI: "Request Info", hi: "Hello! How can I help?", fS: "Submit", fSent: "Sending...", fOk: "Sent!", pi: [{t:"🎮 AI Gaming", d:"High Focus."}, {t:"🧠 ROI", d:"Progress."}, {t:"🏫 Schools", d:"Curriculum."}] },
-            fr: { t: "BridgeMind Education", d: "IA Neuro-Linguistique.", v: "fra.mp4", i: "frbr.jpg", hi: "Bonjour !", fS: "Envoyer", pi: [{t:"🎮 Jeux IA", d:"Attention."},{t:"🧠 Retour", d:"Mesure."},{t:"🏫 Écoles", d:"Modèle."}] },
-            de: { t: "BridgeMind Bildung", d: "KI-basiertes System.", v: "ale.mp4", i: "alebr.jpg", hi: "Hallo!", fS: "Senden", pi: [] },
-            it: { t: "BridgeMind Educazione", d: "Sistema AI.", v: "ita.mp4", i: "itabr.jpg", hi: "Ciao!", fS: "Invia", pi: [] },
-            jp: { t: "BridgeMind Games 教育", d: "AI神経言語トレーニング。", v: "jpn.mp4", i: "jpnbrg.jpg", bC: "面談", hi: "こんにちは！", fS: "送信", pi: [] },
-            ch: { t: "BridgeMind Games 教育", d: "人工智能神经语言训练。", v: "chn.mp4", i: "shbr.jpg", bC: "预约", hi: "你好！", fS: "发送", pi: [] },
-            ar: { t: "BridgeMind Games التعليم", d: "نظام ذكي.", v: "ara.mp4", i: "dubr.jpg", hi: "مرحباً!", fS: "إرسال", pi: [] }
+        // ==========================================
+        // BASE DE DATOS MAESTRA (LOS 8 IDIOMAS)
+        // ==========================================
+        const MASTER_DB = {
+            es: {
+                title: "BridgeMind Games Education",
+                desc: "Sistema de Entrenamiento Neuro-Lingüístico con IA diseñado para potenciar el aprendizaje cognitivo en organizaciones.",
+                video: "esp.mp4", 
+                img4: "esbr.jpg",
+                btnCall: "Agendar Videollamada",
+                btnInfo: "Solicitar Información",
+                formH: "Registro para Organizaciones",
+                fOrg: "Institución / Empresa", fName: "Nombre de contacto", fCountry: "Ciudad y País", fMsg: "Tu consulta...", fSub: "Enviar Planilla",
+                fWait: "Procesando envío...", fSuccess: "¡Enviado! Verás tus datos en la planilla pronto.",
+                pillars: [
+                    { t: "🎮 Juego con IA", d: "Dinámicas que entrenan el cerebro y mantienen la atención del estudiante." },
+                    { t: "🧠 Retorno Cognitivo", d: "Resultados medibles en memoria, lenguaje y habilidades ejecutivas." },
+                    { t: "🏫 Integración Local", d: "Adaptable a cualquier currículo educativo oficial." }
+                ],
+                botHi: "¡Hola! Bienvenido a BridgeMind. ¿Quieres saber sobre nuestros pilares, precio o contacto?",
+                botNo: "No entiendo la pregunta exactamente, pero puedes hablar con mi fundador en España:",
+                botKeys: [
+                    { k: ["precio", "cuanto", "costo"], r: "Los precios se adaptan al tamaño de tu centro. Usa el formulario para recibir un presupuesto." },
+                    { k: ["pilar", "que es", "metodo"], r: "Usamos IA para medir el progreso cognitivo a través del juego lingüístico." }
+                ]
+            },
+            en: {
+                title: "BridgeMind Games Education",
+                desc: "AI-powered Neuro-Linguistic Training System to boost cognitive learning and language focus.",
+                video: "aus.mp4", // VIDEO CORREGIDO (USA/Australia)
+                img4: "enbr.jpg", // FOTO CORREGIDA
+                btnCall: "Schedule Video Call",
+                btnInfo: "Request Information",
+                formH: "Organization Registry",
+                fOrg: "Institution / Company Name", fName: "Contact Person", fCountry: "Country & City", fMsg: "Tell us your needs...", fSub: "Submit to Sheet",
+                fWait: "Sending data...", fSuccess: "Success! Your data has been recorded.",
+                pillars: [
+                    { t: "🎮 AI Active Play", d: "Dynamics that keep learners focused while training cognitive skills." },
+                    { t: "🧠 Cognitive ROI", d: "Measurable growth in memory and language focus." },
+                    { t: "🏫 School Integration", d: "Flexible model that fits into official curricula." }
+                ],
+                botHi: "Hello! Welcome to BridgeMind. Ask me about pillars, pricing, or contact info.",
+                botNo: "I'm still learning, but you can talk directly to our founder in Spain:",
+                botKeys: [
+                    { k: ["price", "cost", "how much"], r: "Pricing is customized per school. Please fill the information form." },
+                    { k: ["pillar", "what is", "about"], r: "We use AI and gaming to track cognitive and linguistic growth." }
+                ]
+            },
+            fr: {
+                title: "BridgeMind Games Education",
+                desc: "Système d'entraînement neuro-linguistique basé sur l'IA pour booster l'apprentissage cognitif.",
+                video: "fra.mp4", img4: "frbr.jpg",
+                btnCall: "Prendre RDV", btnInfo: "Plus d'infos",
+                formH: "Contact Organisations", fOrg: "Établissement", fName: "Nom", fCountry: "Pays / Ville", fMsg: "Votre message...", fSub: "Envoyer",
+                botHi: "Bonjour ! Bienvenue chez BridgeMind.", botNo: "Désolé, contactez-nous en Espagne :"
+            },
+            de: {
+                title: "BridgeMind Games Education",
+                desc: "KI-basiertes neuro-linguistisches Trainingssystem zur Förderung des Lernens.",
+                video: "ale.mp4", img4: "alebr.jpg",
+                botHi: "Hallo! Willkommen bei BridgeMind.", botNo: "Ich weiß es nicht, aber kontaktieren Sie uns in Spanien:"
+            },
+            it: {
+                title: "BridgeMind Educazione",
+                desc: "Sistema neuro-linguistico AI per potenziare l'apprendimento.",
+                video: "ita.mp4", img4: "itabr.jpg",
+                botHi: "Ciao! Benvenuti in BridgeMind.", botNo: "Non lo so, ma contatta il nostro ufficio in Spagna:"
+            },
+            jp: {
+                title: "BridgeMind Games 教育",
+                desc: "認知学習を促進するためのAI搭載神経言語トレーニングシステム。",
+                video: "jpn.mp4", 
+                img4: "jpnbrg.jpg", // FOTO JAPÓN CORREGIDA
+                botHi: "こんにちは！ブリッジマインドへようこそ。", botNo: "申し訳ありません。スペインの担当者に直接お問い合わせください："
+            },
+            ch: {
+                title: "BridgeMind Games 教育",
+                desc: "人工智能驱动的神经语言训练系统，旨在增强认知学习。",
+                video: "chn.mp4", 
+                img4: "shbr.jpg", // FOTO CHINA CORREGIDA
+                botHi: "你好！欢迎来到 BridgeMind。", botNo: "抱歉，我不确定。您可以直接联系我们在西班牙的负责人："
+            },
+            ar: {
+                title: "BridgeMind Games التعليم",
+                desc: "نظام تدريب عصبي لغوي مدعوم بالذكاء الاصطناعي لتعزيز التعلم.",
+                video: "ara.mp4", img4: "dubr.jpg",
+                botHi: "مرحباً! مرحبًا بكم في BridgeMind.", botNo: "عفواً، لا أعرف الإجابة. يمكنك التواصل مع مؤسسنا في إسبانيا:"
+            }
         };
 
-        let curLang = 'es';
+        let currentActiveLang = 'es';
 
-        function init() {
-            const bar = document.getElementById('lang-bar');
-            const flags = { es:'es', en:'us', fr:'fr', de:'de', it:'it', jp:'jp', ch:'cn', ar:'sa' };
-            Object.keys(db).forEach(lang => {
-                const btn = document.createElement('button');
-                btn.className = `lang-btn ${lang === curLang ? 'active' : ''}`;
-                btn.innerHTML = `<span class="flag-icon flag-icon-${flags[lang]}"></span> ${lang.toUpperCase()}`;
-                btn.onclick = () => switchL(lang);
-                bar.appendChild(btn);
-            });
-            switchL('es');
-        }
-
-        function switchL(lang) {
-            curLang = lang;
-            const data = db[lang] || db.en;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(lang)));
+        // ==========================================
+        // MOTOR DE LA INTERFAZ
+        // ==========================================
+        function initSystem() {
+            const nav = document.getElementById('language-nav');
+            const flagMap = { es:'es', en:'us', fr:'fr', de:'de', it:'it', jp:'jp', ch:'cn', ar:'sa' };
             
-            document.getElementById('txt-title').innerText = data.t;
-            document.getElementById('txt-desc').innerText = data.d;
-            document.getElementById('btn-call').innerText = data.bC || "Call";
-            document.getElementById('btn-info').innerText = data.bI || "Info";
-            document.getElementById('h-lang').value = lang;
-            document.getElementById('f-submit-btn').innerText = data.fS;
-
-            const box = document.getElementById('pillars-box');
-            box.innerHTML = '';
-            (data.pi.length > 0 ? data.pi : db.es.pi).forEach(p => { box.innerHTML += `<div class="pillar-card"><h3>${p.t}</h3><p>${p.d}</p></div>`; });
-
-            document.getElementById('dynamic-img').src = data.i;
-            const v = document.getElementById('v-player');
-            document.getElementById('v-src').src = data.v;
-            v.load();
-
-            document.getElementById('chat-content').innerHTML = `<div class="chat-msg bot">${data.hi}</div>`;
-            document.getElementById('main-body').style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
+            Object.keys(MASTER_DB).forEach(lang => {
+                const btn = document.createElement('button');
+                btn.className = `lang-node ${lang === currentActiveLang ? 'active' : ''}`;
+                btn.innerHTML = `<span class="flag-icon flag-icon-${flagMap[lang]}"></span> ${lang.toUpperCase()}`;
+                btn.onclick = () => switchGlobalLanguage(lang);
+                nav.appendChild(btn);
+            });
+            switchGlobalLanguage('es');
         }
 
-        function toggleChat() {
-            const w = document.getElementById('chat-window');
-            w.style.display = (w.style.display === 'flex') ? 'none' : 'flex';
+        function switchGlobalLanguage(lang) {
+            currentActiveLang = lang;
+            const data = MASTER_DB[lang] || MASTER_DB.en;
+            
+            // UI TEXTS
+            document.getElementById('ui-title').innerText = data.title;
+            document.getElementById('ui-desc').innerText = data.desc;
+            document.getElementById('ui-btn-call').innerText = data.btnCall || "Call";
+            document.getElementById('ui-btn-info').innerText = data.btnInfo || "Info";
+            document.getElementById('hidden-lang-field').value = lang;
+
+            // FORM TEXTS
+            document.getElementById('ui-form-head').innerText = data.formH || "Contact";
+            document.getElementById('f-org').placeholder = data.fOrg || "...";
+            document.getElementById('f-name').placeholder = data.fName || "...";
+            document.getElementById('f-email').placeholder = data.fEmail || "...";
+            document.getElementById('f-country').placeholder = data.fCountry || "...";
+            document.getElementById('f-msg').placeholder = data.fMsg || "...";
+            document.getElementById('ui-form-submit').innerText = data.fSub || "Send";
+
+            // PILLARS
+            const pCont = document.getElementById('pillars-container');
+            pCont.innerHTML = '';
+            (data.pillars || MASTER_DB.es.pillars).forEach(p => {
+                pCont.innerHTML += `<div class="pillar-item"><h3>${p.t}</h3><p>${p.d}</p></div>`;
+            });
+
+            // MULTIMEDIA FIX (USA, CHINA, JAPÓN)
+            document.getElementById('image-target').src = data.img4;
+            const vPlayer = document.getElementById('video-node');
+            const vSource = document.getElementById('video-source');
+            vSource.src = data.video;
+            vPlayer.load(); // FORZAR CARGA DEL NUEVO VIDEO
+
+            // CHATBOT SYNC
+            document.getElementById('user-input').placeholder = (lang === 'ar') ? "...اكتب" : (lang === 'jp' ? "入力..." : "Type...");
+            document.getElementById('chat-history').innerHTML = '';
+            addChatMessage(data.botHi, 'bot');
+
+            // RTL SUPPORT
+            document.getElementById('master-body').style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
+
+            // NAVIGATION HIGHLIGHT
+            document.querySelectorAll('.lang-node').forEach(b => {
+                b.classList.toggle('active', b.innerText.toLowerCase().includes(lang));
+            });
         }
 
-        function sendMsg() {
-            const input = document.getElementById('chat-input');
+        // ==========================================
+        // MOTOR DEL CHATBOT
+        // ==========================================
+        function toggleChatWindow() {
+            const win = document.getElementById('chat-engine');
+            const isOpen = win.style.display === 'flex';
+            win.style.display = isOpen ? 'none' : 'flex';
+            if(!isOpen) document.getElementById('user-input').focus();
+        }
+
+        function addChatMessage(txt, type) {
+            const hist = document.getElementById('chat-history');
+            const bubble = document.createElement('div');
+            bubble.className = `msg-bubble ${type}`;
+            bubble.innerText = txt;
+            hist.appendChild(bubble);
+            hist.scrollTop = hist.scrollHeight;
+        }
+
+        function handleUserMessage() {
+            const input = document.getElementById('user-input');
             const val = input.value.trim().toLowerCase();
             if(!val) return;
-            const cont = document.getElementById('chat-content');
-            cont.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
+
+            addChatMessage(input.value, 'user');
             input.value = '';
 
+            // LÓGICA DE RESPUESTA
             setTimeout(() => {
-                const l = db[curLang] || db.en;
-                if(val.includes("pilar") || val.includes("que es") || val.includes("what is")) {
-                    cont.innerHTML += `<div class="chat-msg bot">${l.pi[0]?.d || "AI System."}</div>`;
-                } else {
-                    cont.innerHTML += `<div class="chat-msg bot">Habla con nosotros (España):</div>
-                        <div class="social-links">
-                            <a href="https://wa.me/34634268663" class="soc-btn" style="background:#25d366" target="_blank">WhatsApp</a>
-                            <a href="https://t.me/BridgeMind" class="soc-btn" style="background:#0088cc" target="_blank">Telegram</a>
-                        </div>`;
+                const data = MASTER_DB[currentActiveLang] || MASTER_DB.en;
+                let reply = data.botNo;
+
+                // Keyword Search
+                if(data.botKeys) {
+                    for(let item of data.botKeys) {
+                        if(item.k.some(key => val.includes(key))) {
+                            reply = item.r;
+                            break;
+                        }
+                    }
                 }
-                cont.scrollTop = cont.scrollHeight;
-            }, 600);
+
+                addChatMessage(reply, 'bot');
+
+                // Si no sabe la respuesta, ofrece redes
+                if(reply === data.botNo) {
+                    const esc = document.createElement('div');
+                    esc.className = "escape-box";
+                    esc.innerHTML = `
+                        <a href="https://wa.me/34634268663" class="esc-btn wa-btn" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp CEO</a>
+                        <a href="https://t.me/BridgeMind" class="esc-btn tg-btn" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+                    `;
+                    document.getElementById('chat-history').appendChild(esc);
+                    document.getElementById('chat-history').scrollTop = document.getElementById('chat-history').scrollHeight;
+                }
+            }, 800);
         }
 
-        document.getElementById('main-form').onsubmit = function(e) {
+        // ==========================================
+        // MOTOR DEL FORMULARIO (PLANILLA)
+        // ==========================================
+        function toggleContactForm() {
+            const f = document.getElementById('form-container');
+            const isHidden = f.style.display === 'none' || f.style.display === '';
+            f.style.display = isHidden ? 'block' : 'none';
+            if(isHidden) f.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('bridge-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = document.getElementById('f-submit-btn');
-            const status = document.getElementById('form-status');
-            const data = db[curLang] || db.es;
-            btn.disabled = true;
-            status.style.display = "block";
-            status.innerText = data.fSent;
+            const data = MASTER_DB[currentActiveLang] || MASTER_DB.es;
+            const feedback = document.getElementById('form-feedback');
+            const btn = document.getElementById('ui-form-submit');
             
-            fetch('https://script.google.com/macros/s/AKfycbxkC-I5rdeStPM1SsgmQpAzy3I_BGbPo0LMaaGUfVAKaeQWSvsxqH_E_EUHcpieb0hM/exec', { method: 'POST', body: new FormData(this) })
+            feedback.style.display = "block";
+            feedback.innerText = data.fWait;
+            feedback.style.color = "orange";
+            btn.disabled = true;
+
+            // URL DE TU GOOGLE SCRIPT (MANTENGO LA QUE TIENES)
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxkC-I5rdeStPM1SsgmQpAzy3I_BGbPo0LMaaGUfVAKaeQWSvsxqH_E_EUHcpieb0hM/exec';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(this), mode: 'no-cors' })
             .then(() => {
-                status.innerText = data.fOk;
+                feedback.innerText = data.fSuccess;
+                feedback.style.color = "green";
                 this.reset();
-                setTimeout(() => { status.style.display = "none"; toggleForm(); }, 2000);
+                setTimeout(() => { 
+                    feedback.style.display = "none"; 
+                    toggleContactForm();
+                }, 3500);
             })
-            .finally(() => btn.disabled = false);
+            .catch(() => {
+                feedback.innerText = "Error de conexión. Intente de nuevo.";
+                feedback.style.color = "red";
+            })
+            .finally(() => {
+                btn.disabled = false;
+            });
+        });
+
+        // ==========================================
+        // UTILIDADES
+        // ==========================================
+        function contactFounder(type) {
+            if(type === 'wa') window.open('https://wa.me/34634268663');
+        }
+
+        window.onscroll = function() {
+            const logo = document.getElementById('logo-img');
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                logo.classList.add('shrink');
+            } else {
+                logo.classList.remove('shrink');
+            }
         };
 
-        function toggleForm() {
-            const f = document.getElementById('form-section');
-            f.style.display = (f.style.display === 'block') ? 'none' : 'block';
-            if(f.style.display === 'block') f.scrollIntoView({ behavior: 'smooth' });
-        }
+        // Escuchar Enter en el Chat
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') handleUserMessage();
+        });
 
-        document.getElementById('chat-input').onkeypress = (e) => { if(e.key === 'Enter') sendMsg(); };
-        init();
+        // INICIAR TODO
+        initSystem();
     </script>
 </body>
 </html>
