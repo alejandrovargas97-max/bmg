@@ -57,8 +57,20 @@ window.sendChatMessage = function() {
 
     // Respuesta IA BGM
     setTimeout(() => {
-        const lang = (typeof window.getCurrentLanguage === 'function') ? window.getCurrentLanguage() : 'es';
-        const response = lang === 'es' ? "Procesando datos en BGM..." : "Processing BGM data...";
+              const lang = (typeof window.getCurrentLanguage === 'function') ? window.getCurrentLanguage() : 'es';
+
+      const bgmResponses = {
+        es: "Procesando datos en BGM...",
+        en: "Processing BGM data...",
+        fr: "Traitement des données dans BGM...",
+        de: "Verarbeitung von BGM-Daten...",
+        it: "Elaborazione dei dati in BGM...",
+        jp: "BGM でデータを処理しています...",
+        ch: "正在在 BGM 中处理数据...",
+        ar: "جاري معالجة البيانات في BGM..."
+      };
+
+      const response = bgmResponses[lang] || bgmResponses.en;
         display.innerHTML += `<div style="align-self:flex-start; background:#222; padding:8px; border-radius:8px; font-size:13px; color:#00ffcc; border-left:2px solid #00ffcc;">${response}</div>`;
         display.scrollTop = display.scrollHeight;
     }, 800);
