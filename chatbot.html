@@ -1,323 +1,129 @@
+<style>
+  #bgm-chatbot-wrapper {
+    position: fixed; bottom: 20px; right: 20px; width: 350px;
+    height: 550px; background: white; border-radius: 15px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; 
+    flex-direction: column; font-family: 'Segoe UI', Arial, sans-serif; z-index: 9999;
+    border: 1px solid #1a2a6c; overflow: hidden;
+  }
+  .chat-header { 
+    background: #1a2a6c; color: white; padding: 15px; 
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-info { display: flex; align-items: center; gap: 10px; }
+  .status-247 { font-size: 10px; background: #27ae60; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot BridgeMind - Prueba Completa</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        #test-panel { background: white; padding: 20px; border-radius: 10px; max-width: 800px; margin: 0 auto 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        #test-panel h2 { color: #667eea; margin-bottom: 15px; }
-        .language-selector { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
-        .lang-btn { padding: 10px 20px; border: 2px solid #667eea; background: white; color: #667eea; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
-        .lang-btn:hover { background: #667eea; color: white; }
-        .lang-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #764ba2; }
-        .info-box { background: #f0f4ff; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea; margin-bottom: 20px; }
-        #chatbot-button { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; transition: transform 0.3s; }
-        #chatbot-button:hover { transform: scale(1.1); }
-        #chatbot-button svg { width: 32px; height: 32px; fill: white; }
-        #chatbot-button::after { content: ''; position: absolute; top: 5px; right: 5px; width: 12px; height: 12px; background: #10b981; border-radius: 50%; border: 2px solid white; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } }
-        #chatbot-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 1001; overflow: hidden; }
-        #chatbot-window.active { display: flex; }
-        @media (max-width: 768px) { #chatbot-window { bottom: 80px; right: 10px; left: 10px; width: auto; height: 450px; max-height: 70vh; } }
-        #chatbot-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        #chatbot-header h3 { font-size: 16px; font-weight: 600; }
-        #close-chat { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: #f5f5f5; }
-        .message { margin-bottom: 15px; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .message.bot { text-align: left; }
-        .message.user { text-align: right; }
-        .message-content { display: inline-block; padding: 10px 15px; border-radius: 12px; max-width: 80%; word-wrap: break-word; font-size: 14px; line-height: 1.5; }
-        .message.bot .message-content { background: white; color: #333; border: 1px solid #e0e0e0; }
-        .message.user .message-content { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .action-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .action-buttons button { padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 14px; }
-        .contact-btn { background: #10b981; color: white; }
-        .contact-btn:hover { background: #059669; transform: scale(1.05); }
-        .form-btn { background: #667eea; color: white; }
-        .form-btn:hover { background: #5a67d8; transform: scale(1.05); }
-        .whatsapp-btn { background: #25D366; color: white; }
-        .whatsapp-btn:hover { background: #20BA5A; transform: scale(1.05); }
-        .telegram-btn { background: #0088cc; color: white; }
-        .telegram-btn:hover { background: #006ba1; transform: scale(1.05); }
-        .wechat-btn { background: #09b83e; color: white; }
-        .wechat-btn:hover { background: #078a2f; transform: scale(1.05); }
-        #chat-input-area { padding: 15px; background: white; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; }
-        #chat-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-size: 14px; }
-        #send-button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; }
-        .test-list { list-style: none; padding: 0; margin-top: 10px; }
-        .test-list li { padding: 10px; margin: 5px 0; background: #fff; border-radius: 5px; cursor: pointer; border-left: 3px solid #667eea; }
-        .test-list li:hover { background: #f0f4ff; }
-    </style>
-</head>
-<body>
-    <div id="test-panel">
-        <h2>🧪 Prueba el Chatbot - 3 Apps de Mensajería</h2>
-        <div class="info-box">
-            <p><strong>Idioma actual:</strong> <span id="current-lang">Español</span></p>
-            <p>Detecta horario de España (L-V 9:00-18:00) y ofrece WhatsApp, Telegram y WeChat</p>
-        </div>
-        <div class="language-selector">
-            <button class="lang-btn active" onclick="changeLang('es')">🇪🇸 Español</button>
-            <button class="lang-btn" onclick="changeLang('en')">🇬🇧 English</button>
-            <button class="lang-btn" onclick="changeLang('fr')">🇫🇷 Français</button>
-            <button class="lang-btn" onclick="changeLang('de')">🇩🇪 Deutsch</button>
-            <button class="lang-btn" onclick="changeLang('it')">🇮🇹 Italiano</button>
-            <button class="lang-btn" onclick="changeLang('ja')">🇯🇵 日本語</button>
-            <button class="lang-btn" onclick="changeLang('zh')">🇨🇳 中文</button>
-            <button class="lang-btn" onclick="changeLang('ar')">🇸🇦 العربية</button>
-        </div>
-        <h4>💬 Mensajes de prueba:</h4>
-        <ul class="test-list" id="test-messages"></ul>
+  #chat-display { 
+    flex: 1; padding: 15px; overflow-y: auto; background: #f4f7f6; 
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .msg { padding: 10px 14px; border-radius: 18px; font-size: 13.5px; max-width: 85%; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  .bot-msg { background: white; align-self: flex-start; color: #333; border: 1px solid #eee; }
+  .user-msg { background: #1a2a6c; align-self: flex-end; color: white; }
+
+  .input-area { display: flex; padding: 12px; border-top: 1px solid #eee; background: white; }
+  #user-text { flex: 1; border: none; outline: none; padding: 8px; font-size: 14px; }
+  #send-btn { background: #1a2a6c; border: none; color: white; cursor: pointer; padding: 8px 15px; border-radius: 8px; font-weight: bold; }
+</style>
+
+<div id="bgm-chatbot-wrapper">
+  <div class="chat-header">
+    <div class="header-info">
+      <span style="font-size: 24px;">🤖</span>
+      <div>
+        <div style="font-size: 14px; font-weight: bold;">BGM Global Assistant</div>
+        <div style="font-size: 10px; opacity: 0.9;">BridgeMindGames BGM</div>
+      </div>
     </div>
-
-    <div id="chatbot-button">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/></svg>
+    <span class="status-247">24/7 ONLINE</span>
+  </div>
+  
+  <div id="chat-display">
+    <div class="msg bot-msg">
+      <b>¡Bienvenido a BridgeMindGames BGM!</b><br>
+      Aprende español e inglés a través del Bridge (el ajedrez de las cartas) y la IA.<br><br>
+      <i>Welcome! Learn Spanish and English through Bridge and AI.</i>
     </div>
+  </div>
 
-    <div id="chatbot-window">
-        <div id="chatbot-header">
-            <h3>🎮 BridgeMind Assistant</h3>
-            <button id="close-chat" onclick="closeWindow()">&times;</button>
-        </div>
-        <div id="chat-messages"></div>
-        <div id="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Escribe...">
-            <button id="send-button" onclick="send()">Enviar</button>
-        </div>
-    </div>
+  <div class="input-area">
+    <input type="text" id="user-text" placeholder="Escribe aquí / Type here...">
+    <button id="send-btn">ENVIAR</button>
+  </div>
+</div>
 
-    <script>
-        let lang = "es";
-        const langNames = {es:"Español",en:"English",fr:"Français",de:"Deutsch",it:"Italiano",ja:"日本語",zh:"中文",ar:"العربية"};
-        
-        const kb = {
-            programa: {
-                es: ["BridgeMindGames es un sistema de entrenamiento neuro-lingüístico basado en IA. 🎮","Somos una plataforma educativa que usa IA para entrenar habilidades cognitivas y lingüísticas. 🧠","BridgeMindGames transforma el aprendizaje en una experiencia gamificada con IA. ✨"],
-                en: ["BridgeMindGames is an AI-based neuro-linguistic training system. 🎮","We're an educational platform using AI to train cognitive and language skills. 🧠","BridgeMindGames transforms learning into a gamified AI experience. ✨"],
-                fr: ["BridgeMindGames est un système d'entraînement neuro-linguistique basé sur l'IA. 🎮","Nous sommes une plateforme éducative utilisant l'IA. 🧠","BridgeMindGames transforme l'apprentissage en expérience gamifiée. ✨"],
-                de: ["BridgeMindGames ist ein KI-basiertes neuro-linguistisches Trainingssystem. 🎮","Wir sind eine Bildungsplattform mit KI. 🧠","BridgeMindGames verwandelt Lernen in ein gamifiziertes Erlebnis. ✨"],
-                it: ["BridgeMindGames è un sistema di allenamento neuro-linguistico con IA. 🎮","Siamo una piattaforma educativa che usa l'IA. 🧠","BridgeMindGames trasforma l'apprendimento in esperienza gamificata. ✨"],
-                ja: ["BridgeMindGamesはAIベースの神経言語トレーニングシステムです。🎮","AIを使用した教育プラットフォームです。🧠","BridgeMindGamesは学習をゲーム化されたAI体験に変えます。✨"],
-                zh: ["BridgeMindGames是基于AI的神经语言培训系统。🎮","我们是使用AI的教育平台。🧠","BridgeMindGames将学习转变为游戏化的AI体验。✨"],
-                ar: ["BridgeMindGames هو نظام تدريب عصبي لغوي بالذكاء الاصطناعي.🎮","نحن منصة تعليمية تستخدم الذكاء الاصطناعي.🧠","يحول BridgeMindGames التعلم إلى تجربة ممتعة.✨"]
-            },
-            idiomas: {
-                es: ["Ofrecemos 8 idiomas: Español🇪🇸, Inglés🇬🇧, Francés🇫🇷, Italiano🇮🇹, Alemán🇩🇪, Japonés🇯🇵, Chino🇨🇳 y Árabe🇸🇦","Nuestro sistema soporta 8 idiomas principales adaptándose al usuario. 🌍","Trabajamos con 8 idiomas globales. 🗣️"],
-                en: ["We offer 8 languages: Spanish🇪🇸, English🇬🇧, French🇫🇷, Italian🇮🇹, German🇩🇪, Japanese🇯🇵, Chinese🇨🇳, Arabic🇸🇦","Our system supports 8 major languages. 🌍","We work with 8 global languages. 🗣️"],
-                fr: ["Nous proposons 8 langues: Espagnol🇪🇸, Anglais🇬🇧, Français🇫🇷, Italien🇮🇹, Allemand🇩🇪, Japonais🇯🇵, Chinois🇨🇳, Arabe🇸🇦","Notre système prend en charge 8 langues. 🌍","Nous travaillons avec 8 langues mondiales. 🗣️"],
-                de: ["Wir bieten 8 Sprachen: Spanisch🇪🇸, Englisch🇬🇧, Französisch🇫🇷, Italienisch🇮🇹, Deutsch🇩🇪, Japanisch🇯🇵, Chinesisch🇨🇳, Arabisch🇸🇦","Unser System unterstützt 8 Hauptsprachen. 🌍","Wir arbeiten mit 8 globalen Sprachen. 🗣️"],
-                it: ["Offriamo 8 lingue: Spagnolo🇪🇸, Inglese🇬🇧, Francese🇫🇷, Italiano🇮🇹, Tedesco🇩🇪, Giapponese🇯🇵, Cinese🇨🇳, Arabo🇸🇦","Il nostro sistema supporta 8 lingue principali. 🌍","Lavoriamo con 8 lingue globali. 🗣️"],
-                ja: ["8つの言語を提供: スペイン語🇪🇸、英語🇬🇧、フランス語🇫🇷、イタリア語🇮🇹、ドイツ語🇩🇪、日本語🇯🇵、中国語🇨🇳、アラビア語🇸🇦","当システムは8つの主要言語をサポート。🌍","8つのグローバル言語で作業。🗣️"],
-                zh: ["我们提供8种语言: 西班牙语🇪🇸、英语🇬🇧、法语🇫🇷、意大利语🇮🇹、德语🇩🇪、日语🇯🇵、中文🇨🇳、阿拉伯语🇸🇦","我们的系统支持8种主要语言。🌍","我们使用8种全球语言。🗣️"],
-                ar: ["نقدم 8 لغات: الإسبانية🇪🇸 والإنجليزية🇬🇧 والفرنسية🇫🇷 والإيطالية🇮🇹 والألمانية🇩🇪 واليابانية🇯🇵 والصينية🇨🇳 والعربية🇸🇦","يدعم نظامنا 8 لغات رئيسية.🌍","نعمل مع 8 لغات عالمية.🗣️"]
-            },
-            contacto: {
-                es: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","Estamos disponibles en WhatsApp, Telegram y WeChat: +34 634 268 663 💬","Contáctanos: +34 634 268 663 (WhatsApp/Telegram/WeChat) ⚡"],
-                en: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","We're available on WhatsApp, Telegram and WeChat: +34 634 268 663 💬","Contact us: +34 634 268 663 (WhatsApp/Telegram/WeChat) ⚡"],
-                fr: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","Disponibles sur WhatsApp, Telegram et WeChat: +34 634 268 663 💬","Contactez-nous: +34 634 268 663 (WhatsApp/Telegram/WeChat) ⚡"],
-                de: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","Verfügbar auf WhatsApp, Telegram und WeChat: +34 634 268 663 💬","Kontakt: +34 634 268 663 (WhatsApp/Telegram/WeChat) ⚡"],
-                it: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","Disponibili su WhatsApp, Telegram e WeChat: +34 634 268 663 💬","Contattaci: +34 634 268 663 (WhatsApp/Telegram/WeChat) ⚡"],
-                ja: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","WhatsApp、Telegram、WeChatで対応: +34 634 268 663 💬","お問い合わせ: +34 634 268 663 (WhatsApp/Telegram/WeChat) ⚡"],
-                zh: ["📱 WhatsApp: +34 634 268 663 | 📧 bridgemindgames@gmail.com","WhatsApp、Telegram和微信可用: +34 634 268 663 💬","联系我们: +34 634 268 663 (WhatsApp/Telegram/微信) ⚡"],
-                ar: ["📱 واتساب: +34 634 268 663 | 📧 bridgemindgames@gmail.com","متاح على واتساب وتيليجرام ووي تشات: +34 634 268 663 💬","اتصل بنا: +34 634 268 663 (واتساب/تيليجرام/وي تشات) ⚡"]
-            }
-        };
+<script>
+  const display = document.getElementById('chat-display');
+  const input = document.getElementById('user-text');
+  const btn = document.getElementById('send-btn');
 
-        const welcome = {
-            es: "¡Hola! 👋 Soy tu asistente de BridgeMindGames. ¿En qué puedo ayudarte?",
-            en: "Hi! 👋 I'm your BridgeMindGames assistant. How can I help?",
-            fr: "Bonjour! 👋 Je suis votre assistant BridgeMindGames.",
-            de: "Hallo! 👋 Ich bin dein BridgeMindGames-Assistent.",
-            it: "Ciao! 👋 Sono il tuo assistente BridgeMindGames.",
-            ja: "こんにちは！👋 BridgeMindGamesのアシスタントです。",
-            zh: "你好！👋 我是你的BridgeMindGames助手。",
-            ar: "مرحبًا! 👋 أنا مساعدك في BridgeMindGames."
-        };
+  function botLogic(text) {
+    const t = text.toLowerCase();
+    const hora = new Date().getHours();
+    // Horario de atención: 7:00 AM a 11:59 PM
+    const estoyEnLinea = (hora >= 7 && hora <= 23); 
 
-        const testMsgs = {
-            es: ["¿Qué es BridgeMindGames?","¿Qué idiomas ofrecen?","¿Cómo contactarlos?","Necesito ayuda"],
-            en: ["What is BridgeMindGames?","What languages do you offer?","How to contact you?","I need help"],
-            fr: ["Qu'est-ce que BridgeMindGames?","Quelles langues?","Comment contacter?","J'ai besoin d'aide"],
-            de: ["Was ist BridgeMindGames?","Welche Sprachen?","Kontakt?","Ich brauche Hilfe"],
-            it: ["Cos'è BridgeMindGames?","Quali lingue?","Contatto?","Ho bisogno di aiuto"],
-            ja: ["BridgeMindGamesとは？","どの言語？","連絡方法？","助けが必要"],
-            zh: ["什么是BridgeMindGames？","哪些语言？","如何联系？","需要帮助"],
-            ar: ["ما هو BridgeMindGames؟","ما اللغات؟","كيف الاتصال؟","أحتاج مساعدة"]
-        };
+    const linkWA = "https://wa.me/TUNUMERO"; // Reemplaza TUNUMERO
+    const userTG = "https://t.me/TU_USUARIO"; // Reemplaza TU_USUARIO
+    const idWC = "TU_ID_WECHAT"; // Reemplaza TU_ID
 
-        function changeLang(l) {
-            lang = l;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('current-lang').textContent = langNames[l];
-            document.getElementById('chat-messages').innerHTML = '';
-            updateTestMsgs();
-        }
+    // --- 1. DETECCIÓN DE IDIOMAS ASIÁTICOS ---
+    if (/[\u4e00-\u9fa5]/.test(t)) { // CHINO
+      return "您好！想通过桥牌学习西班牙语吗？请在 **WeChat ID: " + idWC + "** 上联系我。我们可以使用翻译器进行交流。";
+    }
+    if (/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(t)) { // JAPONÉS
+      return "こんにちは！ブリッジでスペイン語を学びましょう。**WhatsApp** でご連絡ください。翻訳機を使って対応します。";
+    }
 
-        function updateTestMsgs() {
-            const list = document.getElementById('test-messages');
-            list.innerHTML = testMsgs[lang].map(m => `<li onclick="testMsg('${m.replace(/'/g, "\\'")}')">${m}</li>`).join('');
-        }
+    // --- 2. DETECCIÓN DE ÁRABE ---
+    if (/[\u0600-\u06FF]/.test(t)) {
+      return "مرحباً! تعلم الإسبانية معنا. تواصل معي عبر **WhatsApp** وسنستخدم المترجم للبدء.";
+    }
 
-        function testMsg(msg) {
-            document.getElementById('chatbot-window').classList.add('active');
-            if(document.getElementById('chat-messages').children.length === 0) addBot(welcome[lang]);
-            setTimeout(() => { document.getElementById('chat-input').value = msg; send(); }, 500);
-        }
+    // --- 3. FILTROS EUROPEOS ---
+    if (t.includes("bonjour") || t.includes("salut") || t.includes("français")) {
+      return "Bonjour ! Apprenez l'espagnol avec le Bridge (l'échecs des cartes). Contactez-nous sur **WhatsApp** !";
+    }
+    if (t.includes("ciao") || t.includes("buongiorno") || t.includes("italiano")) {
+      return "Ciao! Impara lo spagnolo con il Bridge. Parliamo su **WhatsApp** o **Telegram**.";
+    }
+    if (t.includes("hallo") || t.includes("guten tag") || t.includes("deutsch")) {
+      return "Hallo! Lernen Sie Spanisch mit Bridge. Kontaktieren Sie uns per **WhatsApp**.";
+    }
 
-        function addBot(txt) {
-            const d = document.createElement('div');
-            d.className = 'message bot';
-            d.innerHTML = `<div class="message-content">${txt}</div>`;
-            document.getElementById('chat-messages').appendChild(d);
-            document.getElementById('chat-messages').scrollTop = 999999;
-        }
+    // --- 4. BRIDGE, OMAR SHARIF Y METODOLOGÍA ---
+    if (t.includes("bridge") || t.includes("carta") || t.includes("juego") || t.includes("omar")) {
+      return "El Bridge es el <b>ajedrez de las cartas</b>. Fue la pasión de <b>Omar Sharif</b> y en **BGM** lo usamos para despertar la mente y enseñar idiomas a cualquier edad.";
+    }
 
-        function addUser(txt) {
-            const d = document.createElement('div');
-            d.className = 'message user';
-            d.innerHTML = `<div class="message-content">${txt}</div>`;
-            document.getElementById('chat-messages').appendChild(d);
-            document.getElementById('chat-messages').scrollTop = 999999;
-        }
+    // --- 5. CONTACTO DIRECTO POR HORARIO ---
+    if (t.includes("contacto") || t.includes("hablar") || t.includes("cita") || t.includes("whatsapp")) {
+      if (estoyEnLinea) {
+        return "<b>¡Estoy en línea!</b> Hablemos directamente:<br><br>" +
+               "🟢 <a href='"+linkWA+"' target='_blank'>WhatsApp</a><br>" +
+               "🔵 <a href='"+userTG+"' target='_blank'>Telegram</a><br><br>" +
+               "Podemos usar traductor si lo necesitas.";
+      } else {
+        return "No estoy disponible en este momento (Horario: 7:00 - 23:59). Por favor, deja tus datos en el formulario.";
+      }
+    }
 
-        function isOnlineHours() {
-            const now = new Date();
-            const spainTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }));
-            const hour = spainTime.getHours();
-            const day = spainTime.getDay();
-            return (day >= 1 && day <= 5) && (hour >= 9 && hour < 18);
-        }
+    // --- 6. RESPUESTA POR DEFECTO ---
+    return "En **BridgeMindGames BGM** creamos puentes hacia el futuro. ¿Te interesa aprender un idioma o conocer nuestra metodología basada en el Bridge?";
+  }
 
-        function getResp(txt) {
-            txt = txt.toLowerCase();
-            let resp;
-            
-            if(txt.match(/program|qué es|what is|qu'est|was ist|cos'è|とは|是什么|ما هو/)) {
-                resp = kb.programa[lang];
-                return resp[Math.floor(Math.random() * resp.length)];
-            }
-            if(txt.match(/idiom|language|langue|sprache|lingua|言語|语言|لغة/)) {
-                resp = kb.idiomas[lang];
-                return resp[Math.floor(Math.random() * resp.length)];
-            }
-            if(txt.match(/contact|correo|email|contatt|kontakt|連絡|联系|اتصال|whatsapp|telegram|wechat/)) {
-                resp = kb.contacto[lang];
-                return resp[Math.floor(Math.random() * resp.length)];
-            }
-            
-            // Sin respuesta específica
-            const noMatch = {
-                es: "No tengo información específica sobre eso. 🤔<br><br>¿Te gustaría hablar con un humano o recibir información personalizada?<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 Ver contactos</button><button onclick='fillForm()' class='form-btn'>📝 Solicitar información</button></div>",
-                en: "I don't have specific information about that. 🤔<br><br>Would you like to speak with a human or receive personalized information?<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 View contacts</button><button onclick='fillForm()' class='form-btn'>📝 Request information</button></div>",
-                fr: "Je n'ai pas d'informations spécifiques. 🤔<br><br>Souhaitez-vous parler avec un humain?<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 Voir contacts</button><button onclick='fillForm()' class='form-btn'>📝 Demander infos</button></div>",
-                de: "Ich habe keine spezifischen Informationen. 🤔<br><br>Möchten Sie mit einem Menschen sprechen?<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 Kontakte anzeigen</button><button onclick='fillForm()' class='form-btn'>📝 Infos anfordern</button></div>",
-                it: "Non ho informazioni specifiche. 🤔<br><br>Vuoi parlare con un umano?<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 Vedi contatti</button><button onclick='fillForm()' class='form-btn'>📝 Richiedi info</button></div>",
-                ja: "具体的な情報がありません。🤔<br><br>人間と話したいですか？<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 連絡先を見る</button><button onclick='fillForm()' class='form-btn'>📝 情報リクエスト</button></div>",
-                zh: "我没有具体信息。🤔<br><br>您想与真人交谈吗？<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 查看联系方式</button><button onclick='fillForm()' class='form-btn'>📝 索取信息</button></div>",
-                ar: "ليس لدي معلومات محددة. 🤔<br><br>هل تريد التحدث مع إنسان؟<br><br><div class='action-buttons'><button onclick='showContact()' class='contact-btn'>📧 عرض جهات الاتصال</button><button onclick='fillForm()' class='form-btn'>📝 طلب معلومات</button></div>"
-            };
-            return noMatch[lang];
-        }
+  function handleSend() {
+    const val = input.value.trim();
+    if (!val) return;
+    display.innerHTML += `<div class="msg user-msg">${val}</div>`;
+    input.value = "";
+    display.scrollTop = display.scrollHeight;
+    setTimeout(() => {
+      display.innerHTML += `<div class="msg bot-msg">${botLogic(val)}</div>`;
+      display.scrollTop = display.scrollHeight;
+    }, 600);
+  }
 
-        function send() {
-            const inp = document.getElementById('chat-input');
-            const q = inp.value.trim();
-            if(!q) return;
-            addUser(q);
-            inp.value = '';
-            setTimeout(() => addBot(getResp(q)), 300);
-        }
-
-        function closeWindow() {
-            document.getElementById('chatbot-window').classList.remove('active');
-        }
-
-        window.showContact = function() {
-            const msg = {
-                es: "📱 WhatsApp / Telegram / WeChat: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>¡Te responderemos pronto! 😊",
-                en: "📱 WhatsApp / Telegram / WeChat: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>We'll reply soon! 😊",
-                fr: "📱 WhatsApp / Telegram / WeChat: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>Nous répondrons bientôt! 😊",
-                de: "📱 WhatsApp / Telegram / WeChat: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>Wir antworten bald! 😊",
-                it: "📱 WhatsApp / Telegram / WeChat: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>Risponderemo presto! 😊",
-                ja: "📱 WhatsApp / Telegram / WeChat: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>すぐに返信します！😊",
-                zh: "📱 WhatsApp / Telegram / 微信: +34 634 268 663<br>📧 Email: bridgemindgames@gmail.com<br><br>我们会尽快回复！😊",
-                ar: "📱 واتساب / تيليجرام / وي تشات: +34 634 268 663<br>📧 البريد: bridgemindgames@gmail.com<br><br>سنرد قريبًا! 😊"
-            };
-            setTimeout(() => addBot(msg[lang]), 300);
-        };
-
-       window.fillForm = function() {
-    const online = isOnlineHours();
-    const msgs = online ? {
-        es: "🟢 ¡En línea!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Chatear</button><button onclick='goForm()' class='form-btn'>📝 Formulario</button></div>",
-        en: "🟢 Online!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Chat</button><button onclick='goForm()' class='form-btn'>📝 Form</button></div>",
-        fr: "🟢 En ligne!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Chatter</button><button onclick='goForm()' class='form-btn'>📝 Formulaire</button></div>",
-        de: "🟢 Online!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Chatten</button><button onclick='goForm()' class='form-btn'>📝 Formular</button></div>",
-        it: "🟢 Online!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Chatta</button><button onclick='goForm()' class='form-btn'>📝 Modulo</button></div>",
-        ja: "🟢 オンライン!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 チャット</button><button onclick='goForm()' class='form-btn'>📝 フォーム</button></div>",
-        zh: "🟢 在线!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 聊天</button><button onclick='goForm()' class='form-btn'>📝 表格</button></div>",
-        ar: "🟢 متصل!<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 دردشة</button><button onclick='goForm()' class='form-btn'>📝 نموذج</button></div>"
-    } : {
-        es: "🔴 Fuera de horario (L-V 9-18h)<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Mensaje</button><button onclick='goForm()' class='form-btn'>📝 Formulario</button></div>",
-        en: "🔴 Outside hours (M-F 9-18h)<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Message</button><button onclick='goForm()' class='form-btn'>📝 Form</button></div>",
-        fr: "🔴 Hors heures<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Message</button><button onclick='goForm()' class='form-btn'>📝 Formulaire</button></div>",
-        de: "🔴 Außerhalb<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Nachricht</button><button onclick='goForm()' class='form-btn'>📝 Formular</button></div>",
-        it: "🔴 Fuori orario<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 Messaggio</button><button onclick='goForm()' class='form-btn'>📝 Modulo</button></div>",
-        ja: "🔴 営業時間外<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 メッセージ</button><button onclick='goForm()' class='form-btn'>📝 フォーム</button></div>",
-        zh: "🔴 非工作时间<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 消息</button><button onclick='goForm()' class='form-btn'>📝 表格</button></div>",
-        ar: "🔴 خارج الوقت<br><br><div class='action-buttons'><button onclick='showMessaging()' class='whatsapp-btn'>💬 رسالة</button><button onclick='goForm()' class='form-btn'>📝 نموذج</button></div>"
-    };
-    setTimeout(() => addBot(msgs[lang]), 300);
-};
-
-window.showMessaging = function() {
-    const msg = {
-        es: "📱 Elige:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 WeChat</button></div>",
-        en: "📱 Choose:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 WeChat</button></div>",
-        fr: "📱 Choisissez:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 WeChat</button></div>",
-        de: "📱 Wählen:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 WeChat</button></div>",
-        it: "📱 Scegli:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 WeChat</button></div>",
-        ja: "📱 選択:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 WeChat</button></div>",
-        zh: "📱 选择:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 WhatsApp</button><button onclick='openTG()' class='telegram-btn'>✈️ Telegram</button><button onclick='openWC()' class='wechat-btn'>💬 微信</button></div>",
-        ar: "📱 اختر:<br>+34 634 268 663<br><br><div class='action-buttons'><button onclick='openWA()' class='whatsapp-btn'>💚 واتساب</button><button onclick='openTG()' class='telegram-btn'>✈️ تيليجرام</button><button onclick='openWC()' class='wechat-btn'>💬 وي تشات</button></div>"
-    };
-    setTimeout(() => addBot(msg[lang]), 300);
-};
-
-window.openWA = function() {
-    const m = {es:"Hola, me interesa BridgeMind Games",en:"Hi, I'm interested in BridgeMind Games",fr:"Bonjour, BridgeMind Games m'intéresse",de:"Hallo, ich interessiere mich für BridgeMind Games",it:"Ciao, mi interessa BridgeMind Games",ja:"こんにちは、BridgeMind Gamesに興味があります",zh:"您好，我对BridgeMind Games感兴趣",ar:"مرحبًا، أنا مهتم بـ BridgeMind Games"};
-    window.open(`https://wa.me/34634268663?text=${encodeURIComponent(m[lang])}`, '_blank');
-    setTimeout(() => addBot("✅ Abriendo WhatsApp... 💚"), 300);
-};
-
-window.openTG = function() {
-    window.open(`https://t.me/+34634268663`, '_blank');
-    setTimeout(() => addBot("✅ Abriendo Telegram... ✈️"), 300);
-};
-
-window.openWC = function() {
-    const m = {es:"📱 Busca: +34 634 268 663",en:"📱 Search: +34 634 268 663",fr:"📱 Recherche: +34 634 268 663",de:"📱 Suchen: +34 634 268 663",it:"📱 Cerca: +34 634 268 663",ja:"📱 検索: +34 634 268 663",zh:"📱 搜索: +34 634 268 663",ar:"📱 ابحث: +34 634 268 663"};
-    setTimeout(() => addBot(m[lang]), 300);
-};
-
-window.goForm = function() {
-    setTimeout(() => addBot("📝 Scroll al formulario..."), 300);
-};
-
-document.getElementById('chatbot-button').onclick = () => {
-    document.getElementById('chatbot-window').classList.add('active');
-    if(document.getElementById('chat-messages').children.length === 0) addBot(welcome[lang]);
-};
-
-document.getElementById('chat-input').onkeypress = (e) => { if(e.key === 'Enter') send(); };
-
-updateTestMsgs();
-    </script>
-</body>
-</html>
+  btn.onclick = handleSend;
+  input.onkeypress = (e) => { if(e.key === 'Enter') handleSend(); };
+</script>
