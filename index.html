@@ -388,6 +388,23 @@
             <label id="l-mail">Email</label>
             <input type="email" name="email" id="p-mail" required>
           </div>
+          
+            <div class="campo">
+                <label id="l-phone">Teléfono</label>
+                <div style="display:flex; gap:5px;">
+                    <select name="prefijo" id="p-prefix" style="width:auto; padding:12px;" required>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+39">🇮🇹 +39</option>
+                        <option value="+81">🇯🇵 +81</option>
+                        <option value="+86">🇨🇳 +86</option>
+                        <option value="+971">🇦🇪 +971</option>
+                    </select>
+                    <input type="tel" name="telefono" id="p-phone" placeholder="612345678" style="flex:1;" required>
+                </div>
+            </div>
 
           <div class="campo">
             <label id="l-city">Ciudad/País</label>
@@ -456,6 +473,7 @@
         fMsg: "Tu consulta...",
         fBtn: "Enviar Planilla ahora",
         fOk: "¡Recibido! Verás los datos en tu planilla.",
+                    fPhone: "Teléfono",
         fWait: "Enviando...",
         pi: [
           { t: "🎮 Juego IA", d: "Dinámicas cognitivas." },
@@ -483,6 +501,7 @@
         fOrg: "Institution Name",
         fName: "Contact Person",
         fMail: "Email",
+                    fPhone: "Phone",
         fCity: "City and Country",
         fMsg: "Tell us more...",
         fBtn: "Submit to Sheet",
@@ -516,6 +535,7 @@
         fMsg: "Message",
         fBtn: "Envoyer",
         hi: "Bonjour!",
+                    fPhone: "Téléphone",
         ph: "Écrire...",
         no: "Contactez-nous en Espagne:",
         pi: [
@@ -535,6 +555,7 @@
         fMsg: "Nachricht",
         fBtn: "Senden",
         hi: "Hallo!",
+                    fPhone: "Telefon",
         ph: "Schreiben...",
         no: "Kontakt in Spanien:",
         pi: []
@@ -548,6 +569,7 @@
         fOrg: "組織名",
         fName: "担当者",
         fMail: "メール",
+                    fPhone: "電話",
         fCity: "都市",
         fMsg: "メッセージ",
         fBtn: "送信",
@@ -565,6 +587,7 @@
         fOrg: "机构名称",
         fName: "联系人",
         fMail: "电子邮件",
+                    fPhone: "电话",
         fCity: "城市",
         fMsg: "信息",
         fBtn: "发送",
@@ -582,6 +605,7 @@
         fOrg: "المؤسسة",
         fName: "الاسم",
         fMail: "الايميل",
+                    fPhone: "هاتف",
         fCity: "المدينة",
         fMsg: "رسالة",
         fBtn: "إرسال",
@@ -628,6 +652,7 @@
       document.getElementById('l-msg').innerText = data.fMsg;
       document.getElementById('btn-submit-txt').innerText = data.fBtn;
       document.getElementById('hidden-lang').value = lang;
+              document.getElementById('l-phone').innerText = data.fPhone;
 
       // Multimedia
       document.getElementById('img-target').src = data.i;
@@ -756,6 +781,7 @@
   </script>
 </body>
 </html>
+
 
 
 
