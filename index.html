@@ -657,6 +657,18 @@
       // Multimedia
       document.getElementById('img-target').src = data.i;
       const player = document.getElementById('video-player');
+              // Cambiar prefijo según idioma
+        const prefixMap = {
+            es: '+34',
+            en: '+1',
+            fr: '+33',
+            de: '+49',
+            it: '+39',
+            jp: '+81',
+            ch: '+86',
+            ar: '+971'
+        };
+        document.getElementById('p-prefix').value = prefixMap[lang] || '+34';
       document.getElementById('video-src').src = data.v;
       player.load();
 
@@ -696,6 +708,23 @@
       e.preventDefault();
       const data = dictionary[currentLang] || dictionary.es;
       const status = document.getElementById('form-status');
+
+
+            // Combinar prefijo y teléfono antes de enviar
+        const prefijo = document.getElementById('p-prefix').value;
+        const telefono = document.getElementById('p-phone').value;
+        const telefonoCompleto = prefijo + ' ' + telefono;
+        
+        // Crear campo oculto para el teléfono completo
+        let hiddenPhone = document.getElementById('telefono-completo');
+        if (!hiddenPhone) {
+            hiddenPhone = document.createElement('input');
+            hiddenPhone.type = 'hidden';
+            hiddenPhone.name = 'telefono_completo';
+            hiddenPhone.id = 'telefono-completo';
+            this.appendChild(hiddenPhone);
+        }
+        hiddenPhone.value = telefonoCompleto;
 
       status.style.display = "block";
       status.innerText = data.fWait;
@@ -781,6 +810,7 @@
   </script>
 </body>
 </html>
+
 
 
 
