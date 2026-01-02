@@ -1,129 +1,425 @@
-<style>
-  #bgm-chatbot-wrapper {
-    position: fixed; bottom: 20px; right: 20px; width: 350px;
-    height: 550px; background: white; border-radius: 15px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; 
-    flex-direction: column; font-family: 'Segoe UI', Arial, sans-serif; z-index: 9999;
-    border: 1px solid #1a2a6c; overflow: hidden;
-  }
-  .chat-header { 
-    background: #1a2a6c; color: white; padding: 15px; 
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .header-info { display: flex; align-items: center; gap: 10px; }
-  .status-247 { font-size: 10px; background: #27ae60; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>BGM Global Assistant</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0b1020;
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-  #chat-display { 
-    flex: 1; padding: 15px; overflow-y: auto; background: #f4f7f6; 
-    display: flex; flex-direction: column; gap: 12px;
-  }
-  .msg { padding: 10px 14px; border-radius: 18px; font-size: 13.5px; max-width: 85%; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-  .bot-msg { background: white; align-self: flex-start; color: #333; border: 1px solid #eee; }
-  .user-msg { background: #1a2a6c; align-self: flex-end; color: white; }
+    .chat-container {
+      background: radial-gradient(circle at top, #1c2340, #050814);
+      border-radius: 18px;
+      width: 360px;
+      max-width: 100%;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
-  .input-area { display: flex; padding: 12px; border-top: 1px solid #eee; background: white; }
-  #user-text { flex: 1; border: none; outline: none; padding: 8px; font-size: 14px; }
-  #send-btn { background: #1a2a6c; border: none; color: white; cursor: pointer; padding: 8px 15px; border-radius: 8px; font-weight: bold; }
-</style>
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: linear-gradient(90deg, #12172b, #222a4b);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
-<div id="bgm-chatbot-wrapper">
-  <div class="chat-header">
-    <div class="header-info">
-      <span style="font-size: 24px;">🤖</span>
-      <div>
-        <div style="font-size: 14px; font-weight: bold;">BGM Global Assistant</div>
-        <div style="font-size: 10px; opacity: 0.9;">BridgeMindGames BGM</div>
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .chat-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-title span {
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .chat-title-main {
+      font-weight: 600;
+    }
+
+    .chat-title-sub {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .chat-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      font-size: 10px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3ddc97;
+      margin-right: 4px;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      color: #3ddc97;
+    }
+
+    .status-sub {
+      opacity: 0.75;
+    }
+
+    .lang-select {
+      margin-top: 4px;
+      background: rgba(0, 0, 0, 0.25);
+      color: #f5f5f5;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 10px;
+      padding: 2px 6px;
+      outline: none;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      font-size: 13px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.3) transparent;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      display: flex;
+    }
+    .message.bot {
+      justify-content: flex-start;
+    }
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 80%;
+      padding: 8px 10px;
+      border-radius: 12px;
+      line-height: 1.35;
+    }
+
+    .bot .bubble {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px 12px 12px 4px;
+    }
+
+    .user .bubble {
+      background: #3b82f6;
+      border-radius: 12px 12px 4px 12px;
+    }
+
+    .chat-input-area {
+      padding: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(3, 6, 23, 0.96);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 7px 11px;
+      background: rgba(12, 20, 47, 0.9);
+      color: #f5f5f5;
+      outline: none;
+      font-size: 13px;
+    }
+
+    .chat-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .chat-send-btn {
+      border-radius: 999px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chat-send-btn:hover {
+      background: #2563eb;
+    }
+
+    .chat-close-btn {
+      border-radius: 999px;
+      border: none;
+      background: rgba(148, 163, 184, 0.2);
+      color: #e5e7eb;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 11px;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <img src="logo.png" alt="BGM" class="chat-logo">
+        <div class="chat-title">
+          <span class="chat-title-main">Asistente BGM 24/7</span>
+          <span class="chat-title-sub">BridgeMindGames Global System</span>
+        </div>
+      </div>
+      <div class="chat-status">
+        <div class="status-line">
+          <span class="status-dot"></span>
+          <span id="statusText">ONLINE</span>
+        </div>
+        <span class="status-sub" id="statusSub">Horario Madrid 7:00–23:59</span>
+        <select id="langSelect" class="lang-select">
+          <option value="es">ES</option>
+          <option value="en">EN</option>
+          <option value="fr">FR</option>
+          <option value="de">DE</option>
+          <option value="it">IT</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+          <option value="ar">العربية</option>
+        </select>
       </div>
     </div>
-    <span class="status-247">24/7 ONLINE</span>
-  </div>
-  
-  <div id="chat-display">
-    <div class="msg bot-msg">
-      <b>¡Bienvenido a BridgeMindGames BGM!</b><br>
-      Aprende español e inglés a través del Bridge (el ajedrez de las cartas) y la IA.<br><br>
-      <i>Welcome! Learn Spanish and English through Bridge and AI.</i>
+
+    <div class="chat-messages" id="messages"></div>
+
+    <div class="chat-input-area">
+      <input
+        type="text"
+        id="userInput"
+        class="chat-input"
+        placeholder="Escribe tu mensaje..."
+      />
+      <button class="chat-send-btn" id="sendBtn">Enviar</button>
+      <button class="chat-close-btn" onclick="window.close()">Cerrar</button>
     </div>
   </div>
 
-  <div class="input-area">
-    <input type="text" id="user-text" placeholder="Escribe aquí / Type here...">
-    <button id="send-btn">ENVIAR</button>
-  </div>
-</div>
+  <script>
+    // Idioma actual
+    let currentLang = 'es';
 
-<script>
-  const display = document.getElementById('chat-display');
-  const input = document.getElementById('user-text');
-  const btn = document.getElementById('send-btn');
+    // Base para respuestas por idioma (aquí luego se meten tus textos completos)
+    const responses = {
+      es: {
+        welcome:
+          "Bienvenido a BridgeMindGames BGM. Soy tu asistente inteligente. Aquí transformamos el aprendizaje de idiomas en una experiencia estratégica a través del Bridge.",
+        fallback:
+          "Puedo explicarte qué es BGM, cómo funcionan las clases presenciales o ayudarte a reservar una cita. ¿Qué te gustaría saber?",
+        afterHours:
+          "Ahora mismo estamos fuera de horario en Madrid, pero puedes dejar tus datos en el formulario de la web y te contactaremos en el siguiente horario disponible."
+      },
+      en: {
+        welcome:
+          "Welcome to BridgeMindGames BGM. I am your intelligent assistant. Here we turn language learning into a strategic experience through Bridge.",
+        fallback:
+          "I can explain what BGM is, how the in‑person classes work, or help you book a call. What would you like to know?",
+        afterHours:
+          "We are currently outside our Madrid schedule, but you can leave your details in the form on the website and we will contact you as soon as possible."
+      },
+      fr: {
+        welcome:
+          "Bienvenue chez BridgeMindGames BGM. Je suis votre assistant intelligent. Ici, nous transformons l’apprentissage des langues en une expérience stratégique grâce au bridge.",
+        fallback:
+          "Je peux vous expliquer ce qu’est BGM, comment fonctionnent les cours en présentiel ou vous aider à réserver un rendez‑vous. Que souhaitez‑vous savoir ?",
+        afterHours:
+          "Nous sommes actuellement en dehors de l’horaire de Madrid, mais vous pouvez laisser vos coordonnées dans le formulaire du site et nous vous contacterons dès que possible."
+      },
+      de: {
+        welcome:
+          "Willkommen bei BridgeMindGames BGM. Ich bin dein intelligenter Assistent. Hier verwandeln wir Sprachenlernen in eine strategische Erfahrung durch Bridge.",
+        fallback:
+          "Ich kann dir erklären, was BGM ist, wie der Präsenzunterricht funktioniert oder dir helfen, einen Termin zu buchen. Wobei möchtest du Hilfe?",
+        afterHours:
+          "Wir sind derzeit außerhalb der Madrider Sprechzeiten, aber du kannst deine Daten im Formular auf der Website hinterlassen und wir melden uns so bald wie möglich."
+      },
+      it: {
+        welcome:
+          "Benvenuto a BridgeMindGames BGM. Sono il tuo assistente intelligente. Qui trasformiamo l’apprendimento delle lingue in un’esperienza strategica attraverso il Bridge.",
+        fallback:
+          "Posso spiegarti che cos’è BGM, come funzionano le lezioni in presenza o aiutarti a fissare un appuntamento. Di cosa hai bisogno?",
+        afterHours:
+          "Al momento siamo fuori dall’orario di Madrid, ma puoi lasciare i tuoi dati nel modulo del sito e ti contatteremo al più presto."
+      },
+      zh: {
+        welcome:
+          "欢迎来到 BridgeMindGames BGM。我是您的智能助手。我们通过桥牌，将语言学习变成一场有策略的思维训练体验。",
+        fallback:
+          "我可以为您介绍 BGM 是什么、线下课程如何进行，或帮助您预约一对一沟通。您现在最想了解哪一方面？",
+        afterHours:
+          "目前不在马德里的服务时间内，您可以在网页表单中留下联系方式，我们会在上班时间尽快与您联系。"
+      },
+      ja: {
+        welcome:
+          "BridgeMindGames BGM へようこそ。賢いアシスタントです。ここではブリッジを通して、語学学習を戦略的な体験へと変えていきます。",
+        fallback:
+          "BGM とは何か、対面レッスンの仕組み、または体験・相談予約についてご案内できます。今、何を知りたいですか？",
+        afterHours:
+          "現在はマドリード時間の対応時間外です。サイトのフォームからご連絡先を送っていただければ、対応時間内に折り返しご連絡いたします。"
+      },
+      ar: {
+        welcome:
+          "مرحبًا بك في BridgeMindGames BGM. أنا مساعدك الذكي. هنا نحول تعلّم اللغات إلى تجربة استراتيجية من خلال لعبة البريدج.",
+        fallback:
+          "يمكنني أن أشرح لك ما هي BGM، وكيف تعمل الدروس الحضورية، أو أساعدك في حجز موعد. ماذا تود أن تعرف؟",
+        afterHours:
+          "نحن الآن خارج أوقات العمل في مدريد، لكن يمكنك ترك بياناتك في النموذج على الموقع وسنتواصل معك في أقرب وقت ممكن."
+      }
+    };
 
-  function botLogic(text) {
-    const t = text.toLowerCase();
-    const hora = new Date().getHours();
-    // Horario de atención: 7:00 AM a 11:59 PM
-    const estoyEnLinea = (hora >= 7 && hora <= 23); 
+    const messagesEl = document.getElementById('messages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const langSelect = document.getElementById('langSelect');
+    const statusText = document.getElementById('statusText');
+    const statusSub = document.getElementById('statusSub');
 
-    const linkWA = "https://wa.me/TUNUMERO"; // Reemplaza TUNUMERO
-    const userTG = "https://t.me/TU_USUARIO"; // Reemplaza TU_USUARIO
-    const idWC = "TU_ID_WECHAT"; // Reemplaza TU_ID
-
-    // --- 1. DETECCIÓN DE IDIOMAS ASIÁTICOS ---
-    if (/[\u4e00-\u9fa5]/.test(t)) { // CHINO
-      return "您好！想通过桥牌学习西班牙语吗？请在 **WeChat ID: " + idWC + "** 上联系我。我们可以使用翻译器进行交流。";
+    function isWithinMadridHours() {
+      const now = new Date();
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const madridOffset = 1; // aproximado, sin DST
+      const madridTime = new Date(utc + madridOffset * 3600000);
+      const hour = madridTime.getHours();
+      return hour >= 7 && hour <= 23;
     }
-    if (/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(t)) { // JAPONÉS
-      return "こんにちは！ブリッジでスペイン語を学びましょう。**WhatsApp** でご連絡ください。翻訳機を使って対応します。";
+
+    function addMessage(text, from = 'bot') {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + from;
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+
+      msg.appendChild(bubble);
+      messagesEl.appendChild(msg);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // --- 2. DETECCIÓN DE ÁRABE ---
-    if (/[\u0600-\u06FF]/.test(t)) {
-      return "مرحباً! تعلم الإسبانية معنا. تواصل معي عبر **WhatsApp** وسنستخدم المترجم للبدء.";
-    }
-
-    // --- 3. FILTROS EUROPEOS ---
-    if (t.includes("bonjour") || t.includes("salut") || t.includes("français")) {
-      return "Bonjour ! Apprenez l'espagnol avec le Bridge (l'échecs des cartes). Contactez-nous sur **WhatsApp** !";
-    }
-    if (t.includes("ciao") || t.includes("buongiorno") || t.includes("italiano")) {
-      return "Ciao! Impara lo spagnolo con il Bridge. Parliamo su **WhatsApp** o **Telegram**.";
-    }
-    if (t.includes("hallo") || t.includes("guten tag") || t.includes("deutsch")) {
-      return "Hallo! Lernen Sie Spanisch mit Bridge. Kontaktieren Sie uns per **WhatsApp**.";
-    }
-
-    // --- 4. BRIDGE, OMAR SHARIF Y METODOLOGÍA ---
-    if (t.includes("bridge") || t.includes("carta") || t.includes("juego") || t.includes("omar")) {
-      return "El Bridge es el <b>ajedrez de las cartas</b>. Fue la pasión de <b>Omar Sharif</b> y en **BGM** lo usamos para despertar la mente y enseñar idiomas a cualquier edad.";
-    }
-
-    // --- 5. CONTACTO DIRECTO POR HORARIO ---
-    if (t.includes("contacto") || t.includes("hablar") || t.includes("cita") || t.includes("whatsapp")) {
-      if (estoyEnLinea) {
-        return "<b>¡Estoy en línea!</b> Hablemos directamente:<br><br>" +
-               "🟢 <a href='"+linkWA+"' target='_blank'>WhatsApp</a><br>" +
-               "🔵 <a href='"+userTG+"' target='_blank'>Telegram</a><br><br>" +
-               "Podemos usar traductor si lo necesitas.";
+    function updateStatus() {
+      if (isWithinMadridHours()) {
+        statusText.textContent = 'ONLINE';
+        statusSub.textContent = 'Horario Madrid 7:00–23:59';
       } else {
-        return "No estoy disponible en este momento (Horario: 7:00 - 23:59). Por favor, deja tus datos en el formulario.";
+        statusText.textContent = 'OFFLINE';
+        statusSub.textContent = 'Fuera de horario Madrid (rellena el formulario en la web)';
       }
     }
 
-    // --- 6. RESPUESTA POR DEFECTO ---
-    return "En **BridgeMindGames BGM** creamos puentes hacia el futuro. ¿Te interesa aprender un idioma o conocer nuestra metodología basada en el Bridge?";
-  }
+    function botReply(userText) {
+      const langPack = responses[currentLang] || responses.es;
+      const lower = userText.toLowerCase();
 
-  function handleSend() {
-    const val = input.value.trim();
-    if (!val) return;
-    display.innerHTML += `<div class="msg user-msg">${val}</div>`;
-    input.value = "";
-    display.scrollTop = display.scrollHeight;
-    setTimeout(() => {
-      display.innerHTML += `<div class="msg bot-msg">${botLogic(val)}</div>`;
-      display.scrollTop = display.scrollHeight;
-    }, 600);
-  }
+      // Ejemplos simples de intención
+      if (
+        lower.includes('bridge') ||
+        lower.includes('puente') ||
+        lower.includes('omar sharif')
+      ) {
+        return langPack.welcome;
+      }
 
-  btn.onclick = handleSend;
-  input.onkeypress = (e) => { if(e.key === 'Enter') handleSend(); };
-</script>
+      if (
+        lower.includes('clase') ||
+        lower.includes('class') ||
+        lower.includes('curso') ||
+        lower.includes('lesson')
+      ) {
+        return langPack.fallback;
+      }
+
+      // Horario
+      if (!isWithinMadridHours()) {
+        return langPack.afterHours;
+      }
+
+      // Respuesta por defecto
+      return langPack.fallback;
+    }
+
+    function handleSend() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      userInput.value = '';
+
+      const reply = botReply(text);
+      setTimeout(() => {
+        addMessage(reply, 'bot');
+      }, 300);
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSend();
+    });
+
+    langSelect.addEventListener('change', (e) => {
+      currentLang = e.target.value;
+      messagesEl.innerHTML = '';
+      const langPack = responses[currentLang] || responses.es;
+      addMessage(langPack.welcome, 'bot');
+    });
+
+    // Inicialización
+    updateStatus();
+    addMessage(responses[currentLang].welcome, 'bot');
+    setInterval(updateStatus, 60000);
+  </script>
+</body>
+</html>
