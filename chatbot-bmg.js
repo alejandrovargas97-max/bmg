@@ -1,31 +1,8 @@
-const { useState, useEffect, useRef } = React;
-const { Send, X, Globe, Users, Download, Loader2 } = lucide;
-
-const BMGChatbot = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
-  const [showLanguageSelector, setShowLanguageSelector] = useState(true);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [userLanguage, setUserLanguage] = useState('es');
-  const [prospects, setProspects] = useState([]);
-  const [conversationHistory, setConversationHistory] = useState([]);
-  const messagesEndRef = useRef(null);
-
+(function() {
+  'use strict';
+  
   const GEMINI_API_KEY = "AIzaSyDDZsV69Pp3mIHyba4liiEMKTHZa1MIMpI";
-
-  const languages = [
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'ja', name: '日本語', flag: '🇯🇵' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' }
-  ];
-
+  
   const systemPrompt = `Eres el asistente oficial de BridgeMind Games (BMG). SOLO hablas sobre BMG.
 
 INFORMACIÓN BMG:
@@ -44,29 +21,280 @@ REGLAS:
 3. Sé breve (máximo 3-4 oraciones)
 4. Si preguntan precios o quieren inscribirse: "Te puedo conectar con Alejandro al +34 634 268 663"`;
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  let conversationHistory = [];
+  let isLoading = false;
 
-  const selectLanguage = (lang) => {
-    setUserLanguage(lang);
-    setShowLanguageSelector(false);
-  };
+  // Crear el CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    #bmg-chat-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s;
+    }
+    #bmg-chat-button:hover {
+      transform: scale(1.05);
+    }
+    #bmg-chat-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 380px;
+      height: 600px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9999;
+      border: 4px solid #764ba2;
+    }
+    #bmg-chat-container.open {
+      display: flex;
+    }
+    #bmg-chat-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #bmg-chat-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #bmg-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: linear-gradient(to bottom, #f9fafb, white);
+    }
+    .bmg-message {
+      margin-bottom: 12px;
+      display: flex;
+    }
+    .bmg-message.user {
+      justify-content: flex-end;
+    }
+    .bmg-message.bot {
+      justify-content: flex-start;
+    }
+    .bmg-message-content {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .bmg-message.user .bmg-message-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .bmg-message.bot .bmg-message-content {
+      background: #f3f4f6;
+      color: #1f2937;
+      border: 1px solid #e5e7eb;
+    }
+    .bmg-loading {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+    .bmg-loading-dot {
+      width: 8px;
+      height: 8px;
+      background: #9ca3af;
+      border-radius: 50%;
+      animation: bmg-bounce 1.4s infinite ease-in-out;
+    }
+    .bmg-loading-dot:nth-child(1) { animation-delay: -0.32s; }
+    .bmg-loading-dot:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bmg-bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    #bmg-chat-input-container {
+      padding: 16px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 8px;
+    }
+    #bmg-chat-input {
+      flex: 1;
+      border: 2px solid #e5e7eb;
+      border-radius: 24px;
+      padding: 12px 16px;
+      font-size: 14px;
+      outline: none;
+    }
+    #bmg-chat-input:focus {
+      border-color: #764ba2;
+    }
+    #bmg-chat-send {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    #bmg-chat-send:hover {
+      transform: scale(1.05);
+    }
+    #bmg-chat-send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #bmg-welcome {
+      text-align: center;
+      color: #9ca3af;
+      padding: 48px 24px;
+    }
+    @media (max-width: 480px) {
+      #bmg-chat-container {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 100px);
+      }
+    }
+  `;
+  document.head.appendChild(style);
 
-  const addBotMessage = (text, delay = 500) => {
-    setTimeout(() => {
-      setMessages(prev => [...prev, { type: 'bot', text }]);
-    }, delay);
-  };
-
-  const addUserMessage = (text) => {
-    setMessages(prev => [...prev, { type: 'user', text }]);
-  };
-
-  const callGeminiAPI = async (userMessage) => {
-    try {
-      setIsLoading(true);
+  // Crear el HTML del bot
+  const chatHTML = `
+    <button id="bmg-chat-button">
+      <span style="font-size: 24px;">🎴</span>
+      <span>BMG Chat</span>
+    </button>
+    
+    <div id="bmg-chat-container">
+      <div id="bmg-chat-header">
+        <div>
+          <div style="font-weight: bold; font-size: 18px;">🎴 BridgeMind</div>
+          <div style="font-size: 12px; opacity: 0.9;">Gemini AI</div>
+        </div>
+        <button id="bmg-chat-close">×</button>
+      </div>
       
+      <div id="bmg-chat-messages">
+        <div id="bmg-welcome">
+          <div style="font-size: 48px; margin-bottom: 16px;">👋</div>
+          <div style="font-size: 16px; font-weight: bold; color: #4b5563; margin-bottom: 8px;">
+            ¡Hola! Soy el asistente de BMG
+          </div>
+          <div style="font-size: 14px;">
+            Pregúntame sobre nuestro sistema de idiomas + Bridge
+          </div>
+        </div>
+      </div>
+      
+      <div id="bmg-chat-input-container">
+        <input 
+          type="text" 
+          id="bmg-chat-input" 
+          placeholder="Escribe tu mensaje..."
+        />
+        <button id="bmg-chat-send">➤</button>
+      </div>
+    </div>
+  `;
+
+  const container = document.createElement('div');
+  container.innerHTML = chatHTML;
+  document.body.appendChild(container);
+
+  // Referencias a elementos
+  const button = document.getElementById('bmg-chat-button');
+  const chatContainer = document.getElementById('bmg-chat-container');
+  const closeBtn = document.getElementById('bmg-chat-close');
+  const messagesDiv = document.getElementById('bmg-chat-messages');
+  const input = document.getElementById('bmg-chat-input');
+  const sendBtn = document.getElementById('bmg-chat-send');
+  const welcome = document.getElementById('bmg-welcome');
+
+  // Abrir/Cerrar chat
+  button.addEventListener('click', () => {
+    chatContainer.classList.add('open');
+    button.style.display = 'none';
+    input.focus();
+  });
+
+  closeBtn.addEventListener('click', () => {
+    chatContainer.classList.remove('open');
+    button.style.display = 'flex';
+  });
+
+  // Agregar mensaje
+  function addMessage(text, type) {
+    if (welcome) welcome.remove();
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `bmg-message ${type}`;
+    messageDiv.innerHTML = `
+      <div class="bmg-message-content">${text}</div>
+    `;
+    messagesDiv.appendChild(messageDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  // Mostrar loading
+  function showLoading() {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'bmg-message bot';
+    loadingDiv.id = 'bmg-loading-message';
+    loadingDiv.innerHTML = `
+      <div class="bmg-message-content bmg-loading">
+        <div class="bmg-loading-dot"></div>
+        <div class="bmg-loading-dot"></div>
+        <div class="bmg-loading-dot"></div>
+      </div>
+    `;
+    messagesDiv.appendChild(loadingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  function hideLoading() {
+    const loading = document.getElementById('bmg-loading-message');
+    if (loading) loading.remove();
+  }
+
+  // Llamar a Gemini API
+  async function callGemini(userMessage) {
+    try {
+      isLoading = true;
+      sendBtn.disabled = true;
+      showLoading();
+
       const history = conversationHistory.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: msg.content }]
@@ -75,12 +303,12 @@ REGLAS:
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [
               ...history,
-              { role: "user", parts: [{ text: userMessage }] }
+              { role: 'user', parts: [{ text: userMessage }] }
             ],
             systemInstruction: { parts: [{ text: systemPrompt }] },
             generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
@@ -89,212 +317,45 @@ REGLAS:
       );
 
       const data = await response.json();
-      setIsLoading(false);
+      hideLoading();
 
       if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
         const botResponse = data.candidates[0].content.parts[0].text;
         
-        setConversationHistory(prev => [
-          ...prev,
-          { role: "user", content: userMessage },
-          { role: "assistant", content: botResponse }
-        ]);
+        conversationHistory.push(
+          { role: 'user', content: userMessage },
+          { role: 'assistant', content: botResponse }
+        );
 
-        addBotMessage(botResponse);
+        addMessage(botResponse, 'bot');
       } else {
-        addBotMessage("⚠️ Error al conectar. Verifica tu conexión.");
+        addMessage('⚠️ Error al conectar. Verifica tu conexión.', 'bot');
       }
     } catch (error) {
-      setIsLoading(false);
-      console.error("Error:", error);
-      addBotMessage("Disculpa, tengo problemas de conexión. ¿Intentas de nuevo?");
+      hideLoading();
+      console.error('Error:', error);
+      addMessage('Disculpa, tengo problemas de conexión. ¿Intentas de nuevo?', 'bot');
+    } finally {
+      isLoading = false;
+      sendBtn.disabled = false;
     }
-  };
+  }
 
-  const handleSend = () => {
-    if (!input.trim() || isLoading) return;
+  // Enviar mensaje
+  function sendMessage() {
+    const message = input.value.trim();
+    if (!message || isLoading) return;
 
-    const userInput = input.trim();
-    addUserMessage(userInput);
-    setInput('');
-    callGeminiAPI(userInput);
-  };
+    addMessage(message, 'user');
+    input.value = '';
+    callGemini(message);
+  }
 
-  const exportProspects = () => {
-    const csv = [
-      ['Fecha', 'Datos'],
-      ...prospects.map(p => [p.fecha, JSON.stringify(p)])
-    ].map(row => row.join(',')).join('\n');
+  // Event listeners
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
 
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `bmg_conversaciones_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-  };
-
-  return React.createElement(
-    React.Fragment,
-    null,
-    React.createElement(
-      'button',
-      {
-        onClick: () => setShowAdmin(true),
-        className: 'fixed top-6 right-6 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-full p-3 shadow-xl hover:scale-110 transition-transform z-50',
-        style: { display: prospects.length > 0 ? 'block' : 'none' }
-      },
-      React.createElement(Users, { size: 24 })
-    ),
-    React.createElement(
-      'div',
-      { className: 'fixed bottom-6 right-6 z-40' },
-      !isOpen && React.createElement(
-        'button',
-        {
-          onClick: () => {
-            setIsOpen(true);
-            setShowLanguageSelector(true);
-            setMessages([]);
-          },
-          className: 'bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full p-4 shadow-2xl hover:scale-110 transition-transform flex items-center gap-3'
-        },
-        React.createElement('span', { className: 'text-2xl' }, '🎴'),
-        React.createElement('span', { className: 'font-semibold' }, 'BMG Chat')
-      ),
-      isOpen && React.createElement(
-        'div',
-        { className: 'bg-white rounded-2xl shadow-2xl w-96 h-[600px] flex flex-col overflow-hidden border-4 border-purple-500' },
-        React.createElement(
-          'div',
-          { className: 'bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between' },
-          React.createElement(
-            'div',
-            { className: 'flex items-center gap-3' },
-            React.createElement('span', { className: 'text-3xl' }, '🎴'),
-            React.createElement(
-              'div',
-              null,
-              React.createElement('h3', { className: 'font-bold text-lg' }, 'BridgeMind'),
-              React.createElement('p', { className: 'text-xs opacity-90' }, '🤖 Gemini AI')
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: 'flex items-center gap-2' },
-            !showLanguageSelector && React.createElement(
-              'button',
-              {
-                onClick: () => {
-                  setShowLanguageSelector(true);
-                  setMessages([]);
-                  setConversationHistory([]);
-                },
-                className: 'bg-white/20 hover:bg-white/30 rounded-lg px-3 py-2 flex items-center gap-2'
-              },
-              React.createElement(Globe, { size: 16 }),
-              React.createElement('span', { className: 'text-xl' }, languages.find(l => l.code === userLanguage)?.flag)
-            ),
-            React.createElement(
-              'button',
-              {
-                onClick: () => {
-                  setIsOpen(false);
-                  setShowLanguageSelector(true);
-                  setMessages([]);
-                },
-                className: 'hover:bg-white/20 rounded-full p-2'
-              },
-              React.createElement(X, { size: 24 })
-            )
-          )
-        ),
-        React.createElement(
-          'div',
-          { className: 'flex-1 overflow-y-auto p-4 bg-gradient-to-b from-gray-50 to-white' },
-          showLanguageSelector ? React.createElement(
-            'div',
-            { className: 'flex flex-col items-center justify-center h-full' },
-            React.createElement(Globe, { size: 64, className: 'text-purple-600 mb-4 animate-pulse' }),
-            React.createElement('h3', { className: 'text-xl font-bold mb-6 text-gray-800' }, 'Selecciona idioma'),
-            React.createElement(
-              'div',
-              { className: 'grid grid-cols-2 gap-3 w-full px-4' },
-              languages.map((lang) => React.createElement(
-                'button',
-                {
-                  key: lang.code,
-                  onClick: () => selectLanguage(lang.code),
-                  className: 'flex items-center gap-3 p-4 bg-white border-2 border-purple-200 rounded-xl hover:border-purple-500 hover:shadow-lg transition-all'
-                },
-                React.createElement('span', { className: 'text-3xl' }, lang.flag),
-                React.createElement('span', { className: 'font-semibold text-gray-700' }, lang.name)
-              ))
-            )
-          ) : React.createElement(
-            React.Fragment,
-            null,
-            messages.length === 0 && React.createElement(
-              'div',
-              { className: 'text-center text-gray-400 py-12' },
-              React.createElement('p', { className: 'text-lg mb-2' }, '👋 ¡Hola! Soy el asistente de BMG'),
-              React.createElement('p', { className: 'text-sm' }, 'Pregúntame sobre nuestro sistema de idiomas + Bridge')
-            ),
-            messages.map((msg, idx) => React.createElement(
-              'div',
-              { key: idx, className: `mb-3 flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}` },
-              React.createElement(
-                'div',
-                {
-                  className: `max-w-[80%] rounded-2xl px-4 py-3 shadow-md ${
-                    msg.type === 'user' ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' : 'bg-white text-gray-800 border'
-                  }`
-                },
-                React.createElement('p', { className: 'whitespace-pre-line text-sm' }, msg.text)
-              )
-            )),
-            isLoading && React.createElement(
-              'div',
-              { className: 'flex justify-start mb-3' },
-              React.createElement(
-                'div',
-                { className: 'bg-white rounded-2xl px-4 py-3 shadow-md border' },
-                React.createElement(Loader2, { className: 'animate-spin text-purple-600', size: 20 })
-              )
-            ),
-            React.createElement('div', { ref: messagesEndRef })
-          )
-        ),
-        React.createElement(
-          'div',
-          { className: 'border-t p-4 bg-white' },
-          !showLanguageSelector && React.createElement(
-            'div',
-            { className: 'flex gap-2' },
-            React.createElement('input', {
-              type: 'text',
-              value: input,
-              onChange: (e) => setInput(e.target.value),
-              onKeyPress: (e) => e.key === 'Enter' && !isLoading && handleSend(),
-              placeholder: 'Escribe tu mensaje...',
-              disabled: isLoading,
-              className: 'flex-1 border-2 border-purple-300 rounded-full px-4 py-2 focus:outline-none focus:border-purple-500 disabled:opacity-50'
-            }),
-            React.createElement(
-              'button',
-              {
-                onClick: handleSend,
-                disabled: isLoading,
-                className: 'bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full p-3 hover:scale-105 transition-transform shadow-lg disabled:opacity-50'
-              },
-              React.createElement(Send, { size: 20 })
-            )
-          )
-        )
-      )
-    )
-  );
-};
-
-const root = ReactDOM.createRoot(document.getElementById('bmg-chatbot-root'));
-root.render(React.createElement(BMGChatbot));
+  console.log('✅ BMG Chatbot cargado correctamente (versión simple)');
+})();
