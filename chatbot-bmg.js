@@ -22,6 +22,9 @@ const BMGChatbot = () => {
   const [conversationHistory, setConversationHistory] = useState([]);
   const messagesEndRef = useRef(null);
 
+  // 🔑 API KEY DE GEMINI (YA CONFIGURADA - GRATIS)
+  const GEMINI_API_KEY = "AIzaSyDDZsV69Pp3mIHyba4liiEMKTHZa1MIMpI";
+
   const languages = [
     { code: 'es', name: 'Español', flag: '🇪🇸' },
     { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -33,28 +36,151 @@ const BMGChatbot = () => {
     { code: 'zh', name: '中文', flag: '🇨🇳' }
   ];
 
-  const systemPrompt = `Eres un asistente especializado EXCLUSIVAMENTE en BridgeMindGames (BMG).
+  const systemPrompt = `Eres el asistente oficial de BridgeMind Games (BMG). SOLO puedes hablar sobre BMG y nada más.
 
-INFORMACIÓN BMG:
-- Grupos de 4 personas presenciales
-- 8 idiomas: Español, Inglés, Alemán, Italiano, Francés, Japonés, Árabe, Chino
-- Instructor humano + tecnología
-- Bridge para inmersión lingüística
+═══════════════════════════════════════════════════════════════════
+📚 INFORMACIÓN COMPLETA DE BMG
+═══════════════════════════════════════════════════════════════════
 
-REGLAS:
-1. SOLO responde sobre BMG
-2. Si preguntan otro tema: "Lo siento, solo puedo ayudarte con BMG" y usa [MOSTRAR_CONTACTO]
-3. Si preguntan inscripción/precios: usa [INICIAR_FORMULARIO]
-4. Sé breve (2-4 oraciones)`;
+🎯 QUÉ ES BMG:
+Sistema innovador de aprendizaje de idiomas mediante el juego de Bridge con asistencia de Inteligencia Artificial. Es un sistema DUAL: aprendes idioma + Bridge simultáneamente.
+
+🌍 IDIOMA PRINCIPAL:
+- Actualmente: ESPAÑOL (idioma del fundador)
+- Futuro: Posible expansión a INGLÉS según éxito
+
+🎴 METODOLOGÍA:
+- Aprendizaje dual: Idioma + Bridge en paralelo
+- El Bridge se usa como herramienta competitiva
+- El idioma se absorbe de forma inconsciente mientras juegas
+- Asistencia de IA durante todo el proceso
+- Forma entretenida y natural de aprender
+
+👥 FORMATO:
+- Grupos de 4 personas (múltiplos de 4)
+- Clases 100% PRESENCIALES
+- Ubicaciones: Colegios o institutos educativos
+- Horarios: Flexibles según disponibilidad de alumnos
+
+🎯 PÚBLICO OBJETIVO:
+- Jóvenes estudiantes
+- Edad mínima: 12 años
+- Instituciones educativas (colegios, institutos)
+
+📍 PAÍSES BASE (8 destinos prioritarios):
+1. 🇨🇳 China
+2. 🇯🇵 Japón
+3. 🇸🇦 Arabia Saudita
+4. 🇦🇺 Australia
+5. 🇮🇹 Italia
+6. 🇫🇷 Francia
+7. 🇩🇪 Alemania
+8. 🇪🇸 España (base actual)
+
+⏱️ DURACIÓN:
+- Mínimo: 1 SEMESTRE (para ver resultados reales)
+- El programa requiere tiempo para mostrar efectividad
+
+📊 NIVELES:
+- Bridge: No es necesario saber (se enseña desde cero en paralelo)
+- Idioma: Cualquier nivel (se nivela dentro de cada grupo de 4)
+- Los grupos se organizan por nivel similar
+
+💰 PRECIOS:
+- Personalizado según necesidades del cliente
+- Se negocia proyecto por proyecto
+- Varía según: institución, cantidad de alumnos, duración, ubicación
+
+🚀 TECNOLOGÍA:
+- Proyectos que requieren tecnología de punta (top)
+- Preparación tecnológica extensiva
+- Integración de IA en el proceso de aprendizaje
+
+📞 CONTACTO:
+- WhatsApp: +34 634 268 663
+- Email: bridgemindgames@gmail.com
+- Horario: Lun-Vie 9-18h (CET - España)
+
+═══════════════════════════════════════════════════════════════════
+🚨 REGLAS ESTRICTAS - DEBES SEGUIRLAS SIEMPRE:
+═══════════════════════════════════════════════════════════════════
+
+1. ✅ SOLO responde sobre BMG - Nada más existe para ti
+2. ❌ Si preguntan CUALQUIER tema fuera de BMG: responde "Lo siento, solo puedo ayudarte con información sobre BridgeMind Games. ¿Tienes alguna pregunta sobre nuestro sistema de aprendizaje de idiomas con Bridge?" y usa [MOSTRAR_CONTACTO]
+3. 💰 Si preguntan sobre inscripción, precios, o quieren más info: usa [INICIAR_FORMULARIO]
+4. 📝 Sé BREVE (máximo 3-4 oraciones por respuesta)
+5. 🎯 Sé amigable, profesional y entusiasta sobre BMG
+6. 🌍 Adapta tu respuesta al idioma del usuario
+7. ⚡ Si no sabes algo específico de BMG, deriva al contacto directo
+
+═══════════════════════════════════════════════════════════════════
+
+Responde siempre en el idioma que te hablen. Sé conversacional y natural.`;
 
   const formQuestions = {
     es: {
-      askLanguage: "🌍 ¿Qué idioma deseas aprender?",
+      askLanguage: "🌍 ¿Qué idioma deseas aprender? (Actualmente enseñamos Español)",
       askBridgeLevel: "🎴 ¿Nivel de Bridge? (Cero/Principiante/Intermedio/Avanzado/Experto)",
-      askGroup: "👥 ¿Tienes grupo o necesitas uno?",
+      askGroup: "👥 ¿Tienes grupo de 4 o necesitas que te asignemos uno?",
       askName: "✏️ Tu nombre completo:",
-      askContact: "📱 Canal y contacto (ej: WhatsApp +34612345678):",
-      thanks: "¡Perfecto! ✅ Te contactaremos pronto. ¡Bienvenido a BMG! 🎉"
+      askContact: "📱 Canal y contacto (ej: WhatsApp +34612345678 o Email):",
+      thanks: "¡Perfecto! ✅ Alejandro te contactará pronto para coordinar. ¡Bienvenido a BMG! 🎉🎴"
+    },
+    en: {
+      askLanguage: "🌍 Which language do you want to learn? (Currently teaching Spanish)",
+      askBridgeLevel: "🎴 Bridge level? (Zero/Beginner/Intermediate/Advanced/Expert)",
+      askGroup: "👥 Do you have a group of 4 or need us to assign you one?",
+      askName: "✏️ Your full name:",
+      askContact: "📱 Contact method (e.g., WhatsApp +34612345678 or Email):",
+      thanks: "Perfect! ✅ Alejandro will contact you soon. Welcome to BMG! 🎉🎴"
+    },
+    de: {
+      askLanguage: "🌍 Welche Sprache möchtest du lernen? (Derzeit unterrichten wir Spanisch)",
+      askBridgeLevel: "🎴 Bridge-Niveau? (Null/Anfänger/Mittel/Fortgeschritten/Experte)",
+      askGroup: "👥 Hast du eine 4er-Gruppe oder brauchst du eine?",
+      askName: "✏️ Dein vollständiger Name:",
+      askContact: "📱 Kontaktmethode (z.B. WhatsApp +34612345678 oder Email):",
+      thanks: "Perfekt! ✅ Alejandro wird dich bald kontaktieren. Willkommen bei BMG! 🎉🎴"
+    },
+    it: {
+      askLanguage: "🌍 Quale lingua vuoi imparare? (Attualmente insegniamo Spagnolo)",
+      askBridgeLevel: "🎴 Livello Bridge? (Zero/Principiante/Intermedio/Avanzato/Esperto)",
+      askGroup: "👥 Hai un gruppo di 4 o serve assegnartene uno?",
+      askName: "✏️ Il tuo nome completo:",
+      askContact: "📱 Metodo di contatto (es. WhatsApp +34612345678 o Email):",
+      thanks: "Perfetto! ✅ Alejandro ti contatterà presto. Benvenuto in BMG! 🎉🎴"
+    },
+    fr: {
+      askLanguage: "🌍 Quelle langue veux-tu apprendre? (Nous enseignons l'Espagnol actuellement)",
+      askBridgeLevel: "🎴 Niveau Bridge? (Zéro/Débutant/Intermédiaire/Avancé/Expert)",
+      askGroup: "👥 As-tu un groupe de 4 ou besoin qu'on t'en assigne un?",
+      askName: "✏️ Ton nom complet:",
+      askContact: "📱 Méthode de contact (ex: WhatsApp +34612345678 ou Email):",
+      thanks: "Parfait! ✅ Alejandro te contactera bientôt. Bienvenue chez BMG! 🎉🎴"
+    },
+    ja: {
+      askLanguage: "🌍 どの言語を学びたいですか？（現在スペイン語を教えています）",
+      askBridgeLevel: "🎴 ブリッジレベル？（ゼロ/初心者/中級/上級/エキスパート）",
+      askGroup: "👥 4人グループはありますか？割り当てが必要ですか？",
+      askName: "✏️ お名前:",
+      askContact: "📱 連絡方法（例: WhatsApp +34612345678 またはEmail）:",
+      thanks: "完璧！✅ アレハンドロがすぐに連絡します。BMGへようこそ！🎉🎴"
+    },
+    ar: {
+      askLanguage: "🌍 ما اللغة التي تريد تعلمها؟ (نقوم حاليًا بتدريس الإسبانية)",
+      askBridgeLevel: "🎴 مستوى البريدج؟ (صفر/مبتدئ/متوسط/متقدم/خبير)",
+      askGroup: "👥 هل لديك مجموعة من 4 أم تحتاج إلى تعيين واحدة؟",
+      askName: "✏️ اسمك الكامل:",
+      askContact: "📱 طريقة الاتصال (مثال: WhatsApp +34612345678 أو Email):",
+      thanks: "مثالي! ✅ سيتصل بك أليخاندرو قريبًا. مرحبًا بك في BMG! 🎉🎴"
+    },
+    zh: {
+      askLanguage: "🌍 你想学哪种语言？（目前我们教西班牙语）",
+      askBridgeLevel: "🎴 桥牌水平？（零/初学者/中级/高级/专家）",
+      askGroup: "👥 你有4人小组还是需要我们分配一个？",
+      askName: "✏️ 你的全名:",
+      askContact: "📱 联系方式（例如：WhatsApp +34612345678 或Email）:",
+      thanks: "完美！✅ Alejandro很快会联系你。欢迎来到BMG！🎉🎴"
     }
   };
 
@@ -119,32 +245,47 @@ REGLAS:
     if (stages[stage]) stages[stage]();
   };
 
-  const callClaudeAPI = async (userMessage) => {
+  const callGeminiAPI = async (userMessage) => {
     try {
       setIsLoading(true);
       
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "anthropic-version": "2023-06-01"
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [
-            ...conversationHistory,
-            { role: "user", content: userMessage }
-          ]
-        })
-      });
+      // Construir historial de conversación para Gemini
+      const history = conversationHistory.map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }]
+      }));
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            contents: [
+              ...history,
+              {
+                role: "user",
+                parts: [{ text: userMessage }]
+              }
+            ],
+            systemInstruction: {
+              parts: [{ text: systemPrompt }]
+            },
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 500
+            }
+          })
+        }
+      );
 
       const data = await response.json();
       setIsLoading(false);
 
-      if (data.content && data.content[0]) {
-        const botResponse = data.content[0].text;
+      if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+        const botResponse = data.candidates[0].content.parts[0].text;
         
         setConversationHistory(prev => [
           ...prev,
@@ -166,9 +307,12 @@ REGLAS:
         } else {
           addBotMessage(botResponse);
         }
+      } else if (data.error) {
+        addBotMessage("⚠️ Error: " + (data.error.message || "Verifica la configuración"));
       }
     } catch (error) {
       setIsLoading(false);
+      console.error("Error:", error);
       addBotMessage("Disculpa, tengo problemas de conexión. ¿Intentas de nuevo?");
     }
   };
@@ -185,7 +329,7 @@ REGLAS:
       return;
     }
 
-    callClaudeAPI(userInput);
+    callGeminiAPI(userInput);
   };
 
   const selectContactMethod = (method) => {
@@ -194,7 +338,7 @@ REGLAS:
       setStage('askLanguage');
       addBotMessage(formQuestions[userLanguage].askLanguage, 100);
     } else {
-      addBotMessage("📞 Horarios: Lun-Vie 9-18h\n\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com", 100);
+      addBotMessage("📞 Horarios: Lun-Vie 9-18h (CET)\n\n📱 WhatsApp: +34 634 268 663\n📧 bridgemindgames@gmail.com\n\n👤 Contacto: Alejandro", 100);
     }
   };
 
@@ -276,7 +420,7 @@ REGLAS:
                   'div',
                   null,
                   React.createElement('p', { className: 'text-sm text-gray-600 font-semibold' }, '📱 Contacto'),
-                  React.createElement('a', { href: `https://wa.me/${p.contacto.replace(/\D/g, '')}`, target: '_blank', rel: 'noopener noreferrer', className: 'text-blue-600 hover:underline' }, p.contacto)
+                  React.createElement('p', { className: 'text-blue-600' }, p.contacto)
                 )
               )
             ))
@@ -323,7 +467,7 @@ REGLAS:
               'div',
               null,
               React.createElement('h3', { className: 'font-bold text-lg' }, 'BridgeMind'),
-              React.createElement('p', { className: 'text-xs opacity-90' }, '24/7')
+              React.createElement('p', { className: 'text-xs opacity-90' }, '🤖 Gemini AI')
             )
           ),
           React.createElement(
