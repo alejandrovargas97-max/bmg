@@ -226,6 +226,9 @@ BMG信息:
       border-radius: 50%;
       cursor: pointer;
       font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     #bmg-chat-messages {
       flex: 1;
@@ -301,6 +304,9 @@ BMG信息:
       cursor: pointer;
       font-size: 18px;
       transition: transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     #bmg-chat-send:hover { transform: scale(1.05); }
     #bmg-chat-send:disabled {
@@ -344,6 +350,12 @@ BMG信息:
       #bmg-chat-container {
         width: calc(100vw - 32px);
         height: calc(100vh - 100px);
+        bottom: 16px;
+        right: 16px;
+      }
+      #bmg-chat-button {
+        bottom: 16px;
+        right: 16px;
       }
     }
   `;
@@ -390,6 +402,18 @@ BMG信息:
   const input = document.getElementById('bmg-chat-input');
   const sendBtn = document.getElementById('bmg-chat-send');
 
+  // Placeholders por idioma
+  const placeholders = {
+    es: "Escribe tu mensaje...",
+    en: "Type your message...",
+    de: "Schreiben Sie Ihre Nachricht...",
+    it: "Scrivi il tuo messaggio...",
+    fr: "Écrivez votre message...",
+    ja: "メッセージを入力...",
+    ar: "اكتب رسالتك...",
+    zh: "输入您的消息..."
+  };
+
   // Mostrar selector de idiomas
   function showLanguageSelector() {
     let html = '<div id="bmg-language-selector">';
@@ -399,7 +423,7 @@ BMG信息:
     
     for (let code in languages) {
       html += `
-        <button class="bmg-lang-btn" onclick="window.bmgSelectLanguage('${code}')">
+        <button class="bmg-lang-btn" data-lang="${code}">
           <span style="font-size: 28px;">${languages[code].flag}</span>
           <span>${languages[code].name}</span>
         </button>
@@ -408,10 +432,18 @@ BMG信息:
     
     html += '</div></div>';
     messagesDiv.innerHTML = html;
+    
+    // Añadir event listeners a los botones de idioma
+    document.querySelectorAll('.bmg-lang-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const langCode = this.getAttribute('data-lang');
+        bmgSelectLanguage(langCode);
+      });
+    });
   }
 
   // Seleccionar idioma
-  window.bmgSelectLanguage = function(code) {
+  function bmgSelectLanguage(code) {
     selectedLanguage = code;
     conversationHistory = [];
     messagesDiv.innerHTML = `
@@ -439,8 +471,14 @@ BMG信息:
         </div>
       </div>
     `;
+    
+    // Actualizar placeholder del input
+    input.placeholder = placeholders[code] || placeholders.es;
     input.focus();
-  };
+  }
+
+  // Hacer la función global para que sea accesible desde HTML
+  window.bmgSelectLanguage = bmgSelectLanguage;
 
   // Abrir/Cerrar
   button.addEventListener('click', () => {
@@ -453,6 +491,10 @@ BMG信息:
     chatContainer.classList.remove('open');
     button.style.display = 'flex';
     selectedLanguage = null;
+    conversationHistory = [];
+    messagesDiv.innerHTML = '';
+    input.value = '';
+    input.placeholder = placeholders.es;
   });
 
   // Agregar mensaje
@@ -507,13 +549,14 @@ BMG信息:
       input.disabled = true;
       showLoading();
 
+      // Preparar el historial para la API
       const history = conversationHistory.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: msg.content }]
       }));
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -522,11 +565,22 @@ BMG信息:
               ...history,
               { role: 'user', parts: [{ text: userMessage }] }
             ],
-            systemInstruction: { parts: [{ text: systemPrompts[selectedLanguage] || systemPrompts.es }] },
-            generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+            systemInstruction: { 
+              parts: [{ text: systemPrompts[selectedLanguage] || systemPrompts.es }] 
+            },
+            generationConfig: { 
+              temperature: 0.7, 
+              maxOutputTokens: 500,
+              topP: 0.95,
+              topK: 40
+            }
           })
         }
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
       hideLoading();
@@ -539,24 +593,28 @@ BMG信息:
           { role: 'assistant', content: botResponse }
         );
 
+        // Mantener el historial manejable (últimos 10 intercambios)
+        if (conversationHistory.length > 20) {
+          conversationHistory = conversationHistory.slice(-20);
+        }
+
         addMessage(botResponse, 'bot');
       } else {
-        const errorMsg = selectedLanguage === 'es' ? '⚠️ Error al conectar' :
-                        selectedLanguage === 'en' ? '⚠️ Connection error' :
-                        selectedLanguage === 'de' ? '⚠️ Verbindungsfehler' :
-                        selectedLanguage === 'it' ? '⚠️ Errore di connessione' :
-                        selectedLanguage === 'fr' ? '⚠️ Erreur de connexion' :
-                        selectedLanguage === 'ja' ? '⚠️ 接続エラー' :
-                        selectedLanguage === 'ar' ? '⚠️ خطأ في الاتصال' :
-                        selectedLanguage === 'zh' ? '⚠️ 连接错误' : '⚠️ Error';
-        addMessage(errorMsg, 'bot');
+        throw new Error('No response from Gemini API');
       }
     } catch (error) {
       hideLoading();
-      console.error('Error:', error);
-      const errorMsg = selectedLanguage === 'es' ? 'Disculpa, tengo problemas de conexión' :
-                      selectedLanguage === 'en' ? 'Sorry, connection problems' :
-                      'Error de conexión';
+      console.error('Error calling Gemini:', error);
+      
+      let errorMsg = '';
+      if (selectedLanguage === 'es') {
+        errorMsg = 'Disculpa, estoy teniendo problemas técnicos. Por favor, intenta de nuevo en unos momentos.';
+      } else if (selectedLanguage === 'en') {
+        errorMsg = 'Sorry, I\'m experiencing technical issues. Please try again in a moment.';
+      } else {
+        errorMsg = 'Sorry, technical error. Please try again.';
+      }
+      
       addMessage(errorMsg, 'bot');
     } finally {
       isLoading = false;
@@ -584,6 +642,21 @@ BMG信息:
   sendBtn.addEventListener('click', sendMessage);
   input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !isLoading) sendMessage();
+  });
+
+  // Click fuera del chat para cerrar
+  document.addEventListener('click', (e) => {
+    if (!chatContainer.contains(e.target) && 
+        !button.contains(e.target) && 
+        chatContainer.classList.contains('open')) {
+      chatContainer.classList.remove('open');
+      button.style.display = 'flex';
+      selectedLanguage = null;
+      conversationHistory = [];
+      messagesDiv.innerHTML = '';
+      input.value = '';
+      input.placeholder = placeholders.es;
+    }
   });
 
   console.log('✅ BMG Chatbot cargado correctamente');
