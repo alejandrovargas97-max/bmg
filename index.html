@@ -489,8 +489,8 @@
       document.getElementById('btn-submit-txt').innerText = data.fBtn;
       document.getElementById('hidden-lang').value = lang;
       document.getElementById('l-phone').innerText = data.fPhone;
-      document.getElementById('img-target').src = data.i;
-      document.getElementById('video-src').src = data.v;
+      document.getElementById('img-target').src = data.i + '?v=3';
+      document.getElementById('video-src').src = data.v + '?v=3';
       document.getElementById('video-player').load();
       const prefixMap = { es: '+34', en: '+1', fr: '+33', de: '+49', it: '+39', jp: '+81', ch: '+86', ar: '+971' };
       document.getElementById('p-prefix').value = prefixMap[lang] || '+34';
@@ -569,6 +569,7 @@
  
 </body>
 </html>
+
 
 
 
