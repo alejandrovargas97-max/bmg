@@ -192,13 +192,14 @@
       height: 100%;
       background-color: rgba(0,0,0,0.7);
       animation: fadeIn 0.3s;
+      overflow-y: auto;
     }
     .modal-content {
       background: #fff;
       margin: 5% auto;
       padding: 30px;
       border-radius: 15px;
-      max-width: 600px;
+      max-width: 650px;
       box-shadow: 0 10px 50px rgba(0,0,0,0.5);
       position: relative;
       animation: slideIn 0.3s;
@@ -220,6 +221,32 @@
     .modal-content h2 {
       color: var(--dark);
       margin-top: 0;
+    }
+    .day-selector {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 15px 0;
+    }
+    .day-btn {
+      padding: 12px 8px;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      color: #333;
+      font-size: 0.85rem;
+    }
+    .day-btn:hover {
+      border-color: var(--blue);
+      background: #f0f8ff;
+    }
+    .day-btn.selected {
+      border-color: var(--yellow);
+      background: var(--yellow);
+      font-weight: bold;
     }
     .contact-options {
       display: grid;
@@ -290,6 +317,24 @@
       color: #333;
       font-weight: bold;
     }
+    .timezone-converter {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border-left: 4px solid var(--blue);
+    }
+    .timezone-converter p {
+      margin: 5px 0;
+      color: #333;
+    }
+    .telegram-info {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border-left: 4px solid #ffc107;
+    }
     
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -309,6 +354,9 @@
       }
       .time-slots {
         grid-template-columns: repeat(2, 1fr);
+      }
+      .day-selector {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   </style>
@@ -395,26 +443,28 @@
     <div class="modal-content">
       <button class="close-modal" onclick="closeCalendarModal()">&times;</button>
       <h2 id="modal-title">Agendar Videollamada</h2>
-      <p id="modal-subtitle" style="color:#666;">Primero elige tu horario preferido:</p>
       
       <div class="calendar-info">
-        <h3 id="calendar-title">📅 Horarios Disponibles</h3>
-        <p id="calendar-text" style="margin:10px 0;">Horario: Lunes a Viernes, 9:00 - 18:00 (CET)</p>
-        <p id="timezone-text" style="font-size:0.9rem; color:#666;">Zona horaria: Europa Central (Madrid)</p>
+        <h3 id="step1-title">Paso 1: Selecciona el día</h3>
+        <div class="day-selector" id="day-selector"></div>
         
-        <div style="margin-top:20px;">
-          <p id="slots-title" style="font-weight:bold; margin-bottom:10px;">Selecciona tu horario:</p>
-          <div class="time-slots" id="time-slots-container">
-            <div class="time-slot" data-time="10:00">10:00 AM</div>
-            <div class="time-slot" data-time="12:00">12:00 PM</div>
-            <div class="time-slot" data-time="15:00">15:00 PM</div>
-            <div class="time-slot" data-time="16:30">16:30 PM</div>
-            <div class="time-slot" data-time="18:00">18:00 PM</div>
-          </div>
+        <h3 id="step2-title" style="margin-top:20px;">Paso 2: Selecciona la hora (CET - Madrid)</h3>
+        <p id="schedule-text" style="font-size:0.9rem; color:#666;">Lunes a Viernes, 9:00 - 18:00</p>
+        <div class="time-slots" id="time-slots-container">
+          <div class="time-slot" data-time="10:00">10:00</div>
+          <div class="time-slot" data-time="12:00">12:00</div>
+          <div class="time-slot" data-time="15:00">15:00</div>
+          <div class="time-slot" data-time="16:30">16:30</div>
+          <div class="time-slot" data-time="18:00">18:00</div>
+        </div>
+        
+        <div class="timezone-converter" id="timezone-info" style="display:none;">
+          <p style="font-weight:bold; margin-bottom:8px;" id="tz-title">🌍 Tu hora local:</p>
+          <p id="user-timezone" style="font-size:1.1rem; color: var(--blue); font-weight:bold;"></p>
         </div>
       </div>
       
-      <p id="contact-subtitle" style="color:#666; margin-top:20px;">Ahora elige tu método de contacto:</p>
+      <h3 id="step3-title" style="color: var(--dark); margin-top:20px;">Paso 3: Elige tu método de contacto</h3>
       
       <div class="contact-options" id="contact-options">
         <a href="#" onclick="contactVia('whatsapp'); return false;" class="contact-btn" id="wa-btn">
@@ -429,6 +479,11 @@
           <i class="fab fa-weixin" style="color:#09B83E;"></i>
           <strong>WeChat</strong>
         </a>
+      </div>
+      
+      <div class="telegram-info" id="telegram-info" style="display:none;">
+        <p style="margin:0; color:#333;"><strong>Telegram:</strong> <span id="tg-username">@BridgeMindGames</span></p>
+        <p style="margin:5px 0 0 0; font-size:0.85rem; color:#666;" id="tg-copy-text">Copia el username y búscame en Telegram</p>
       </div>
     </div>
   </div>
@@ -457,14 +512,17 @@
         fPhone: "Teléfono",
         fWait: "Enviando...",
         modalTitle: "Agendar Videollamada",
-        modalSubtitle: "Primero elige tu horario preferido:",
-        contactSubtitle: "Ahora elige tu método de contacto:",
-        calendarTitle: "📅 Horarios Disponibles",
-        calendarText: "Horario: Lunes a Viernes, 9:00 - 18:00 (CET)",
-        timezoneText: "Zona horaria: Europa Central (Madrid)",
-        slotsTitle: "Selecciona tu horario:",
-        messageTemplate: "Hola, me gustaría agendar una videollamada para el horario: ",
-        selectTimeFirst: "Por favor, selecciona primero un horario",
+        step1Title: "Paso 1: Selecciona el día",
+        step2Title: "Paso 2: Selecciona la hora (CET - Madrid)",
+        step3Title: "Paso 3: Elige tu método de contacto",
+        scheduleText: "Lunes a Viernes, 9:00 - 18:00",
+        tzTitle: "🌍 Tu hora local:",
+        tgCopyText: "Copia el username y búscame en Telegram",
+        days: ["Lun", "Mar", "Mié", "Jue", "Vie"],
+        daysFull: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"],
+        messageTemplate: "Hola, me gustaría agendar una videollamada para: ",
+        selectDayFirst: "Por favor, selecciona primero un día",
+        selectTimeFirst: "Por favor, selecciona primero una hora",
         pi: [
           { t: "🎮 Juegos con IA", d: "Dinámicas gamificadas que integran inteligencia artificial para mejorar el aprendizaje cognitivo y la retención de conocimientos de forma interactiva y medible." },
           { t: "🧠 Retorno Medible", d: "Sistema de métricas y analíticas que permite evaluar el progreso real de los estudiantes con resultados tangibles, reportes detallados y seguimiento continuo del rendimiento académico." },
@@ -489,13 +547,16 @@
         fOk: "Success!",
         fWait: "Sending...",
         modalTitle: "Schedule Video Call",
-        modalSubtitle: "First choose your preferred time:",
-        contactSubtitle: "Now choose your contact method:",
-        calendarTitle: "📅 Available Times",
-        calendarText: "Schedule: Monday to Friday, 9:00 AM - 6:00 PM (CET)",
-        timezoneText: "Timezone: Central European Time (Madrid)",
-        slotsTitle: "Select your time:",
+        step1Title: "Step 1: Select the day",
+        step2Title: "Step 2: Select time (CET - Madrid)",
+        step3Title: "Step 3: Choose contact method",
+        scheduleText: "Monday to Friday, 9:00 AM - 6:00 PM",
+        tzTitle: "🌍 Your local time:",
+        tgCopyText: "Copy the username and find me on Telegram",
+        days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+        daysFull: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         messageTemplate: "Hello, I would like to schedule a video call for: ",
+        selectDayFirst: "Please select a day first",
         selectTimeFirst: "Please select a time first",
         pi: [
           { t: "🎮 AI Gaming", d: "Gamified dynamics integrating artificial intelligence to enhance cognitive learning and knowledge retention through interactive and measurable experiences." },
@@ -521,14 +582,17 @@
         fOk: "Reçu!",
         fWait: "Envoi...",
         modalTitle: "Planifier un appel vidéo",
-        modalSubtitle: "Choisissez d'abord votre horaire préféré:",
-        contactSubtitle: "Maintenant choisissez votre méthode de contact:",
-        calendarTitle: "📅 Horaires Disponibles",
-        calendarText: "Horaires: Lundi à Vendredi, 9h00 - 18h00 (CET)",
-        timezoneText: "Fuseau horaire: Heure d'Europe centrale (Madrid)",
-        slotsTitle: "Sélectionnez votre horaire:",
+        step1Title: "Étape 1: Sélectionnez le jour",
+        step2Title: "Étape 2: Sélectionnez l'heure (CET - Madrid)",
+        step3Title: "Étape 3: Choisissez la méthode de contact",
+        scheduleText: "Lundi à Vendredi, 9h00 - 18h00",
+        tzTitle: "🌍 Votre heure locale:",
+        tgCopyText: "Copiez le nom d'utilisateur et trouvez-moi sur Telegram",
+        days: ["Lun", "Mar", "Mer", "Jeu", "Ven"],
+        daysFull: ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"],
         messageTemplate: "Bonjour, je voudrais planifier un appel vidéo pour: ",
-        selectTimeFirst: "Veuillez d'abord sélectionner un horaire",
+        selectDayFirst: "Veuillez d'abord sélectionner un jour",
+        selectTimeFirst: "Veuillez d'abord sélectionner une heure",
         pi: [
           { t: "🎮 Jeux IA", d: "Dynamiques gamifiées intégrant l'intelligence artificielle pour améliorer l'apprentissage cognitif et la rétention des connaissances de manière interactive." },
           { t: "🧠 ROI Mesurable", d: "Système de métriques permettant d'évaluer les progrès réels des étudiants avec des résultats tangibles et des rapports détaillés." },
@@ -553,14 +617,17 @@
         fOk: "Gesendet!",
         fWait: "Wird gesendet...",
         modalTitle: "Videoanruf vereinbaren",
-        modalSubtitle: "Wählen Sie zuerst Ihre bevorzugte Zeit:",
-        contactSubtitle: "Wählen Sie jetzt Ihre Kontaktmethode:",
-        calendarTitle: "📅 Verfügbare Zeiten",
-        calendarText: "Zeitplan: Montag bis Freitag, 9:00 - 18:00 Uhr (MEZ)",
-        timezoneText: "Zeitzone: Mitteleuropäische Zeit (Madrid)",
-        slotsTitle: "Wählen Sie Ihre Zeit:",
+        step1Title: "Schritt 1: Wählen Sie den Tag",
+        step2Title: "Schritt 2: Wählen Sie die Uhrzeit (MEZ - Madrid)",
+        step3Title: "Schritt 3: Wählen Sie die Kontaktmethode",
+        scheduleText: "Montag bis Freitag, 9:00 - 18:00 Uhr",
+        tzTitle: "🌍 Ihre Ortszeit:",
+        tgCopyText: "Kopieren Sie den Benutzernamen und finden Sie mich auf Telegram",
+        days: ["Mon", "Die", "Mit", "Don", "Fre"],
+        daysFull: ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"],
         messageTemplate: "Hallo, ich möchte einen Videoanruf vereinbaren für: ",
-        selectTimeFirst: "Bitte wählen Sie zuerst eine Zeit",
+        selectDayFirst: "Bitte wählen Sie zuerst einen Tag",
+        selectTimeFirst: "Bitte wählen Sie zuerst eine Uhrzeit",
         pi: [
           { t: "🎮 KI-Spiele", d: "Gamifizierte Dynamiken mit künstlicher Intelligenz zur Verbesserung des kognitiven Lernens und der Wissensbewahrung." },
           { t: "🧠 Messbarer ROI", d: "Metriken zur Bewertung des realen Fortschritts der Schüler mit greifbaren Ergebnissen und detaillierten Berichten." },
@@ -585,14 +652,17 @@
         fOk: "Ricevuto!",
         fWait: "Invio...",
         modalTitle: "Pianifica videochiamata",
-        modalSubtitle: "Prima scegli il tuo orario preferito:",
-        contactSubtitle: "Ora scegli il tuo metodo di contatto:",
-        calendarTitle: "📅 Orari Disponibili",
-        calendarText: "Orario: Lunedì a Venerdì, 9:00 - 18:00 (CET)",
-        timezoneText: "Fuso orario: Ora dell'Europa centrale (Madrid)",
-        slotsTitle: "Seleziona il tuo orario:",
+        step1Title: "Passo 1: Seleziona il giorno",
+        step2Title: "Passo 2: Seleziona l'ora (CET - Madrid)",
+        step3Title: "Passo 3: Scegli il metodo di contatto",
+        scheduleText: "Lunedì a Venerdì, 9:00 - 18:00",
+        tzTitle: "🌍 Il tuo orario locale:",
+        tgCopyText: "Copia lo username e cercami su Telegram",
+        days: ["Lun", "Mar", "Mer", "Gio", "Ven"],
+        daysFull: ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"],
         messageTemplate: "Ciao, vorrei pianificare una videochiamata per: ",
-        selectTimeFirst: "Si prega di selezionare prima un orario",
+        selectDayFirst: "Si prega di selezionare prima un giorno",
+        selectTimeFirst: "Si prega di selezionare prima un'ora",
         pi: [
           { t: "🎮 Giochi IA", d: "Dinamiche gamificate che integrano l'intelligenza artificiale per migliorare l'apprendimento cognitivo e la ritenzione delle conoscenze." },
           { t: "🧠 ROI Misurabile", d: "Sistema di metriche per valutare il progresso reale degli studenti con risultati tangibili e report dettagliati." },
@@ -617,13 +687,16 @@
         fOk: "受信！",
         fWait: "送信中...",
         modalTitle: "ビデオ通話を予約",
-        modalSubtitle: "まず希望の時間を選択してください：",
-        contactSubtitle: "次に連絡方法を選択してください：",
-        calendarTitle: "📅 利用可能な時間",
-        calendarText: "スケジュール：月曜日から金曜日、9:00 - 18:00（CET）",
-        timezoneText: "タイムゾーン：中央ヨーロッパ時間（マドリード）",
-        slotsTitle: "時間を選択：",
+        step1Title: "ステップ1：日を選択",
+        step2Title: "ステップ2：時間を選択（CET - マドリード）",
+        step3Title: "ステップ3：連絡方法を選択",
+        scheduleText: "月曜日から金曜日、9:00 - 18:00",
+        tzTitle: "🌍 あなたの現地時間：",
+        tgCopyText: "ユーザー名をコピーしてTelegramで検索してください",
+        days: ["月", "火", "水", "木", "金"],
+        daysFull: ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"],
         messageTemplate: "こんにちは、ビデオ通話を予約したいです： ",
+        selectDayFirst: "まず日を選択してください",
         selectTimeFirst: "まず時間を選択してください",
         pi: [
           { t: "🎮 AIゲーム", d: "認知学習を向上させるために人工知能を統合したゲーミフィケーションダイナミクス。" },
@@ -649,13 +722,16 @@
         fOk: "已收到！",
         fWait: "发送中...",
         modalTitle: "安排视频通话",
-        modalSubtitle: "首先选择您的首选时间：",
-        contactSubtitle: "现在选择您的联系方式：",
-        calendarTitle: "📅 可用时间",
-        calendarText: "时间表：周一至周五，9:00 - 18:00（CET）",
-        timezoneText: "时区：中欧时间（马德里）",
-        slotsTitle: "选择您的时间：",
+        step1Title: "步骤1：选择日期",
+        step2Title: "步骤2：选择时间（CET - 马德里）",
+        step3Title: "步骤3：选择联系方式",
+        scheduleText: "周一至周五，9:00 - 18:00",
+        tzTitle: "🌍 您的当地时间：",
+        tgCopyText: "复制用户名并在Telegram上搜索我",
+        days: ["周一", "周二", "周三", "周四", "周五"],
+        daysFull: ["星期一", "星期二", "星期三", "星期四", "星期五"],
         messageTemplate: "你好，我想安排视频通话时间： ",
+        selectDayFirst: "请先选择日期",
         selectTimeFirst: "请先选择时间",
         pi: [
           { t: "🎮 AI游戏", d: "集成人工智能的游戏化动态，以增强认知学习和知识保留。" },
@@ -681,13 +757,16 @@
         fOk: "تم!",
         fWait: "جاري الإرسال...",
         modalTitle: "جدولة مكالمة فيديو",
-        modalSubtitle: "اختر أولاً الوقت المفضل لديك:",
-        contactSubtitle: "الآن اختر طريقة الاتصال الخاصة بك:",
-        calendarTitle: "📅 الأوقات المتاحة",
-        calendarText: "الجدول: من الاثنين إلى الجمعة، 9:00 - 18:00 (CET)",
-        timezoneText: "المنطقة الزمنية: التوقيت الأوروبي المركزي (مدريد)",
-        slotsTitle: "اختر وقتك:",
+        step1Title: "الخطوة 1: حدد اليوم",
+        step2Title: "الخطوة 2: حدد الوقت (CET - مدريد)",
+        step3Title: "الخطوة 3: اختر طريقة الاتصال",
+        scheduleText: "من الاثنين إلى الجمعة، 9:00 - 18:00",
+        tzTitle: "🌍 وقتك المحلي:",
+        tgCopyText: "انسخ اسم المستخدم وابحث عني على Telegram",
+        days: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"],
+        daysFull: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"],
         messageTemplate: "مرحباً، أود جدولة مكالمة فيديو في: ",
+        selectDayFirst: "يرجى تحديد اليوم أولاً",
         selectTimeFirst: "يرجى تحديد الوقت أولاً",
         pi: [
           { t: "🎮 ألعاب الذكاء الاصطناعي", d: "ديناميكيات ممتعة تدمج الذكاء الاصطناعي لتحسين التعلم المعرفي." },
@@ -698,7 +777,9 @@
     };
 
     let currentLang = 'es';
+    let selectedDay = null;
     let selectedTime = null;
+    let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     
     function init() {
       const box = document.getElementById('flag-box');
@@ -711,15 +792,57 @@
         box.appendChild(btn);
       });
       switchLang('es');
-      
-      // Setup time slot selection
+      setupDaySelector();
+      setupTimeSlots();
+    }
+    
+    function setupDaySelector() {
+      const daySelector = document.getElementById('day-selector');
+      const data = dictionary[currentLang];
+      data.days.forEach((day, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'day-btn';
+        btn.textContent = day;
+        btn.setAttribute('data-day', index);
+        btn.setAttribute('data-day-full', data.daysFull[index]);
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedDay = this.getAttribute('data-day-full');
+        });
+        daySelector.appendChild(btn);
+      });
+    }
+    
+    function setupTimeSlots() {
       document.querySelectorAll('.time-slot').forEach(slot => {
         slot.addEventListener('click', function() {
           document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
           this.classList.add('selected');
           selectedTime = this.getAttribute('data-time');
+          updateTimezoneInfo();
         });
       });
+    }
+    
+    function updateTimezoneInfo() {
+      if (!selectedTime) return;
+      
+      const cetHour = parseInt(selectedTime.split(':')[0]);
+      const cetMinute = parseInt(selectedTime.split(':')[1]);
+      
+      const cetDate = new Date();
+      cetDate.setHours(cetHour, cetMinute, 0, 0);
+      
+      const userTime = cetDate.toLocaleTimeString(currentLang === 'en' ? 'en-US' : currentLang === 'jp' ? 'ja-JP' : 'es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: userTimezone,
+        timeZoneName: 'short'
+      });
+      
+      document.getElementById('timezone-info').style.display = 'block';
+      document.getElementById('user-timezone').textContent = userTime;
     }
 
     function switchLang(lang) {
@@ -741,14 +864,20 @@
       document.getElementById('l-phone').innerText = data.fPhone;
       
       document.getElementById('modal-title').innerText = data.modalTitle;
-      document.getElementById('modal-subtitle').innerText = data.modalSubtitle;
-      document.getElementById('contact-subtitle').innerText = data.contactSubtitle;
-      document.getElementById('calendar-title').innerText = data.calendarTitle;
-      document.getElementById('calendar-text').innerText = data.calendarText;
-      document.getElementById('timezone-text').innerText = data.timezoneText;
-      document.getElementById('slots-title').innerText = data.slotsTitle;
+      document.getElementById('step1-title').innerText = data.step1Title;
+      document.getElementById('step2-title').innerText = data.step2Title;
+      document.getElementById('step3-title').innerText = data.step3Title;
+      document.getElementById('schedule-text').innerText = data.scheduleText;
+      document.getElementById('tz-title').innerText = data.tzTitle;
+      document.getElementById('tg-copy-text').innerText = data.tgCopyText;
       
-      // Mostrar/ocultar WeChat para chino
+      // Actualizar días
+      const dayButtons = document.querySelectorAll('.day-btn');
+      dayButtons.forEach((btn, index) => {
+        btn.textContent = data.days[index];
+        btn.setAttribute('data-day-full', data.daysFull[index]);
+      });
+      
       const wechatBtn = document.getElementById('wechat-btn');
       if (lang === 'ch') {
         wechatBtn.style.display = 'flex';
@@ -805,8 +934,12 @@
     function openCalendarModal() {
       document.getElementById('calendarModal').style.display = 'block';
       document.body.style.overflow = 'hidden';
+      selectedDay = null;
       selectedTime = null;
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('selected'));
       document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      document.getElementById('timezone-info').style.display = 'none';
+      document.getElementById('telegram-info').style.display = 'none';
     }
     
     function closeCalendarModal() {
@@ -817,28 +950,35 @@
     function contactVia(method) {
       const data = dictionary[currentLang] || dictionary.es;
       
+      if (!selectedDay) {
+        alert(data.selectDayFirst);
+        return;
+      }
+      
       if (!selectedTime) {
         alert(data.selectTimeFirst);
         return;
       }
       
-      const message = encodeURIComponent(data.messageTemplate + selectedTime + ' (CET)');
-      let url;
+      const fullDateTime = `${selectedDay} ${selectedTime} CET (Madrid)`;
+      const message = encodeURIComponent(data.messageTemplate + fullDateTime);
       
-      switch(method) {
-        case 'whatsapp':
-          url = `https://wa.me/34634268663?text=${message}`;
-          break;
-        case 'telegram':
-          url = `https://t.me/34634268663?text=${message}`;
-          break;
-        case 'wechat':
-          alert('WeChat ID: bridgemindgames\n' + data.messageTemplate + selectedTime);
-          return;
+      if (method === 'telegram') {
+        document.getElementById('telegram-info').style.display = 'block';
+        document.getElementById('telegram-info').scrollIntoView({ behavior: 'smooth' });
+        return;
       }
       
-      window.open(url, '_blank');
-      closeCalendarModal();
+      if (method === 'wechat') {
+        alert('WeChat ID: bridgemindgames\n\n' + data.messageTemplate + fullDateTime);
+        return;
+      }
+      
+      if (method === 'whatsapp') {
+        const url = `https://wa.me/34634268663?text=${message}`;
+        window.open(url, '_blank');
+        closeCalendarModal();
+      }
     }
     
     window.onclick = function(event) {
