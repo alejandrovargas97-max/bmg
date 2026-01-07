@@ -185,11 +185,6 @@
       .gallery { grid-template-columns: 1fr 1fr; }
     }
   </style>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body id="main-body">
   <header>
@@ -220,7 +215,7 @@
     </div>
     <section id="form-wrap">
       <h2 id="f-header-txt">Contacto</h2>
-      <form id="contact-form" 
+      <form id="contact-form">
         <input type="hidden" name="idioma_origen" id="hidden-lang">
         <div class="grid">
           <div class="campo">
@@ -460,6 +455,7 @@
     };
 
     let currentLang = 'es';
+    
     function init() {
       const box = document.getElementById('flag-box');
       const flags = { es:'es', en:'us', fr:'fr', de:'de', it:'it', jp:'jp', ch:'cn', ar:'sa' };
@@ -476,6 +472,8 @@
     function switchLang(lang) {
       currentLang = lang;
       const data = dictionary[lang] || dictionary.en;
+      
+      // Actualizar textos
       document.getElementById('txt-h1').innerText = data.t;
       document.getElementById('txt-p').innerText = data.p;
       document.getElementById('btn-wa-txt').innerText = data.bW;
@@ -489,19 +487,47 @@
       document.getElementById('btn-submit-txt').innerText = data.fBtn;
       document.getElementById('hidden-lang').value = lang;
       document.getElementById('l-phone').innerText = data.fPhone;
-      document.getElementById('img-target').src = data.i + '?v=3';
-      document.getElementById('video-src').src = data.v + '?v=3';
-      document.getElementById('video-player').load();
-      const prefixMap = { es: '+34', en: '+1', fr: '+33', de: '+49', it: '+39', jp: '+81', ch: '+86', ar: '+971' };
-      document.getElementById('p-prefix').value = prefixMap[lang] || '+34';
       
+      // Cambiar imagen (foto 4)
+      const imgElement = document.getElementById('img-target');
+      if (imgElement) {
+        imgElement.src = data.i + '?v=' + Date.now();
+        console.log('Imagen cambiada a:', data.i);
+      }
+      
+      // Cambiar video
+      const videoSrc = document.getElementById('video-src');
+      const videoPlayer = document.getElementById('video-player');
+      if (videoSrc && videoPlayer) {
+        videoSrc.src = data.v + '?v=' + Date.now();
+        videoPlayer.load();
+        console.log('Video cambiado a:', data.v);
+      }
+      
+      // Actualizar prefijo telefónico
+      const prefixMap = { es: '+34', en: '+1', fr: '+33', de: '+49', it: '+39', jp: '+81', ch: '+86', ar: '+971' };
+      const prefixSelect = document.getElementById('p-prefix');
+      if (prefixSelect) {
+        prefixSelect.value = prefixMap[lang] || '+34';
+      }
+      
+      // Generar tarjetas (pillars)
       const pBox = document.getElementById('pillar-box');
-      pBox.innerHTML = '';
-      data.pi.forEach(item => {
-        pBox.innerHTML += `<div class="card"><h3>${item.t}</h3><p>${item.d}</p></div>`;
-      });
+      if (pBox && data.pi) {
+        pBox.innerHTML = '';
+        data.pi.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<h3>${item.t}</h3><p>${item.d}</p>`;
+          pBox.appendChild(card);
+        });
+        console.log('Tarjetas generadas:', data.pi.length);
+      }
 
+      // Cambiar dirección del texto (para árabe)
       document.getElementById('main-body').style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
+      
+      // Actualizar botones activos
       document.querySelectorAll('.nav-flags .f-btn').forEach(b => {
         const txt = b.innerText.trim().toLowerCase();
         b.classList.toggle('active', txt.includes(lang));
@@ -517,68 +543,61 @@
       }
     }
 
-    document.getElementById('contact-form').onsubmit = function (e) {
-      e.preventDefault();
-      const data = dictionary[currentLang] || dictionary.es;
-      const status = document.getElementById('form-status');
-      const prefijo = document.getElementById('p-prefix').value;
-      const telefono = document.getElementById('p-phone').value;
-      const telefonoCompleto = prefijo + ' ' + telefono;
-      
-      let hiddenPhone = document.getElementById('telefono-completo');
-      if (!hiddenPhone) {
-        hiddenPhone = document.createElement('input');
-        hiddenPhone.type = 'hidden';
-        hiddenPhone.name = 'telefono_completo';
-        hiddenPhone.id = 'telefono-completo';
-        this.appendChild(hiddenPhone);
-      }
-      hiddenPhone.value = telefonoCompleto;
-
-      status.style.display = "block";
-      status.innerText = data.fWait;
-      status.style.color = "orange";
-
-      fetch(
-        "https://script.google.com/macros/s/AKfycbwHd-D2401y7crDq19CRVcR5FspddnkDpN_h7JpGS-n6BDxNU1FZO_ypHE9dsrYl1b5cg/exec",
-        {
-          method: "POST",
-          body: new FormData(this),
-          mode: "no-cors"
+    // Manejar envío del formulario
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.onsubmit = function (e) {
+        e.preventDefault();
+        const data = dictionary[currentLang] || dictionary.es;
+        const status = document.getElementById('form-status');
+        const prefijo = document.getElementById('p-prefix').value;
+        const telefono = document.getElementById('p-phone').value;
+        const telefonoCompleto = prefijo + ' ' + telefono;
+        
+        let hiddenPhone = document.getElementById('telefono-completo');
+        if (!hiddenPhone) {
+          hiddenPhone = document.createElement('input');
+          hiddenPhone.type = 'hidden';
+          hiddenPhone.name = 'telefono_completo';
+          hiddenPhone.id = 'telefono-completo';
+          this.appendChild(hiddenPhone);
         }
-      )
-        .then(() => {
-          status.innerText = data.fOk;
-          status.style.color = "green";
-          this.reset();
-          setTimeout(() => {
-            status.style.display = "none";
-            toggleForm();
-          }, 3000);
-        })
-        .catch(() => {
-          status.innerText = "Error al enviar. Intenta de nuevo.";
-          status.style.color = "red";
-        });
-    };
+        hiddenPhone.value = telefonoCompleto;
 
-    init();
+        status.style.display = "block";
+        status.innerText = data.fWait;
+        status.style.color = "orange";
+
+        fetch(
+          "https://script.google.com/macros/s/AKfycbwHd-D2401y7crDq19CRVcR5FspddnkDpN_h7JpGS-n6BDxNU1FZO_ypHE9dsrYl1b5cg/exec",
+          {
+            method: "POST",
+            body: new FormData(this),
+            mode: "no-cors"
+          }
+        )
+          .then(() => {
+            status.innerText = data.fOk;
+            status.style.color = "green";
+            this.reset();
+            setTimeout(() => {
+              status.style.display = "none";
+              toggleForm();
+            }, 3000);
+          })
+          .catch(() => {
+            status.innerText = "Error al enviar. Intenta de nuevo.";
+            status.style.color = "red";
+          });
+      };
+    }
+
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   </script>
-  <div id="bmg-chatbot-root"></div>
-  <script type="text/babel" src="./chatbot-bmg.js"></script>
- 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
