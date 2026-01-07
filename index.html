@@ -180,9 +180,136 @@
       padding: 30px;
       margin-top: 50px;
     }
+    
+    /* Modal de Calendario */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      animation: fadeIn 0.3s;
+    }
+    .modal-content {
+      background: #fff;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+      position: relative;
+      animation: slideIn 0.3s;
+    }
+    .close-modal {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #999;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    .close-modal:hover {
+      color: #333;
+    }
+    .modal-content h2 {
+      color: var(--dark);
+      margin-top: 0;
+    }
+    .contact-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 25px 0;
+    }
+    .contact-btn {
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      background: #f8f9fa;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .contact-btn:hover {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+    }
+    .contact-btn i {
+      font-size: 2rem;
+    }
+    .calendar-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: #333;
+    }
+    .calendar-info h3 {
+      margin-top: 0;
+      color: var(--dark);
+    }
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .time-slot {
+      padding: 10px;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      color: #333;
+    }
+    .time-slot:hover {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+    .time-slot.selected {
+      border-color: var(--yellow);
+      background: var(--yellow);
+      color: #333;
+      font-weight: bold;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
     @media (max-width: 768px) {
       .grid { grid-template-columns: 1fr; }
       .gallery { grid-template-columns: 1fr 1fr; }
+      .modal-content {
+        margin: 10% 5%;
+        padding: 20px;
+      }
+      .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   </style>
 </head>
@@ -210,7 +337,7 @@
     </div>
     <div class="pillars" id="pillar-box"></div>
     <div style="margin:40px 0; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
-      <button onclick="window.open('https://wa.me/34634268663')" class="f-btn" style="padding:15px 30px; background:var(--blue); color:white; border:none; font-size:1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" id="btn-wa-txt">Videollamada</button>
+      <button onclick="openCalendarModal()" class="f-btn" style="padding:15px 30px; background:var(--blue); color:white; border:none; font-size:1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" id="btn-wa-txt">Videollamada</button>
       <button onclick="toggleForm()" class="f-btn" style="padding:15px 30px; background:#28a745; color:white; border:none; font-size:1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" id="btn-info-txt">Más Información</button>
     </div>
     <section id="form-wrap">
@@ -262,6 +389,50 @@
       </form>
     </section>
   </main>
+  
+  <!-- Modal de Calendario -->
+  <div id="calendarModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeCalendarModal()">&times;</button>
+      <h2 id="modal-title">Agendar Videollamada</h2>
+      <p id="modal-subtitle" style="color:#666;">Primero elige tu horario preferido:</p>
+      
+      <div class="calendar-info">
+        <h3 id="calendar-title">📅 Horarios Disponibles</h3>
+        <p id="calendar-text" style="margin:10px 0;">Horario: Lunes a Viernes, 9:00 - 18:00 (CET)</p>
+        <p id="timezone-text" style="font-size:0.9rem; color:#666;">Zona horaria: Europa Central (Madrid)</p>
+        
+        <div style="margin-top:20px;">
+          <p id="slots-title" style="font-weight:bold; margin-bottom:10px;">Selecciona tu horario:</p>
+          <div class="time-slots" id="time-slots-container">
+            <div class="time-slot" data-time="10:00">10:00 AM</div>
+            <div class="time-slot" data-time="12:00">12:00 PM</div>
+            <div class="time-slot" data-time="15:00">15:00 PM</div>
+            <div class="time-slot" data-time="16:30">16:30 PM</div>
+            <div class="time-slot" data-time="18:00">18:00 PM</div>
+          </div>
+        </div>
+      </div>
+      
+      <p id="contact-subtitle" style="color:#666; margin-top:20px;">Ahora elige tu método de contacto:</p>
+      
+      <div class="contact-options" id="contact-options">
+        <a href="#" onclick="contactVia('whatsapp'); return false;" class="contact-btn" id="wa-btn">
+          <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+          <strong>WhatsApp</strong>
+        </a>
+        <a href="#" onclick="contactVia('telegram'); return false;" class="contact-btn" id="tg-btn">
+          <i class="fab fa-telegram" style="color:#0088cc;"></i>
+          <strong>Telegram</strong>
+        </a>
+        <a href="#" onclick="contactVia('wechat'); return false;" class="contact-btn" id="wechat-btn" style="display:none;">
+          <i class="fab fa-weixin" style="color:#09B83E;"></i>
+          <strong>WeChat</strong>
+        </a>
+      </div>
+    </div>
+  </div>
+  
   <footer>
     <div><strong>BridgeMind Games Education</strong> | España (CET)</div>
     <div>bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</div>
@@ -285,6 +456,15 @@
         fOk: "¡Recibido!",
         fPhone: "Teléfono",
         fWait: "Enviando...",
+        modalTitle: "Agendar Videollamada",
+        modalSubtitle: "Primero elige tu horario preferido:",
+        contactSubtitle: "Ahora elige tu método de contacto:",
+        calendarTitle: "📅 Horarios Disponibles",
+        calendarText: "Horario: Lunes a Viernes, 9:00 - 18:00 (CET)",
+        timezoneText: "Zona horaria: Europa Central (Madrid)",
+        slotsTitle: "Selecciona tu horario:",
+        messageTemplate: "Hola, me gustaría agendar una videollamada para el horario: ",
+        selectTimeFirst: "Por favor, selecciona primero un horario",
         pi: [
           { t: "🎮 Juegos con IA", d: "Dinámicas gamificadas que integran inteligencia artificial para mejorar el aprendizaje cognitivo y la retención de conocimientos de forma interactiva y medible." },
           { t: "🧠 Retorno Medible", d: "Sistema de métricas y analíticas que permite evaluar el progreso real de los estudiantes con resultados tangibles, reportes detallados y seguimiento continuo del rendimiento académico." },
@@ -308,6 +488,15 @@
         fBtn: "Submit",
         fOk: "Success!",
         fWait: "Sending...",
+        modalTitle: "Schedule Video Call",
+        modalSubtitle: "First choose your preferred time:",
+        contactSubtitle: "Now choose your contact method:",
+        calendarTitle: "📅 Available Times",
+        calendarText: "Schedule: Monday to Friday, 9:00 AM - 6:00 PM (CET)",
+        timezoneText: "Timezone: Central European Time (Madrid)",
+        slotsTitle: "Select your time:",
+        messageTemplate: "Hello, I would like to schedule a video call for: ",
+        selectTimeFirst: "Please select a time first",
         pi: [
           { t: "🎮 AI Gaming", d: "Gamified dynamics integrating artificial intelligence to enhance cognitive learning and knowledge retention through interactive and measurable experiences." },
           { t: "🧠 Measurable ROI", d: "Metrics and analytics system allowing evaluation of real student progress with tangible results, detailed reports, and continuous academic performance tracking." },
@@ -331,6 +520,15 @@
         fBtn: "Envoyer",
         fOk: "Reçu!",
         fWait: "Envoi...",
+        modalTitle: "Planifier un appel vidéo",
+        modalSubtitle: "Choisissez d'abord votre horaire préféré:",
+        contactSubtitle: "Maintenant choisissez votre méthode de contact:",
+        calendarTitle: "📅 Horaires Disponibles",
+        calendarText: "Horaires: Lundi à Vendredi, 9h00 - 18h00 (CET)",
+        timezoneText: "Fuseau horaire: Heure d'Europe centrale (Madrid)",
+        slotsTitle: "Sélectionnez votre horaire:",
+        messageTemplate: "Bonjour, je voudrais planifier un appel vidéo pour: ",
+        selectTimeFirst: "Veuillez d'abord sélectionner un horaire",
         pi: [
           { t: "🎮 Jeux IA", d: "Dynamiques gamifiées intégrant l'intelligence artificielle pour améliorer l'apprentissage cognitif et la rétention des connaissances de manière interactive." },
           { t: "🧠 ROI Mesurable", d: "Système de métriques permettant d'évaluer les progrès réels des étudiants avec des résultats tangibles et des rapports détaillés." },
@@ -354,6 +552,15 @@
         fBtn: "Senden",
         fOk: "Gesendet!",
         fWait: "Wird gesendet...",
+        modalTitle: "Videoanruf vereinbaren",
+        modalSubtitle: "Wählen Sie zuerst Ihre bevorzugte Zeit:",
+        contactSubtitle: "Wählen Sie jetzt Ihre Kontaktmethode:",
+        calendarTitle: "📅 Verfügbare Zeiten",
+        calendarText: "Zeitplan: Montag bis Freitag, 9:00 - 18:00 Uhr (MEZ)",
+        timezoneText: "Zeitzone: Mitteleuropäische Zeit (Madrid)",
+        slotsTitle: "Wählen Sie Ihre Zeit:",
+        messageTemplate: "Hallo, ich möchte einen Videoanruf vereinbaren für: ",
+        selectTimeFirst: "Bitte wählen Sie zuerst eine Zeit",
         pi: [
           { t: "🎮 KI-Spiele", d: "Gamifizierte Dynamiken mit künstlicher Intelligenz zur Verbesserung des kognitiven Lernens und der Wissensbewahrung." },
           { t: "🧠 Messbarer ROI", d: "Metriken zur Bewertung des realen Fortschritts der Schüler mit greifbaren Ergebnissen und detaillierten Berichten." },
@@ -377,6 +584,15 @@
         fBtn: "Invia",
         fOk: "Ricevuto!",
         fWait: "Invio...",
+        modalTitle: "Pianifica videochiamata",
+        modalSubtitle: "Prima scegli il tuo orario preferito:",
+        contactSubtitle: "Ora scegli il tuo metodo di contatto:",
+        calendarTitle: "📅 Orari Disponibili",
+        calendarText: "Orario: Lunedì a Venerdì, 9:00 - 18:00 (CET)",
+        timezoneText: "Fuso orario: Ora dell'Europa centrale (Madrid)",
+        slotsTitle: "Seleziona il tuo orario:",
+        messageTemplate: "Ciao, vorrei pianificare una videochiamata per: ",
+        selectTimeFirst: "Si prega di selezionare prima un orario",
         pi: [
           { t: "🎮 Giochi IA", d: "Dinamiche gamificate che integrano l'intelligenza artificiale per migliorare l'apprendimento cognitivo e la ritenzione delle conoscenze." },
           { t: "🧠 ROI Misurabile", d: "Sistema di metriche per valutare il progresso reale degli studenti con risultati tangibili e report dettagliati." },
@@ -400,6 +616,15 @@
         fBtn: "送信",
         fOk: "受信！",
         fWait: "送信中...",
+        modalTitle: "ビデオ通話を予約",
+        modalSubtitle: "まず希望の時間を選択してください：",
+        contactSubtitle: "次に連絡方法を選択してください：",
+        calendarTitle: "📅 利用可能な時間",
+        calendarText: "スケジュール：月曜日から金曜日、9:00 - 18:00（CET）",
+        timezoneText: "タイムゾーン：中央ヨーロッパ時間（マドリード）",
+        slotsTitle: "時間を選択：",
+        messageTemplate: "こんにちは、ビデオ通話を予約したいです： ",
+        selectTimeFirst: "まず時間を選択してください",
         pi: [
           { t: "🎮 AIゲーム", d: "認知学習を向上させるために人工知能を統合したゲーミフィケーションダイナミクス。" },
           { t: "🧠 測定可能なROI", d: "実際の学生の進歩を評価するためのメトリクスシステム。" },
@@ -423,6 +648,15 @@
         fBtn: "发送",
         fOk: "已收到！",
         fWait: "发送中...",
+        modalTitle: "安排视频通话",
+        modalSubtitle: "首先选择您的首选时间：",
+        contactSubtitle: "现在选择您的联系方式：",
+        calendarTitle: "📅 可用时间",
+        calendarText: "时间表：周一至周五，9:00 - 18:00（CET）",
+        timezoneText: "时区：中欧时间（马德里）",
+        slotsTitle: "选择您的时间：",
+        messageTemplate: "你好，我想安排视频通话时间： ",
+        selectTimeFirst: "请先选择时间",
         pi: [
           { t: "🎮 AI游戏", d: "集成人工智能的游戏化动态，以增强认知学习和知识保留。" },
           { t: "🧠 可衡量的投资回报", d: "用于评估学生实际进步的指标系统。" },
@@ -446,6 +680,15 @@
         fBtn: "إرسال",
         fOk: "تم!",
         fWait: "جاري الإرسال...",
+        modalTitle: "جدولة مكالمة فيديو",
+        modalSubtitle: "اختر أولاً الوقت المفضل لديك:",
+        contactSubtitle: "الآن اختر طريقة الاتصال الخاصة بك:",
+        calendarTitle: "📅 الأوقات المتاحة",
+        calendarText: "الجدول: من الاثنين إلى الجمعة، 9:00 - 18:00 (CET)",
+        timezoneText: "المنطقة الزمنية: التوقيت الأوروبي المركزي (مدريد)",
+        slotsTitle: "اختر وقتك:",
+        messageTemplate: "مرحباً، أود جدولة مكالمة فيديو في: ",
+        selectTimeFirst: "يرجى تحديد الوقت أولاً",
         pi: [
           { t: "🎮 ألعاب الذكاء الاصطناعي", d: "ديناميكيات ممتعة تدمج الذكاء الاصطناعي لتحسين التعلم المعرفي." },
           { t: "🧠 عائد استثمار قابل للقياس", d: "نظام مقاييس لتقييم التقدم الفعلي للطلاب." },
@@ -455,6 +698,7 @@
     };
 
     let currentLang = 'es';
+    let selectedTime = null;
     
     function init() {
       const box = document.getElementById('flag-box');
@@ -467,13 +711,21 @@
         box.appendChild(btn);
       });
       switchLang('es');
+      
+      // Setup time slot selection
+      document.querySelectorAll('.time-slot').forEach(slot => {
+        slot.addEventListener('click', function() {
+          document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedTime = this.getAttribute('data-time');
+        });
+      });
     }
 
     function switchLang(lang) {
       currentLang = lang;
       const data = dictionary[lang] || dictionary.en;
       
-      // Actualizar textos
       document.getElementById('txt-h1').innerText = data.t;
       document.getElementById('txt-p').innerText = data.p;
       document.getElementById('btn-wa-txt').innerText = data.bW;
@@ -488,30 +740,40 @@
       document.getElementById('hidden-lang').value = lang;
       document.getElementById('l-phone').innerText = data.fPhone;
       
-      // Cambiar imagen (foto 4)
+      document.getElementById('modal-title').innerText = data.modalTitle;
+      document.getElementById('modal-subtitle').innerText = data.modalSubtitle;
+      document.getElementById('contact-subtitle').innerText = data.contactSubtitle;
+      document.getElementById('calendar-title').innerText = data.calendarTitle;
+      document.getElementById('calendar-text').innerText = data.calendarText;
+      document.getElementById('timezone-text').innerText = data.timezoneText;
+      document.getElementById('slots-title').innerText = data.slotsTitle;
+      
+      // Mostrar/ocultar WeChat para chino
+      const wechatBtn = document.getElementById('wechat-btn');
+      if (lang === 'ch') {
+        wechatBtn.style.display = 'flex';
+      } else {
+        wechatBtn.style.display = 'none';
+      }
+      
       const imgElement = document.getElementById('img-target');
       if (imgElement) {
         imgElement.src = data.i + '?v=' + Date.now();
-        console.log('Imagen cambiada a:', data.i);
       }
       
-      // Cambiar video
       const videoSrc = document.getElementById('video-src');
       const videoPlayer = document.getElementById('video-player');
       if (videoSrc && videoPlayer) {
         videoSrc.src = data.v + '?v=' + Date.now();
         videoPlayer.load();
-        console.log('Video cambiado a:', data.v);
       }
       
-      // Actualizar prefijo telefónico
       const prefixMap = { es: '+34', en: '+1', fr: '+33', de: '+49', it: '+39', jp: '+81', ch: '+86', ar: '+971' };
       const prefixSelect = document.getElementById('p-prefix');
       if (prefixSelect) {
         prefixSelect.value = prefixMap[lang] || '+34';
       }
       
-      // Generar tarjetas (pillars)
       const pBox = document.getElementById('pillar-box');
       if (pBox && data.pi) {
         pBox.innerHTML = '';
@@ -521,13 +783,10 @@
           card.innerHTML = `<h3>${item.t}</h3><p>${item.d}</p>`;
           pBox.appendChild(card);
         });
-        console.log('Tarjetas generadas:', data.pi.length);
       }
 
-      // Cambiar dirección del texto (para árabe)
       document.getElementById('main-body').style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
       
-      // Actualizar botones activos
       document.querySelectorAll('.nav-flags .f-btn').forEach(b => {
         const txt = b.innerText.trim().toLowerCase();
         b.classList.toggle('active', txt.includes(lang));
@@ -542,8 +801,53 @@
         f.scrollIntoView({ behavior: 'smooth' });
       }
     }
+    
+    function openCalendarModal() {
+      document.getElementById('calendarModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      selectedTime = null;
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+    }
+    
+    function closeCalendarModal() {
+      document.getElementById('calendarModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+    
+    function contactVia(method) {
+      const data = dictionary[currentLang] || dictionary.es;
+      
+      if (!selectedTime) {
+        alert(data.selectTimeFirst);
+        return;
+      }
+      
+      const message = encodeURIComponent(data.messageTemplate + selectedTime + ' (CET)');
+      let url;
+      
+      switch(method) {
+        case 'whatsapp':
+          url = `https://wa.me/34634268663?text=${message}`;
+          break;
+        case 'telegram':
+          url = `https://t.me/34634268663?text=${message}`;
+          break;
+        case 'wechat':
+          alert('WeChat ID: bridgemindgames\n' + data.messageTemplate + selectedTime);
+          return;
+      }
+      
+      window.open(url, '_blank');
+      closeCalendarModal();
+    }
+    
+    window.onclick = function(event) {
+      const modal = document.getElementById('calendarModal');
+      if (event.target == modal) {
+        closeCalendarModal();
+      }
+    }
 
-    // Manejar envío del formulario
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
       contactForm.onsubmit = function (e) {
@@ -592,7 +896,6 @@
       };
     }
 
-    // Inicializar cuando el DOM esté listo
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
     } else {
