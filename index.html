@@ -1123,7 +1123,7 @@
         const status = document.getElementById('form-status');
         const prefijo = document.getElementById('p-prefix').value;
         const telefono = document.getElementById('p-phone').value;
-        const telefonoCompleto = prefijo + ' ' + telefono;
+        const telefonoCompleto = "'" + prefijo + ' ' + telefono;
         
         // Generar código único
         const country = document.getElementById('country-select').value || 'XX';
@@ -1332,3 +1332,4 @@
 <script src="chatbot.js"></script>
 </body>
 </html>
+
