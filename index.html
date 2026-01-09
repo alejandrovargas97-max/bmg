@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -525,16 +524,17 @@
             <label id="l-phone">Teléfono</label>
             <div style="display:flex; gap:5px;">
               <select name="prefijo" id="p-prefix" style="width:auto; padding:12px;" required>
-  <option value="34">🇪🇸 +34</option>
-  <option value="1">🇺🇸 +1</option>
-  <option value="33">🇫🇷 +33</option>
-  <option value="49">🇩🇪 +49</option>
-  <option value="39">🇮🇹 +39</option>
-  <option value="81">🇯🇵 +81</option>
-  <option value="86">🇨🇳 +86</option>
-  <option value="971">🇦🇪 +971</option>
-  <option value="7">PT +351</option>
-</select>
+                <option value="34">🇪🇸 +34</option>
+                <option value="1">🇺🇸 +1</option>
+                <option value="33">🇫🇷 +33</option>
+                <option value="49">🇩🇪 +49</option>
+                <option value="39">🇮🇹 +39</option>
+                <option value="81">🇯🇵 +81</option>
+                <option value="86">🇨🇳 +86</option>
+                <option value="971">🇦🇪 +971</option>
+                <option value="7">🇷🇺 +7</option>
+                <option value="351">🇵🇹 +351</option>
+              </select>
               <input type="tel" name="telefono" id="p-phone" placeholder="612345678" style="flex:1;" required>
             </div>
           </div>
@@ -551,6 +551,7 @@
               <option value="CN">🇨🇳 China</option>
               <option value="AE">🇦🇪 Emiratos Árabes</option>
               <option value="RU">🇷🇺 Rusia</option>
+              <option value="PT">🇵🇹 Portugal</option>
               <option value="OT">🌍 Otro país</option>
             </select>
             <div id="other-country-container" style="display:none; margin-top:10px;">
@@ -625,6 +626,7 @@
     <div>bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</div>
     <div style="margin-top:10px; font-size:0.9rem;">© 2024 BridgeMind Games. Todos los derechos reservados.</div>
   </footer>
+  
   <script>
     const dictionary = {
       es: {
@@ -714,7 +716,89 @@
       it: { t: "BridgeMind Games Education", p: "Sistema di formazione neurolinguistica basato sull'IA.", v: "ita.mp4", i: "itabr.jpg", bW: "Pianifica videochiamata", bI: "Richiedi informazioni", fH: "Registrazione", fOrg: "Organizzazione", fName: "Contatto", fMail: "Email", fPhone: "Telefono", fCity: "Paese", fMsg: "Messaggio", fBtn: "Invia", fOk: "Ricevuto! Ti contatteremo presto.", fWait: "Invio...", modalTitle: "Pianifica videochiamata", step1Title: "Passo 1: Seleziona il giorno", step2Title: "Passo 2: Selecçiona l'ora (CET - Madrid)", step3Title: "Passo 3: Scegli il metodo di contatto", scheduleText: "Lunedì a Venerdì, 9:00 - 18:00", tzTitle: "🌍 Il tuo orario locale:", tgCopyText: "Copia lo username e cercami su Telegram", days: ["Lun", "Mar", "Mer", "Gio", "Ven"], daysFull: ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"], messageTemplate: "Ciao, vorrei pianificare una videochiamata per BridgeMind Games il: ", selectDayFirst: "Si prega di selezionare prima un giorno", selectTimeFirst: "Si prega di selezionare prima un'ora", imageTexts: ["Bambini che imparano lo spagnolo attraverso il gioco del Bridge con IA", "Omar Sharif - Attore, giocatore professionista di Bridge e leggenda mondiale", "Il futuro dell'apprendimento delle lingue per tutte le età con tecnologia all'avanguardia", "BridgeMind Games - Connettere le culture attraverso il linguaggio"], pi: [{ t: "🎮 Giochi IA", d: "Dinamiche gamificate che integrano l'intelligenza artificiale per migliorare l'apprendimento cognitivo e la ritenzione delle conoscenze." }, { t: "🧠 ROI Misurabile", d: "Sistema di metriche per valutare il progresso reale degli studenti con risultati tangibili e report dettagliati." }, { t: "🏫 Centri Educativi", d: "Soluzione adattabile al curriculum scolastico attuale, integrabile in qualsiasi istituzione educativa con supporto tecnico continuo." }] },
       jp: { t: "BridgeMind Games Education", p: "AI駆動型神経言語トレーニングシステム。", v: "jpn.mp4", i: "jpnbrg.jpg", bW: "ビデオ通話を予約", bI: "情報をリクエスト", fH: "組織登録", fOrg: "組織名", fName: "担当者", fMail: "メール", fPhone: "電話", fCity: "国", fMsg: "メッセージ", fBtn: "送信", fOk: "受信！ すぐにご連絡いたします。", fWait: "送信中...", modalTitle: "ビデオ通話を予約", step1Title: "ステップ1：日を選択", step2Title: "ステップ2：時間を選択（CET - マドリード）", step3Title: "ステップ3：連絡方法を選択", scheduleText: "月曜日から金曜日、9:00 - 18:00", tzTitle: "🌍 あなたの現地時間：", tgCopyText: "ユーザー名をコピーしてTelegramで検索してください", days: ["月", "火", "水", "木", "金"], daysFull: ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"], messageTemplate: "こんにちは、BridgeMind Gamesのビデオ通話を予約したいです： ", selectDayFirst: "まず日を選択してください", selectTimeFirst: "まず時間を選択してください", imageTexts: ["AIを活用したブリッジゲームでスペイン語を学ぶ子供たち", "オマー・シャリフ - 俳優、プロのブリッジプレーヤー、世界的なレジェンド", "最先端技術による全年齢向けの言語学習の未来", "BridgeMind Games - 言語を通じて文化をつなぐ"], pi: [{ t: "🎮 AIゲーム", d: "認知学習を向上させるために人工知能を統合したゲーミフィケーションダイナミクス。" }, { t: "🧠 測定可能なROI", d: "実際の学生の進歩を評価するためのメトリクスシステム。" }, { t: "🏫 教育センター", d: "現在の学校カリキュラムに適応可能なソリューション。" }] },
       ch: { t: "BridgeMind Games Education", p: "基于人工智能的神经语言训练系统。", v: "chn.mp4", i: "shbr.jpg", bW: "安排视频通话", bI: "请求信息", fH: "机构登记", fOrg: "机构名称", fName: "联系人", fMail: "电子邮件", fPhone: "电话", fCity: "国家", fMsg: "信息", fBtn: "发送", fOk: "已收到！我们会尽快联系您。", fWait: "发送中...", modalTitle: "安排视频通话", step1Title: "步骤1：选择日期", step2Title: "步骤2：选择时间（CET - 马德里）", step3Title: "步骤3：选择联系方式", scheduleText: "周一至周五，9:00 - 18:00", tzTitle: "🌍 您的当地时间：", tgCopyText: "复制用户名并在Telegram上搜索我", days: ["周一", "周二", "周三", "周四", "周五"], daysFull: ["星期一", "星期二", "星期三", "星期四", "星期五"], messageTemplate: "你好，我想为BridgeMind Games安排视频通话时间： ", selectDayFirst: "请先选择日期", selectTimeFirst: "请先选择时间", imageTexts: ["通过AI桥牌游戏学习西班牙语的儿童", "奥马尔·沙里夫 - 演员、职业桥牌选手和世界传奇人物", "采用尖端技术的全年龄段语言学习的未来", "BridgeMind Games - 通过语言连接文化"], pi: [{ t: "🎮 AI游戏", d: "集成人工智能的游戏化动态，以增强认知学习和知识保留。" }, { t: "🧠 可衡量的投资回报", d: "用于评估学生实际进步的指标系统。" }, { t: "🏫 教育中心", d: "完全适应当前学校课程的解决方案。" }] },
-      ar: { t: "BridgeMind Games Education", p: "نظام تدريب عصبي لغوي مدعوم بالذكاء الاصطناعي.", v: "ara.mp4", i: "dubr.jpg", bW: "جدولة مكالمة فيديو", bI: "طلب معلومات", fH: "تسجيل المنظمات", fOrg: "المؤسسة", fName: "الاتصال", fMail: "البريد", fPhone: "هاتف", fCity: "البلد", fMsg: "رسالة", fBtn: "إرسال", fOk: "تم! سنتواصل معك قريباً.", fWait: "جاري الإرسال...", modalTitle: "جدولة مكالمة فيديو", step1Title: "الخطوة 1: حدد اليوم", step2Title: "الخطوة 2: حدد الوقت (CET - مدريد)", step3Title: "الخطوة 3: اختر طريقة الاتصال", scheduleText: "من الاثنين إلى الجمعة، 9:00 - 18:00", tzTitle: "🌍 وقتك المحلي:", tgCopyText: "انسخ اسم المستخدم وابحث عني على Telegram", days: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"], daysFull: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"], messageTemplate: "مرحباً، أود جدولة مكالمة فيديو لـ BridgeMind Games في: ", selectDayFirst: "يرجى تحديد اليوم أولاً", selectTimeFirst: "يرجى تحديد الوقت أولاً", imageTexts: ["أطفال يتعلمون الإسبانية من خلال ألعاب الجسر بالذكاء الاصطناعي", "عمر الشريف - ممثل، لاعب جسر محترف وأسطورة عالمية", "مستقبل تعلم اللغة لجميع الأعمار بتقنية متطورة", "BridgeMind Games - ربط الثقافات من خلال اللغة"], pi: [{ t: "🎮 ألعاب الذكاء الاصطناعي", d: "ديناميكيات ممتعة تدمج الذكاء الاصطناعي لتحسين التعلم المعرفي." }, { t: "🧠 عائد استثمار قابل للقياس", d: "نظام مقاييس لتقييم التقدم الفعلي للطلاب." }, { t: "🏫 المراكز التعليمية", d: "حل قابل للتكيف مع المناهج المدرسية الحالية." }] }
+      ar: { t: "BridgeMind Games Education", p: "نظام تدريب عصبي لغوي مدعوم بالذكاء الاصطناعي.", v: "ara.mp4", i: "dubr.jpg", bW: "جدولة مكالمة فيديو", bI: "طلب معلومات", fH: "تسجيل المنظمات", fOrg: "المؤسسة", fName: "الاتصال", fMail: "البريد", fPhone: "هاتف", fCity: "البلد", fMsg: "رسالة", fBtn: "إرسال", fOk: "تم! سنتواصل معك قريباً.", fWait: "جاري الإرسال...", modalTitle: "جدولة مكالمة فيديو", step1Title: "الخطوة 1: حدد اليوم", step2Title: "الخطوة 2: حدد الوقت (CET - مدريد)", step3Title: "الخطوة 3: اختر طريقة الاتصال", scheduleText: "من الاثنين إلى الجمعة، 9:00 - 18:00", tzTitle: "🌍 وقتك المحلي:", tgCopyText: "انسخ اسم المستخدم وابحث عني على Telegram", days: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"], daysFull: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"], messageTemplate: "مرحباً، أود جدولة مكالمة فيديو لـ BridgeMind Games في: ", selectDayFirst: "يرجى تحديد اليوم أولاً", selectTimeFirst: "يرجى تحديد الوقت أولاً", imageTexts: ["أطفال يتعلمون الإسبانية من خلال ألعاب الجسر بالذكاء الاصطناعي", "عمر الشريف - ممثل، لاعب جسر محترف وأسطورة عالمية", "مستقبل تعلم اللغة لجميع الأعمار بتقنية متطورة", "BridgeMind Games - ربط الثقافات من خلال اللغة"], pi: [{ t: "🎮 ألعاب الذكاء الاصطناعي", d: "ديناميكيات ممتعة تدمج الذكاء الاصطناعي لتحسين التعلم المعرفي." }, { t: "🧠 عائد استثمار قابل للقياس", d: "نظام مقاييس لتقييم التقدم الفعلي للطلاب." }, { t: "🏫 المراكز التعليمية", d: "حل قابل للتكيف مع المناهج المدرسية الحالية." }] },
+      ru: {
+        t: "BridgeMind Games Education",
+        p: "Нейролингвистическая тренировочная система на базе ИИ для эффективного обучения.",
+        v: "rus.mp4",
+        i: "rusbr.jpg",
+        bW: "Запланировать видеозвонок",
+        bI: "Запросить информацию",
+        fH: "Регистрация организаций",
+        fOrg: "Организация",
+        fName: "Контактное лицо",
+        fMail: "Электронная почта",
+        fPhone: "Телефон",
+        fCity: "Страна",
+        fMsg: "Ваше сообщение",
+        fBtn: "Отправить",
+        fOk: "Получено! Мы скоро свяжемся с вами.",
+        fWait: "Отправка...",
+        modalTitle: "Запланировать видеозвонок",
+        step1Title: "Шаг 1: Выберите день",
+        step2Title: "Шаг 2: Выберите время (CET - Мадрид)",
+        step3Title: "Шаг 3: Выберите способ связи",
+        scheduleText: "Понедельник - Пятница, 9:00 - 18:00",
+        tzTitle: "🌍 Ваше местное время:",
+        tgCopyText: "Скопируйте имя пользователя и найдите меня в Telegram",
+        days: ["Пн", "Вт", "Ср", "Чт", "Пт"],
+        daysFull: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"],
+        messageTemplate: "Здравствуйте, я хотел бы запланировать видеозвонок для BridgeMind Games на: ",
+        selectDayFirst: "Пожалуйста, сначала выберите день",
+        selectTimeFirst: "Пожалуйста, сначала выберите время",
+        imageTexts: [
+          "Дети изучают испанский через игру в Бридж с ИИ",
+          "Омар Шариф - Актер, профессиональный игрок в Бридж и мировая легенда",
+          "Будущее изучения языков для всех возрастов с передовыми технологиями",
+          "BridgeMind Games - Соединяем культуры через язык"
+        ],
+        pi: [
+          { t: "🎮 Игры с ИИ", d: "Геймифицированные динамики, интегрирующие искусственный интеллект для улучшения когнитивного обучения и сохранения знаний." },
+          { t: "🧠 Измеримая отдача", d: "Система метрик и аналитики для оценки реального прогресса студентов с измеримыми результатами." },
+          { t: "🏫 Образовательные центры", d: "Решение, полностью адаптируемое к текущей школьной программе." }
+        ]
+      },
+      pt: {
+        t: "BridgeMind Games Education",
+        p: "Sistema de Treinamento Neurolinguístico com IA para aprendizagem eficaz.",
+        v: "por.mp4",
+        i: "porbr.jpg",
+        bW: "Agendar Videchamada",
+        bI: "Solicitar Informação",
+        fH: "Registo de Organizações",
+        fOrg: "Organização",
+        fName: "Pessoa de contacto",
+        fMail: "Email",
+        fPhone: "Telefone",
+        fCity: "País",
+        fMsg: "A sua mensagem",
+        fBtn: "Enviar",
+        fOk: "Recebido! Entraremos em contacto em breve.",
+        fWait: "A enviar...",
+        modalTitle: "Agendar Videchamada",
+        step1Title: "Passo 1: Selecione o dia",
+        step2Title: "Passo 2: Selecione a hora (CET - Madrid)",
+        step3Title: "Passo 3: Escolha o método de contacto",
+        scheduleText: "Segunda a Sexta, 9:00 - 18:00",
+        tzTitle: "🌍 A sua hora local:",
+        tgCopyText: "Copie o username e procure-me no Telegram",
+        days: ["Seg", "Ter", "Qua", "Qui", "Sex"],
+        daysFull: ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"],
+        messageTemplate: "Olá, gostaria de agendar uma videchamada para BridgeMind Games no dia: ",
+        selectDayFirst: "Por favor, selecione primeiro um dia",
+        selectTimeFirst: "Por favor, selecione primeiro uma hora",
+        imageTexts: [
+          "Crianças a aprender espanhol através do jogo Bridge com IA",
+          "Omar Sharif - Ator, jogador profissional de Bridge e lenda mundial",
+          "O futuro da aprendizagem de línguas para todas as idades com tecnologia de ponta",
+          "BridgeMind Games - Conectando culturas através da linguagem"
+        ],
+        pi: [
+          { t: "🎮 Jogos com IA", d: "Dinâmicas gamificadas que integram inteligência artificial para melhorar a aprendizagem cognitiva." },
+          { t: "🧠 ROI Mensurável", d: "Sistema de métricas para avaliar o progresso real dos estudantes com resultados tangíveis." },
+          { t: "🏫 Centros Educativos", d: "Solução totalmente adaptável ao currículo escolar atual, integrável em qualquer instituição de ensino." }
+        ]
+      }
     };
 
     let currentLang = 'es';
@@ -727,7 +811,11 @@
     
     function init() {
       const box = document.getElementById('flag-box');
-      const flags = { es:'es', en:'us', fr:'fr', de:'de', it:'it', jp:'jp', ch:'cn', ar:'sa' };
+      const flags = { 
+        es:'es', en:'us', fr:'fr', de:'de', 
+        it:'it', jp:'jp', ch:'cn', ar:'sa',
+        ru:'ru', pt:'pt'  // NUEVAS BANDERAS
+      };
       Object.keys(dictionary).forEach(lang => {
         const btn = document.createElement('button');
         btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
@@ -756,7 +844,8 @@
       const userLang = navigator.language || navigator.userLanguage;
       const langMap = {
         'es': 'es', 'en': 'en', 'fr': 'fr', 'de': 'de', 
-        'it': 'it', 'ja': 'jp', 'zh': 'ch', 'ar': 'ar'
+        'it': 'it', 'ja': 'jp', 'zh': 'ch', 'ar': 'ar',
+        'ru': 'ru', 'pt': 'pt'  // NUEVOS IDIOMAS
       };
       
       const langCode = userLang.substring(0, 2);
@@ -765,7 +854,8 @@
       const countryNames = {
         'es': 'España', 'en': 'International', 'fr': 'France', 
         'de': 'Deutschland', 'it': 'Italia', 'jp': 'Japan', 
-        'ch': 'China', 'ar': 'Middle East'
+        'ch': 'China', 'ar': 'Middle East',
+        'ru': 'Russia', 'pt': 'Portugal'  // NUEVOS PAÍSES
       };
       
       document.getElementById('current-country-text').textContent = 
@@ -859,7 +949,11 @@
       }
       
       // Actualizar prefijo telefónico
-      const prefixMap = { es: '+34', en: '+1', fr: '+33', de: '+49', it: '+39', jp: '+81', ch: '+86', ar: '+971' };
+      const prefixMap = { 
+        es: '+34', en: '+1', fr: '+33', de: '+49', 
+        it: '+39', jp: '+81', ch: '+86', ar: '+971',
+        ru: '+7', pt: '+351'  // NUEVOS PREFIJOS
+      };
       const prefixSelect = document.getElementById('p-prefix');
       if (prefixSelect) {
         prefixSelect.value = prefixMap[lang] || '+34';
@@ -1328,7 +1422,5 @@
       setTimeout(createChatbot, 3000);
     }
   </script>
-<!-- Después de los otros scripts -->
-<script src="chatbot.js"></script>
 </body>
 </html>
