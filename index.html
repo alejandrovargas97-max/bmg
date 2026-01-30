@@ -1080,7 +1080,6 @@
         es:'es', en:'us', fr:'fr', de:'de', 
         it:'it', jp:'jp', ch:'cn', ar:'sa',
             ['es', 'en', 'fr', 'de', 'it', 'pt', 'cn', 'ru', 'ar', 'jp', 'ot'].forEach(lang => {    ['es', 'en'].forEach(lang => {        const btn = document.createElement('button');
-            ['es', 'en'].forEach(lang => {        btn.innerHTML = `<span class="flag-icon flag-icon-${flags[lang]}"></span> ${lang.toUpperCase()}`;
         btn.onclick = () => switchLang(lang);
         box.appendChild(btn);
       });
@@ -1671,6 +1670,7 @@
   </script>
 </body>
 </html>
+
 
 
 
