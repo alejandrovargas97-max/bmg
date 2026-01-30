@@ -43,13 +43,26 @@
       transition: all 0.3s ease;
     }
     .nav-flags {
-      display: flex;
-      justify-content: center;
+    display: none; /* Ocultar banderas por defecto */      justify-content: center;
       gap: 8px;
       flex-wrap: wrap;
       padding: 8px;
       background: rgba(0,0,0,0.2);
       transition: all 0.3s ease;
+    }
+        .nav-flags.show {
+        display: flex;
+    }
+    .world-flag-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 2rem;
+        margin-left: 15px;
+        transition: transform 0.3s ease;
+    }
+    .world-flag-btn:hover {
+        transform: scale(1.2);
     }
     .f-btn {
       background: #fff;
@@ -475,9 +488,9 @@
 </head>
 <body id="main-body">
   <header>
-    <div class="logo-box">
-      <img src="bmg.jpg" alt="BridgeMind Games Education">
+    <div class="logo-box" style="display: flex; align-items: center; justify-content: center;">      <img src="bmg.jpg" alt="BridgeMind Games Education">
     </div>
+            <button class="world-flag-btn" id="world-flag-toggle" onclick="toggleFlags()">🌍</button>
     <nav class="nav-flags" id="flag-box"></nav>
     <div class="country-title">
       <span id="current-country-text">BridgeMind Games - Global Language Learning System</span>
@@ -1068,8 +1081,7 @@
         es:'es', en:'us', fr:'fr', de:'de', 
         it:'it', jp:'jp', ch:'cn', ar:'sa',
     ru:'ru', pt:'pt', ot:'globe'      };
-      Object.keys(dictionary).forEach(lang => {
-        const btn = document.createElement('button');
+    ['es', 'en'].forEach(lang => {        const btn = document.createElement('button');
         btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
         btn.innerHTML = `<span class="flag-icon flag-icon-${flags[lang]}"></span> ${lang.toUpperCase()}`;
         btn.onclick = () => switchLang(lang);
@@ -1654,8 +1666,14 @@
       init();
       setTimeout(createChatbot, 3000);
     }
+
+    function toggleFlags() {
+    const flagBox = document.getElementById('flag-box');
+    flagBox.classList.toggle('show');
+}
   </script>
 </body>
 </html>
+
 
 
