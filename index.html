@@ -552,8 +552,7 @@
               <option value="AE">🇦🇪 Emiratos Árabes</option>
               <option value="RU">🇷🇺 Rusia</option>
               <option value="PT">🇵🇹 Portugal</option>
-              <option value="OT">🌍 Otro país</option>
-            </select>
+    <option value="OT">🌍 Resto del mundo</option>            </select>
             <div id="other-country-container" style="display:none; margin-top:10px;">
               <input type="text" id="other-country" name="otro_pais" placeholder="Especifica tu país">
             </div>
@@ -1068,8 +1067,7 @@
       const flags = { 
         es:'es', en:'us', fr:'fr', de:'de', 
         it:'it', jp:'jp', ch:'cn', ar:'sa',
-        ru:'ru', pt:'pt'
-      };
+    ru:'ru', pt:'pt', ot:'globe'      };
       Object.keys(dictionary).forEach(lang => {
         const btn = document.createElement('button');
         btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
@@ -1659,4 +1657,5 @@
   </script>
 </body>
 </html>
+
 
