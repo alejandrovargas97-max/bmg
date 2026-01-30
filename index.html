@@ -1079,8 +1079,7 @@
       const flags = { 
         es:'es', en:'us', fr:'fr', de:'de', 
         it:'it', jp:'jp', ch:'cn', ar:'sa',
-    ru:'ru', pt:'pt', ot:'globe'      };
-    ['es', 'en'].forEach(lang => {        const btn = document.createElement('button');
+            ['es', 'en', 'fr', 'de', 'it', 'pt', 'cn', 'ru', 'ar', 'jp', 'ot'].forEach(lang => {    ['es', 'en'].forEach(lang => {        const btn = document.createElement('button');
         btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
         btn.innerHTML = `<span class="flag-icon flag-icon-${flags[lang]}"></span> ${lang.toUpperCase()}`;
         btn.onclick = () => switchLang(lang);
@@ -1673,6 +1672,7 @@
   </script>
 </body>
 </html>
+
 
 
 
