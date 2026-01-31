@@ -488,8 +488,8 @@
 <body id="main-body">
   <header>
     <div class="logo-box" style="display: flex; align-items: center; justify-content: center;">      <img src="bmg.jpg" alt="BridgeMind Games Education">
+       <button class="world-flag-btn" id="world-flag-toggle" onclick="toggleFlags()">🌍</button>
     </div>
-            <button class="world-flag-btn" id="world-flag-toggle" onclick="toggleFlags()">🌍</button>
     <nav class="nav-flags" id="flag-box"></nav>
     <div class="country-title">
       <span id="current-country-text">BridgeMind Games - Global Language Learning System</span>
@@ -1073,6 +1073,8 @@
     let selectedDate = null;
     let selectedTime = null;
     let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+   function toggleFlags() { const flagBox = document.getElementById('flag-box'); flagBox.classList.toggle('show'); }
     
     function init() {
       const box = document.getElementById('flag-box');
@@ -1665,13 +1667,10 @@
       setTimeout(createChatbot, 3000);
     }
 
-    function toggleFlags() {
-    const flagBox = document.getElementById('flag-box');
-    flagBox.classList.toggle('show');
-}
   </script>
 </body>
 </html>
+
 
 
 
