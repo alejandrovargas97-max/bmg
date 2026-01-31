@@ -471,6 +471,16 @@
         right: 10px;
       }
     }
+
+        @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .world-icon {
+      display: inline-block;
+      animation: spin 3s linear infinite;
+    }
   </style>
 </head>
 <body id="main-body">
@@ -1068,7 +1078,7 @@
       const flags = { 
         es:'es', en:'us', fr:'fr', de:'de', 
         it:'it', jp:'jp', ch:'cn', ar:'sa',
-    ru:'ru', pt:'pt', ot:'globe'      };
+    ru:'ru', pt:'pt', ot:'globe', rm:'rm'      };
       Object.keys(dictionary).forEach(lang => {
         const btn = document.createElement('button');
         btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
@@ -1089,7 +1099,7 @@
       const langMap = {
         'es': 'es', 'en': 'en', 'fr': 'fr', 'de': 'de', 
         'it': 'it', 'ja': 'jp', 'zh': 'ch', 'ar': 'ar',
-        'ru': 'ru', 'pt': 'pt'
+        'ru': 'ru', 'pt': 'pt, 'rm': 'rm''
       };
       
       const langCode = userLang.substring(0, 2);
@@ -1659,6 +1669,7 @@
   </script>
 </body>
 </html>
+
 
 
 
