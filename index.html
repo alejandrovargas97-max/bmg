@@ -376,11 +376,9 @@
       margin: 10% auto;
       padding: 30px;
       border-radius: 15px;
-      max-width: min(600px, 90vw); max-height: 90vh;
+      max-width: 600px;
       color: #333;
       position: relative;
-        overflow: auto;
-        overflow-y: auto;
     }
     
     /* Chatbot 24/7 */
@@ -491,17 +489,13 @@
     <p id="txt-p" style="font-size:1.2rem;">Sistema Neuro-Lingüístico con IA</p>
     <div class="gallery">
       <img src="1.jpeg" alt="Imagen 1" title="Click para descripción">
-        <p style="font-size:0.9rem;color:#fff;margin-top:8px;text-align:center;">Niños aprendiendo español mediante el juego del Bridge con IA</p>
       <img src="2.jpeg" alt="Imagen 2" title="Click para descripción">
-        <p style="font-size:0.9rem;color:#fff;margin-top:8px;text-align:center;">Omar Sharif - Actor, jugador profesional de Bridge y leyenda mundial</p>
       <img src="3.jpg" alt="Imagen 3" title="Click para descripción">
-        <p style="font-size:0.9rem;color:#fff;margin-top:8px;text-align:center;">El futuro del aprendizaje de idiomas para todas las edades con tecnología de punta</p>
       <img id="img-target" src="esbr.jpg" alt="" title="">
     </div>
     <div class="v-container">
       <video id="video-player" controls>
         <source id="video-src" src="esp.mp4" type="video/mp4">
-          <p style="font-size:0.9rem;color:#fff;margin-top:8px;text-align:center;">BridgeMind Games - Conectando culturas a través del lenguaje</p>por eso te pregunto s es la misma foto 
       </video>
     </div>
     <div class="pillars" id="pillar-box"></div>
@@ -714,7 +708,8 @@
         selectTimeFirst: "Please select a time first",
         imageTexts: [
           "Children learning Spanish through Bridge games with AI",
-"🧠 Advanced Neuro-Linguistic System with AI - Adaptive Technology that Revolutionizes Learning",          "The future of language learning for all ages with cutting-edge technology",
+          "Omar Sharif - Actor, professional Bridge player and world legend",
+          "The future of language learning for all ages with cutting-edge technology",
           "BridgeMind Games - Connecting cultures through language"
         ],
         pi: [
@@ -1116,18 +1111,16 @@
     
     function setupImageClicks() {
       document.querySelectorAll('.gallery img').forEach((img, index) => {
-        img.addEventListener('click', () => 1100
-          (index));
+        img.addEventListener('click', () => showImageInfo(index));
       });
     }
     
-    function 1135
-      492
-        (index) {
+    function showImageInfo(index) {
       const data = dictionary[currentLang] || dictionary.es;
       const texts = data.imageTexts || [
         "BridgeMind Games - Aprendizaje de idiomas mediante Bridge",
-"🧠 Sistema Neuro-lingüístico Avanzado con IA - Tecnología Adaptativa que Revoluciona el Aprendizaje",        "Tecnología de punta para educación",
+        "Sistema Neuro-Lingüístico con IA",
+        "Tecnología de punta para educación",
         "Conectando culturas a través del lenguaje"
       ];
       
@@ -1664,7 +1657,4 @@
   </script>
 </body>
 </html>
-
-
-
 
