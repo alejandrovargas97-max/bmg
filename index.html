@@ -471,23 +471,12 @@
         right: 10px;
       }
     }
-
-        @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    
-    .world-icon {
-      display: inline-block;
-      animation: spin 3s linear infinite;
-    }
   </style>
 </head>
 <body id="main-body">
   <header>
     <div class="logo-box">
       <img src="bmg.jpg" alt="BridgeMind Games Education">
-          <span class="world-icon" style="font-size:100px;">🌍</span>
     </div>
     <nav class="nav-flags" id="flag-box"></nav>
     <div class="country-title">
@@ -563,7 +552,8 @@
               <option value="AE">🇦🇪 Emiratos Árabes</option>
               <option value="RU">🇷🇺 Rusia</option>
               <option value="PT">🇵🇹 Portugal</option>
-    <option value="OT">🌍 Resto del mundo</option>            </select>
+              <option value="OT">🌍 Otro país</option>
+            </select>
             <div id="other-country-container" style="display:none; margin-top:10px;">
               <input type="text" id="other-country" name="otro_pais" placeholder="Especifica tu país">
             </div>
@@ -1078,7 +1068,8 @@
       const flags = { 
         es:'es', en:'us', fr:'fr', de:'de', 
         it:'it', jp:'jp', ch:'cn', ar:'sa',
-    ru:'ru', pt:'pt', ot:'globe'
+        ru:'ru', pt:'pt'
+      };
       Object.keys(dictionary).forEach(lang => {
         const btn = document.createElement('button');
         btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
@@ -1099,7 +1090,7 @@
       const langMap = {
         'es': 'es', 'en': 'en', 'fr': 'fr', 'de': 'de', 
         'it': 'it', 'ja': 'jp', 'zh': 'ch', 'ar': 'ar',
-        'ru': 'ru', 'pt': 'pt,
+        'ru': 'ru', 'pt': 'pt'
       };
       
       const langCode = userLang.substring(0, 2);
@@ -1110,7 +1101,7 @@
         'de': 'Deutschland', 'it': 'Italia', 'jp': 'Japan', 
         'ch': 'China', 'ar': 'Middle East',
         'ru': 'Russia', 'pt': 'Portugal'
-                      };
+      };
       
       document.getElementById('current-country-text').textContent = 
         `BridgeMind Games - Sistema Global | ${countryNames[detectedLang]}`;
@@ -1668,8 +1659,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
