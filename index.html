@@ -499,8 +499,9 @@
         </div>
         <style>
             @keyframes spin {
-                from { transform: rotateZ(0deg) rotateX(0deg); }
-                to { transform: rotateZ(360deg) rotateX(15deg); }
+    0% { transform: rotateZ(0deg) rotateX(0deg); opacity: 1; }
+                    90% { transform: rotateZ(350deg) rotateX(0deg); opacity: 1; }
+    100% { transform: rotateZ(350deg) rotateX(0deg); opacity: 0; }
             }
         </style>
     </div>
@@ -1685,5 +1686,6 @@
   </script>
 </body>
 </html>
+
 
 
