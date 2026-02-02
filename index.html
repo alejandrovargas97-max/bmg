@@ -477,26 +477,81 @@
   <header>
     <div class="logo-box">
       <img src="logo.png" alt="BridgeMind Games Education">
-              <div class="globe-rotating" style="display: inline-flex; margin-left: 20px; align-items: center;">
-            <svg viewBox="0 0 100 100" width="120" height="120" style="animation: spin 10s linear infinite;">
-                <circle cx="50" cy="50" r="48" fill="#1f93ff" stroke="#fff" stroke-width="1"/>
-                <!-- Continents simplified -->
-                <ellipse cx="40" cy="35" rx="8" ry="6" fill="#2d5016" opacity="0.8"/>
-                <ellipse cx="55" cy="45" rx="10" ry="8" fill="#2d5016" opacity="0.8"/>
-                <path d="M 35 50 Q 40 55 45 52" stroke="#2d5016" stroke-width="2" fill="none" opacity="0.8"/>
-                <circle cx="30" cy="65" r="5" fill="#2d5016" opacity="0.8"/>
-                <!-- Latitude lines -->
-                <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
-                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-                <!-- Rotation effect -->
-                <g opacity="0.4">
-                    <circle cx="50" cy="20" r="3" fill="#FFD700"/>
-                    <circle cx="80" cy="50" r="3" fill="#FFD700"/>
-                    <circle cx="50" cy="80" r="3" fill="#FFD700"/>
-                    <circle cx="20" cy="50" r="3" fill="#FFD700"/>
-                </g>
-            </svg>
-        </div>
+             <div class="globe-rotating" style="display: inline-flex; margin-left: 20px; align-items: center;">
+    <svg viewBox="0 0 100 100" width="120" height="120" style="animation: spinAndFade 5s linear forwards;">
+        <!-- Fondo de la esfera -->
+        <defs>
+            <radialGradient id="sphereGradient">
+                <stop offset="0%" stop-color="#1e90ff" />
+                <stop offset="50%" stop-color="#0066cc" />
+                <stop offset="100%" stop-color="#004080" />
+            </radialGradient>
+            <radialGradient id="highlightGradient">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+        </defs>
+        
+        <!-- Esfera principal -->
+        <circle cx="50" cy="50" r="48" fill="url(#sphereGradient)" stroke="#004080" stroke-width="1"/>
+        
+        <!-- Continentes detallados -->
+        <!-- América del Norte -->
+        <path d="M 25 35 Q 30 25 35 30 Q 40 28 45 32 Q 50 30 55 35 Q 52 40 48 42 Q 45 45 42 42 Q 38 40 35 38 Q 30 38 28 36 Z" 
+              fill="#228B22" stroke="#2d5016" stroke-width="0.5" opacity="0.9"/>
+        
+        <!-- América del Sur -->
+        <path d="M 40 50 Q 38 55 36 60 Q 40 65 45 70 Q 50 72 52 68 Q 55 65 53 60 Q 52 55 48 52 Z" 
+              fill="#32CD32" stroke="#2d5016" stroke-width="0.5" opacity="0.9"/>
+        
+        <!-- Europa -->
+        <path d="M 55 35 Q 58 38 60 40 Q 62 38 65 36 Q 68 35 70 37 Q 68 40 65 42 Q 63 45 60 42 Q 58 40 56 38 Z" 
+              fill="#2E8B57" stroke="#2d5016" stroke-width="0.5" opacity="0.9"/>
+        
+        <!-- África -->
+        <path d="M 60 42 Q 63 45 65 48 Q 68 50 70 55 Q 68 58 65 60 Q 62 58 60 55 Q 58 52 56 48 Q 58 45 60 42 Z" 
+              fill="#3CB371" stroke="#2d5016" stroke-width="0.5" opacity="0.9"/>
+        
+        <!-- Asia -->
+        <path d="M 70 30 Q 75 28 78 32 Q 80 35 82 40 Q 80 45 78 50 Q 75 48 72 45 Q 70 42 68 38 Q 68 35 70 30 Z" 
+              fill="#66CDAA" stroke="#2d5016" stroke-width="0.5" opacity="0.9"/>
+        
+        <!-- Australia -->
+        <path d="M 80 60 Q 82 62 84 65 Q 82 68 80 70 Q 78 68 76 65 Q 78 62 80 60 Z" 
+              fill="#7CFC00" stroke="#2d5016" stroke-width="0.5" opacity="0.9"/>
+        
+        <!-- Líneas de latitud -->
+        <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.3" stroke-dasharray="2,1"/>
+        <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.3" stroke-dasharray="2,1"/>
+        
+        <!-- Reflejo de luz -->
+        <ellipse cx="30" cy="30" rx="15" ry="10" fill="url(#highlightGradient)" />
+        
+        <!-- Rotación de puntos de referencia (opcional) -->
+        <g opacity="0.6">
+            <circle cx="85" cy="50" r="1.5" fill="#FFD700"/>
+            <circle cx="15" cy="50" r="1.5" fill="#FFD700"/>
+            <circle cx="50" cy="85" r="1.5" fill="#FFD700"/>
+            <circle cx="50" cy="15" r="1.5" fill="#FFD700"/>
+        </g>
+    </svg>
+</div>
+<style>
+    @keyframes spinAndFade {
+        0% { 
+            transform: rotateZ(0deg); 
+            opacity: 1; 
+        }
+        70% { 
+            transform: rotateZ(360deg); 
+            opacity: 1; 
+        }
+        100% { 
+            transform: rotateZ(360deg); 
+            opacity: 0; 
+        }
+    }
+</style>
         <style>
             @keyframes spin {
     0% { transform: rotateZ(0deg) rotateX(0deg); opacity: 1; }
@@ -1686,6 +1741,7 @@
   </script>
 </body>
 </html>
+
 
 
 
