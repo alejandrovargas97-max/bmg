@@ -537,17 +537,21 @@
   <main>
     <h1 id="txt-h1">BridgeMind Games Education</h1>
     <p id="txt-p" style="font-size:1.2rem;">Sistema Neuro-Lingüístico con IA</p>
-    <div class="gallery">
-      <img src="1.jpeg" alt="Imagen 1" title="Click para descripción">
-      <img src="2.jpeg" alt="Imagen 2" title="Click para descripción">
-      <img src="3.jpg" alt="Imagen 3" title="Click para descripción">
-      <img id="img-target" src="esbr.jpg" alt="" title="">
-    </div>
-    <div class="v-container">
-      <video id="video-player" controls>
-        <source id="video-src" src="esp.mp4" type="video/mp4">
-      </video>
-    </div>
+    <div class="gallery-scroll">
+  <div class="gallery">
+    <img src="1.jpeg" alt="Imagen 1" title="Click para descripción">
+    <img src="2.jpeg" alt="Imagen 2" title="Click para descripción">
+    <img src="3.jpg" alt="Imagen 3" title="Click para descripción">
+    <img id="img-target" src="esbr.jpg" alt="BridgeMind Games - Conectando culturas a través del lenguaje" title="">
+  </div>
+</div>
+
+<div class="v-container">
+  <video id="video-player" controls>
+    <source id="video-src" src="esp.mp4" type="video/mp4">
+  </video>
+</div>
+
     <div class="pillars" id="pillar-box"></div>
     <div style="margin:40px 0; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
       <button onclick="openCalendarModal()" class="f-btn" style="padding:15px 30px; background:var(--blue); color:white; border:none; font-size:1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" id="btn-wa-txt">Videollamada</button>
@@ -1744,6 +1748,7 @@
   </script>
 </body>
 </html>
+
 
 
 
