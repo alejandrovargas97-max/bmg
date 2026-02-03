@@ -12,9 +12,6 @@
       --yellow: #ffc107;
       --dark: #0056b3;
     }
-    * {
-      box-sizing: border-box;
-    }
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
@@ -31,14 +28,19 @@
       background: rgba(0, 86, 179, 0.95);
       z-index: 5000;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
     }
     .logo-box {
       text-align: center;
-      padding: 10px 0;
+      padding: 8px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .logo-box img {
       max-width: 120px;
       height: auto;
+      transition: all 0.3s ease;
     }
     .nav-flags {
       display: flex;
@@ -47,6 +49,7 @@
       flex-wrap: wrap;
       padding: 8px;
       background: rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
     }
     .f-btn {
       background: #fff;
@@ -70,11 +73,14 @@
       text-align: center;
       padding: 5px 20px;
       background: rgba(0, 86, 179, 0.8);
+      margin-top: 0;
       border-bottom: 2px solid var(--yellow);
       font-size: 0.8rem;
+      transition: all 0.3s ease;
     }
     .spacer {
-      height: 120px;
+      height: 110px;
+      transition: all 0.3s ease;
     }
     main {
       max-width: 1100px;
@@ -83,38 +89,57 @@
       text-align: center;
     }
     
-    /* GALERÍA SIMPLE Y FUNCIONAL */
-    .gallery-container {
+    /* GALERÍA CON SCROLL HORIZONTAL */
+    .gallery-scroll {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      padding: 15px 0;
       margin: 30px 0;
-      width: 100%;
-      overflow: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--yellow) rgba(0,0,0,0.1);
     }
     
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      margin: 0 auto;
+    .gallery-scroll::-webkit-scrollbar {
+      height: 8px;
     }
     
-    .gallery-item {
-      width: 100%;
-      height: 200px;
+    .gallery-scroll::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.1);
       border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      position: relative;
     }
     
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
+    .gallery-scroll::-webkit-scrollbar-thumb {
+      background: var(--yellow);
+      border-radius: 10px;
+    }
+    
+    .gallery {
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .gallery img {
+      display: inline-block;
+      width: 280px;
+      height: 200px;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      border-radius: 12px;
+      margin-right: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.3s;
+      vertical-align: top;
     }
     
-    .gallery-item:hover img {
-      transform: scale(1.05);
+    .gallery img:hover {
+      transform: scale(1.03);
+    }
+    
+    .gallery img:last-child {
+      margin-right: 0;
     }
     
     #img-target {
@@ -123,100 +148,57 @@
     
     .v-container {
       background: #000;
-      border-radius: 10px;
+      border-radius: 15px;
       overflow: hidden;
-      margin: 30px 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      margin: 40px 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    
     video {
       width: 100%;
-      max-height: 400px;
+      max-height: 500px;
       display: block;
     }
-    
     .pillars {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
-      margin: 30px 0;
+      margin: 40px 0;
     }
-    
     .card {
       background: rgba(255, 255, 255, 0.95);
-      padding: 20px;
-      border-radius: 10px;
+      padding: 25px;
+      border-radius: 12px;
       border-left: 5px solid var(--yellow);
       text-align: left;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
       color: #333;
     }
-    
     .card h3 {
       margin-top: 0;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       color: var(--dark);
     }
-    
-    .buttons-container {
-      margin: 30px 0;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-    
-    .action-btn {
-      padding: 15px 25px;
-      border: none;
-      border-radius: 30px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      min-width: 180px;
-    }
-    
-    .btn-blue {
-      background: var(--blue);
-      color: white;
-    }
-    
-    .btn-green {
-      background: #28a745;
-      color: white;
-    }
-    
-    .action-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    }
-    
     #form-wrap {
       display: none;
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.98);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.3);
       margin: 20px auto;
-      max-width: 600px;
+      max-width: 700px;
+      max-height: none;
+      overflow: visible;
       text-align: left;
       color: #333;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-    
     #form-wrap h2 {
       color: var(--dark);
-      text-align: center;
-      margin-top: 0;
     }
-    
-    .form-grid {
+    .grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 15px;
     }
-    
     label {
       font-weight: bold;
       font-size: 0.9rem;
@@ -224,75 +206,38 @@
       display: block;
       margin-bottom: 5px;
     }
-    
     input, textarea, select {
       width: 100%;
       padding: 12px;
       border: 1px solid #ddd;
       border-radius: 8px;
-      font-size: 1rem;
+      box-sizing: border-box;
     }
-    
-    .phone-input {
-      display: flex;
-      gap: 10px;
+    .full {
+      grid-column: span 2;
     }
-    
-    .phone-input select {
-      width: auto;
-      min-width: 100px;
-    }
-    
     .send-btn {
       background: #28a745;
       color: #fff;
       border: none;
-      padding: 15px;
+      padding: 18px;
       border-radius: 30px;
       width: 100%;
       font-weight: bold;
       cursor: pointer;
       font-size: 1.1rem;
-      margin-top: 10px;
     }
-    
     #form-status {
       margin-top: 10px;
-      text-align: center;
       font-size: 0.9rem;
+      display: none;
     }
-    
-    .badge-24-7 {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #25D366;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      z-index: 9999;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
     footer {
       background: rgba(0,0,0,0.3);
       color: #fff;
       text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      font-size: 0.9rem;
+      padding: 30px;
+      margin-top: 50px;
     }
     
     /* Modal de Calendario */
@@ -305,17 +250,19 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0,0,0,0.7);
+      animation: fadeIn 0.3s;
+      overflow-y: auto;
     }
-    
     .modal-content {
       background: #fff;
       margin: 5% auto;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 650px;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.5);
       position: relative;
+      animation: slideIn 0.3s;
     }
-    
     .close-modal {
       position: absolute;
       right: 15px;
@@ -327,154 +274,279 @@
       border: none;
       background: none;
     }
-    
+    .close-modal:hover {
+      color: #333;
+    }
+    .modal-content h2 {
+      color: var(--dark);
+      margin-top: 0;
+    }
     .day-selector {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
       margin: 15px 0;
     }
-    
     .day-btn {
-      padding: 12px;
+      padding: 12px 8px;
       background: white;
       border: 2px solid #ddd;
       border-radius: 8px;
       cursor: pointer;
+      transition: all 0.2s;
       text-align: center;
       color: #333;
+      font-size: 0.85rem;
     }
-    
+    .day-btn:hover {
+      border-color: var(--blue);
+      background: #f0f8ff;
+    }
     .day-btn.selected {
       border-color: var(--yellow);
       background: var(--yellow);
       font-weight: bold;
     }
-    
+    .contact-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 25px 0;
+    }
+    .contact-btn {
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      background: #f8f9fa;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .contact-btn:hover {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+    }
+    .contact-btn i {
+      font-size: 2rem;
+    }
+    .calendar-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: #333;
+    }
+    .calendar-info h3 {
+      margin-top: 0;
+      color: var(--dark);
+    }
     .time-slots {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin: 15px 0;
+      margin-top: 15px;
     }
-    
     .time-slot {
       padding: 10px;
       background: white;
       border: 2px solid #ddd;
       border-radius: 8px;
       cursor: pointer;
+      transition: all 0.2s;
       text-align: center;
       color: #333;
     }
-    
-    .time-slot.selected {
-      border-color: var(--yellow);
-      background: var(--yellow);
-      font-weight: bold;
-    }
-    
-    .contact-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
-    }
-    
-    .contact-btn {
-      padding: 15px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      background: #f8f9fa;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .contact-btn:hover {
+    .time-slot:hover {
       border-color: var(--blue);
       background: var(--blue);
       color: white;
     }
+    .time-slot.selected {
+      border-color: var(--yellow);
+      background: var(--yellow);
+      color: #333;
+      font-weight: bold;
+    }
+    .timezone-converter {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border-left: 4px solid var(--blue);
+    }
+    .timezone-converter p {
+      margin: 5px 0;
+      color: #333;
+    }
+    .telegram-info {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border-left: 4px solid #ffc107;
+    }
     
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .gallery-grid {
-        grid-template-columns: 1fr;
+    /* Modal para descripción de imágenes */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 10001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      animation: fadeIn 0.3s;
+    }
+    
+    .image-modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      color: #333;
+      position: relative;
+    }
+    
+    /* Chatbot 24/7 */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .chatbot-container {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 9998;
+      overflow: hidden;
+    }
+    
+    /* Header compacto al hacer scroll */
+    header.compact {
+      padding: 0;
+      background: rgba(0, 86, 179, 0.95);
+    }
+    
+    header.compact .logo-box {
+      padding: 2px 0;
+    }
+    
+    header.compact .logo-box img {
+      max-width: 80px;
+    }
+    
+    header.compact .country-title {
+      display: none;
+    }
+    
+    header.compact .nav-flags {
+      padding: 3px;
+      background: rgba(0,0,0,0.1);
+    }
+    
+    header.compact .f-btn {
+      padding: 3px 8px;
+      font-size: 0.7rem;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+     /* Tablet: 769px - 1024px */
+     @media (min-width: 769px) and (max-width: 1024px) {
+          .gallery-scroll {
+            padding: 20px 0;
+          }
+          
+          .gallery img {
+            width: 250px;
+            height: 180px;
+            margin-right: 12px;
+          }
+        }
+        
+        @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      
+      .gallery-scroll {
+        padding: 15px 0;
       }
       
-      .gallery-item {
-        height: 180px;
-      }
-      
-      .pillars {
-        grid-template-columns: 1fr;
-      }
-      
-      .buttons-container {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .action-btn {
-        width: 100%;
-        max-width: 300px;
+      .gallery img {
+        width: 220px;
+        height: 160px;
+        margin-right: 10px;
       }
       
       .modal-content {
         margin: 10% 5%;
-        padding: 15px;
+        padding: 20px;
       }
-      
+      .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .day-selector {
         grid-template-columns: repeat(3, 1fr);
       }
-      
-      .time-slots {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      
-      .contact-options {
-        grid-template-columns: 1fr;
-      }
-      
-      .badge-24-7 {
-        bottom: 10px;
+      .chatbot-container {
+        width: 300px;
+        height: 400px;
         right: 10px;
-        font-size: 0.8rem;
-        padding: 8px 15px;
       }
     }
     
-    @media (max-width: 480px) {
-      .gallery-item {
-        height: 150px;
-      }
-      
-      .spacer {
-        height: 100px;
-      }
-      
-      .logo-box img {
-        max-width: 100px;
-      }
-      
-      .phone-input {
-        flex-direction: column;
-      }
-      
-      .phone-input select {
-        width: 100%;
-      }
+    /* Ocultar banderas individualmente */
+    .f-btn.hidden-flag {
+        opacity: 0;
+        transform: scale(0);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    /* Animación para mostrar cada bandera */
+    .f-btn.show-flag {
+        opacity: 1;
+        transform: scale(1);
     }
   </style>
 </head>
-<body>
+<body id="main-body">
   <header>
     <div class="logo-box">
       <img src="logo.png" alt="BridgeMind Games Education">
@@ -484,50 +556,37 @@
       <span id="current-country-text">BridgeMind Games - Global Language Learning System</span>
     </div>
   </header>
-  
   <div class="spacer"></div>
-  
   <main>
     <h1 id="txt-h1">BridgeMind Games Education</h1>
     <p id="txt-p" style="font-size:1.2rem;">Sistema Neuro-Lingüístico con IA</p>
     
-    <!-- GALERÍA SIMPLE -->
-    <div class="gallery-container">
-      <div class="gallery-grid">
-        <div class="gallery-item">
-          <img src="1.jpeg" alt="Niños aprendiendo con Bridge" title="Click para ver descripción">
-        </div>
-        <div class="gallery-item">
-          <img src="2.jpeg" alt="Omar Sharif - Leyenda del Bridge" title="Click para ver descripción">
-        </div>
-        <div class="gallery-item">
-          <img src="3.jpg" alt="Tecnología educativa" title="Click para ver descripción">
-        </div>
-        <div class="gallery-item" id="img-target">
-          <img src="esbr.jpg" alt="BridgeMind Games" title="Click para ver descripción">
-        </div>
+    <!-- GALERÍA CON SCROLL HORIZONTAL -->
+    <div class="gallery-scroll">
+      <div class="gallery">
+        <img src="1.jpeg" alt="Imagen 1" title="Click para descripción">
+        <img src="2.jpeg" alt="Imagen 2" title="Click para descripción">
+        <img src="3.jpg" alt="Imagen 3" title="Click para descripción">
+        <img id="img-target" src="esbr.jpg" alt="BridgeMind Games - Conectando culturas a través del lenguaje" title="">
       </div>
     </div>
 
-    <div class="v-container">
-      <video id="video-player" controls>
-        <source id="video-src" src="esp.mp4" type="video/mp4">
-        Tu navegador no soporta video HTML5.
-      </video>
-    </div>
+<div class="v-container">
+  <video id="video-player" controls>
+    <source id="video-src" src="esp.mp4" type="video/mp4">
+  </video>
+</div>
 
     <div class="pillars" id="pillar-box"></div>
-    
-    <div class="buttons-container">
-      <button onclick="openCalendarModal()" class="action-btn btn-blue" id="btn-wa-txt">Videollamada</button>
-      <button onclick="toggleForm()" class="action-btn btn-green" id="btn-info-txt">Más Información</button>
+    <div style="margin:40px 0; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+      <button onclick="openCalendarModal()" class="f-btn" style="padding:15px 30px; background:var(--blue); color:white; border:none; font-size:1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" id="btn-wa-txt">Videollamada</button>
+      <button onclick="toggleForm()" class="f-btn" style="padding:15px 30px; background:#28a745; color:white; border:none; font-size:1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" id="btn-info-txt">Más Información</button>
     </div>
-    
     <section id="form-wrap">
       <h2 id="f-header-txt">Contacto</h2>
       <form id="contact-form">
         <input type="hidden" name="idioma_origen" id="hidden-lang">
-        <div class="form-grid">
+        <div class="grid">
           <div class="campo">
             <label id="l-org">Organización</label>
             <input type="text" name="organizacion" required>
@@ -542,8 +601,8 @@
           </div>
           <div class="campo">
             <label id="l-phone">Teléfono</label>
-            <div class="phone-input">
-              <select name="prefijo" id="p-prefix" required>
+            <div style="display:flex; gap:5px;">
+              <select name="prefijo" id="p-prefix" style="width:auto; padding:12px;" required>
                 <option value="34">🇪🇸 +34</option>
                 <option value="1">🇺🇸 +1</option>
                 <option value="33">🇫🇷 +33</option>
@@ -555,7 +614,7 @@
                 <option value="7">🇷🇺 +7</option>
                 <option value="351">🇵🇹 +351</option>
               </select>
-              <input type="tel" name="telefono" id="p-phone" placeholder="Ej: 612345678" required>
+              <input type="tel" name="telefono" id="p-phone" placeholder="612345678" style="flex:1;" required>
             </div>
           </div>
           <div class="campo">
@@ -575,14 +634,14 @@
               <option value="OT">🌍 Otro país</option>
             </select>
             <div id="other-country-container" style="display:none; margin-top:10px;">
-              <input type="text" id="other-country" name="otro_pais" placeholder="Escribe tu país">
+              <input type="text" id="other-country" name="otro_pais" placeholder="Especifica tu país">
             </div>
           </div>
-          <div class="campo">
+          <div class="campo full">
             <label id="l-msg">Tu consulta</label>
             <textarea name="mensaje" rows="4" placeholder="Cuéntanos sobre tu interés en BridgeMind Games..."></textarea>
           </div>
-          <div class="campo">
+          <div class="campo full">
             <button type="submit" class="send-btn" id="btn-submit-txt">Enviar</button>
             <div id="form-status"></div>
           </div>
@@ -591,24 +650,18 @@
     </section>
   </main>
   
-  <!-- Indicador 24/7 -->
-  <div class="badge-24-7">
-    <i class="fas fa-clock"></i>
-    <span>Asistencia 24/7</span>
-  </div>
-  
   <!-- Modal de Calendario -->
   <div id="calendarModal" class="modal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeCalendarModal()">&times;</button>
       <h2 id="modal-title">Agendar Videollamada</h2>
       
-      <div>
+      <div class="calendar-info">
         <h3 id="step1-title">Paso 1: Selecciona el día</h3>
         <div class="day-selector" id="day-selector"></div>
         
-        <h3 id="step2-title">Paso 2: Selecciona la hora (CET - Madrid)</h3>
-        <p id="schedule-text" style="color:#666;">Lunes a Viernes, 9:00 - 18:00</p>
+        <h3 id="step2-title" style="margin-top:20px;">Paso 2: Selecciona la hora (CET - Madrid)</h3>
+        <p id="schedule-text" style="font-size:0.9rem; color:#666;">Lunes a Viernes, 9:00 - 18:00</p>
         <div class="time-slots" id="time-slots-container">
           <div class="time-slot" data-time="10:00">10:00</div>
           <div class="time-slot" data-time="12:00">12:00</div>
@@ -616,9 +669,14 @@
           <div class="time-slot" data-time="16:30">16:30</div>
           <div class="time-slot" data-time="18:00">18:00</div>
         </div>
+        
+        <div class="timezone-converter" id="timezone-info" style="display:none;">
+          <p style="font-weight:bold; margin-bottom:8px;" id="tz-title">🌍 Tu hora local:</p>
+          <p id="user-timezone" style="font-size:1.1rem; color: var(--blue); font-weight:bold;"></p>
+        </div>
       </div>
       
-      <h3 id="step3-title">Paso 3: Elige tu método de contacto</h3>
+      <h3 id="step3-title" style="color: var(--dark); margin-top:20px;">Paso 3: Elige tu método de contacto</h3>
       
       <div class="contact-options" id="contact-options">
         <a href="#" onclick="contactVia('whatsapp'); return false;" class="contact-btn" id="wa-btn">
@@ -629,6 +687,15 @@
           <i class="fab fa-telegram" style="color:#0088cc;"></i>
           <strong>Telegram</strong>
         </a>
+        <a href="#" onclick="contactVia('wechat'); return false;" class="contact-btn" id="wechat-btn" style="display:none;">
+          <i class="fab fa-weixin" style="color:#09B83E;"></i>
+          <strong>WeChat</strong>
+        </a>
+      </div>
+      
+      <div class="telegram-info" id="telegram-info" style="display:none;">
+        <p style="margin:0; color:#333;"><strong>Telegram:</strong> <span id="tg-username">@BridgeMindGames</span></p>
+        <p style="margin:5px 0 0 0; font-size:0.85rem; color:#666;" id="tg-copy-text">Copia el username y búscame en Telegram</p>
       </div>
     </div>
   </div>
@@ -636,33 +703,38 @@
   <footer>
     <div><strong>BridgeMind Games Education</strong> | España (CET)</div>
     <div>bridgemindgames@gmail.com | WhatsApp: +34 634 268 663</div>
-    <div style="margin-top:10px;">© 2024 BridgeMind Games. Todos los derechos reservados.</div>
+    <div style="margin-top:10px; font-size:0.9rem;">© 2024 BridgeMind Games. Todos los derechos reservados.</div>
   </footer>
-
+    <audio id="flagSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" type="audio/mpeg">
+  </audio>
   <script>
     const dictionary = {
       es: {
         t: "BridgeMind Games Education",
-        p: "Sistema de Entrenamiento Neuro-Lingüístico impulsado por IA",
+        p: "Sistema de Entrenamiento Neuro-Lingüístico impulsado por IA para el aprendizaje efectivo.",
         v: "esp.mp4",
         i: "esbr.jpg",
         bW: "Agendar Videollamada",
         bI: "Solicitar Información",
-        fH: "Contacto",
+        fH: "Registro de Organizaciones",
         fOrg: "Organización",
-        fName: "Nombre",
-        fMail: "Email",
-        fPhone: "Teléfono",
+        fName: "Persona de contacto",
+        fMail: "Correo electrónico",
         fCity: "País",
         fMsg: "Tu consulta",
-        fBtn: "Enviar",
+        fBtn: "Enviar Planilla",
         fOk: "¡Recibido! Te contactaremos pronto.",
-        fError: "Error al enviar. Intenta de nuevo.",
+        fPhone: "Teléfono",
+        fWait: "Enviando...",
+        fError: "Error al enviar. Intenta de nuevo o contacta directamente.",
         modalTitle: "Agendar Videollamada",
         step1Title: "Paso 1: Selecciona el día",
-        step2Title: "Paso 2: Selecciona la hora",
-        step3Title: "Paso 3: Elige contacto",
+        step2Title: "Paso 2: Selecciona la hora (CET - Madrid)",
+        step3Title: "Paso 3: Elige tu método de contacto",
         scheduleText: "Lunes a Viernes, 9:00 - 18:00",
+        tzTitle: "🌍 Tu hora local:",
+        tgCopyText: "Copia el username y búscame en Telegram",
         days: ["Lun", "Mar", "Mié", "Jue", "Vie"],
         daysFull: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"],
         messageTemplate: "Hola, me gustaría agendar una videollamada para BridgeMind Games el: ",
@@ -670,38 +742,47 @@
         selectTimeFirst: "Por favor, selecciona primero una hora",
         imageTexts: [
           "Niños aprendiendo español mediante el juego del Bridge con IA",
-          "Omar Sharif - Actor, jugador profesional de Bridge",
-          "El futuro del aprendizaje de idiomas con tecnología de punta",
-          "BridgeMind Games - Conectando culturas"
+          "Omar Sharif - Actor, jugador profesional de Bridge y leyenda mundial",
+          "El futuro del aprendizaje de idiomas para todas las edades con tecnología de punta",
+          "BridgeMind Games - Conectando culturas a través del lenguaje"
         ],
         pi: [
-          { t: "🎮 Juegos con IA", d: "Dinámicas gamificadas con inteligencia artificial para mejorar el aprendizaje." },
-          { t: "🧠 Retorno Medible", d: "Sistema de métricas para evaluar el progreso real de los estudiantes." },
-          { t: "🏫 Centros Educativos", d: "Solución adaptable al currículo escolar actual." }
-        ]
+          { t: "🎮 Juegos con IA", d: "Dinámicas gamificadas que integran inteligencia artificial para mejorar el aprendizaje cognitivo y la retención de conocimientos de forma interactiva y medible." },
+          { t: "🧠 Retorno Medible", d: "Sistema de métricas y analíticas que permite evaluar el progreso real de los estudiantes con resultados tangibles, reportes detallados y seguimiento continuo del rendimiento académico." },
+          { t: "🏫 Centros Educativos", d: "Solución completamente adaptable al currículo escolar actual, integrable en cualquier institución educativa con soporte técnico continuo y capacitación para docentes." }
+        ],
+        selectCountryText: "Selecciona tu país",
+        otherCountryPlaceholder: "Especifica tu país",
+        phonePlaceholder: "612345678",
+        messagePlaceholder: "Cuéntanos sobre tu interés en BridgeMind Games...",
+        footerText: "España (CET)",
+        copyrightText: "© 2024 BridgeMind Games. Todos los derechos reservados."
       },
       en: {
         t: "BridgeMind Games Education",
-        p: "AI-powered Neuro-Linguistic Training System",
+        p: "AI-powered Neuro-Linguistic Training System for effective learning outcomes.",
         v: "aus.mp4",
         i: "enbr.jpg",
         bW: "Schedule Video Call",
         bI: "Request Information",
-        fH: "Contact",
-        fOrg: "Organization",
-        fName: "Name",
+        fH: "Organization Registry",
+        fOrg: "Institution",
+        fName: "Contact Person",
         fMail: "Email",
         fPhone: "Phone",
         fCity: "Country",
-        fMsg: "Your Message",
-        fBtn: "Send",
+        fMsg: "Message",
+        fBtn: "Submit",
         fOk: "Success! We will contact you soon.",
-        fError: "Error sending. Try again.",
+        fWait: "Sending...",
+        fError: "Error sending. Try again or contact directly.",
         modalTitle: "Schedule Video Call",
-        step1Title: "Step 1: Select day",
-        step2Title: "Step 2: Select time",
-        step3Title: "Step 3: Choose contact",
+        step1Title: "Step 1: Select the day",
+        step2Title: "Step 2: Select time (CET - Madrid)",
+        step3Title: "Step 3: Choose contact method",
         scheduleText: "Monday to Friday, 9:00 AM - 6:00 PM",
+        tzTitle: "🌍 Your local time:",
+        tgCopyText: "Copy the username and find me on Telegram",
         days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
         daysFull: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         messageTemplate: "Hello, I would like to schedule a video call for BridgeMind Games on: ",
@@ -709,15 +790,351 @@
         selectTimeFirst: "Please select a time first",
         imageTexts: [
           "Children learning Spanish through Bridge games with AI",
-          "Omar Sharif - Actor, professional Bridge player",
-          "The future of language learning with cutting-edge technology",
-          "BridgeMind Games - Connecting cultures"
+          "Omar Sharif - Actor, professional Bridge player and world legend",
+          "The future of language learning for all ages with cutting-edge technology",
+          "BridgeMind Games - Connecting cultures through language"
         ],
         pi: [
-          { t: "🎮 AI Gaming", d: "Gamified dynamics with artificial intelligence." },
-          { t: "🧠 Measurable ROI", d: "Metrics system for real student progress." },
-          { t: "🏫 Educational Centers", d: "Solution adaptable to school curriculum." }
-        ]
+          { t: "🎮 AI Gaming", d: "Gamified dynamics integrating artificial intelligence to enhance cognitive learning and knowledge retention through interactive and measurable experiences." },
+          { t: "🧠 Measurable ROI", d: "Metrics and analytics system allowing evaluation of real student progress with tangible results, detailed reports, and continuous academic performance tracking." },
+          { t: "🏫 Educational Centers", d: "Solution fully adaptable to current school curriculum, integrable in any educational institution with continuous technical support and teacher training." }
+        ],
+        selectCountryText: "Select your country",
+        otherCountryPlaceholder: "Specify your country",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "Tell us about your interest in BridgeMind Games...",
+        footerText: "Spain (CET)",
+        copyrightText: "© 2024 BridgeMind Games. All rights reserved."
+      },
+      fr: {
+        t: "BridgeMind Games Education",
+        p: "Système d'entraînement neurolinguistique alimenté par l'IA.",
+        v: "fra.mp4",
+        i: "frbr.jpg",
+        bW: "Planifier un appel vidéo",
+        bI: "Demander des informations",
+        fH: "Enregistrement",
+        fOrg: "Établissement",
+        fName: "Contact",
+        fMail: "Email",
+        fPhone: "Téléphone",
+        fCity: "Pays",
+        fMsg: "Message",
+        fBtn: "Envoyer",
+        fOk: "Reçu! Nous vous contacterons bientôt.",
+        fWait: "Envoi...",
+        fError: "Erreur d'envoi. Réessayez ou contactez directement.",
+        modalTitle: "Planifier un appel vidéo",
+        step1Title: "Étape 1: Sélectionnez le jour",
+        step2Title: "Étape 2: Sélectionnez l'heure (CET - Madrid)",
+        step3Title: "Étape 3: Choisissez la méthode de contact",
+        scheduleText: "Lundi à Vendredi, 9h00 - 18h00",
+        tzTitle: "🌍 Votre heure locale:",
+        tgCopyText: "Copiez le nom d'utilisateur et trouvez-moi sur Telegram",
+        days: ["Lun", "Mar", "Mer", "Jeu", "Ven"],
+        daysFull: ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"],
+        messageTemplate: "Bonjour, je voudrais planifier un appel vidéo pour BridgeMind Games le: ",
+        selectDayFirst: "Veuillez d'abord sélectionner un jour",
+        selectTimeFirst: "Veuillez d'abord sélectionner une heure",
+        imageTexts: ["Enfants apprenant l'espagnol par le jeu du Bridge avec IA", "Omar Sharif - Acteur, joueur professionnel de Bridge et légende mondiale", "L'avenir de l'apprentissage des langues pour tous les âges avec technologie de pointe", "BridgeMind Games - Connecter les cultures par le langage"],
+        pi: [{ t: "🎮 Jeux IA", d: "Dynamiques gamifiées intégrant l'intelligence artificielle pour améliorer l'apprentissage cognitif et la rétention des connaissances de manière interactive." }, { t: "🧠 ROI Mesurable", d: "Système de métricas permettant d'évaluer les progrès réels des étudiants avec des résultats tangibles et des rapports détaillés." }, { t: "🏫 Centres Éducatifs", d: "Solution adaptable au programme scolaire actuel, intégrable dans toute institution éducative avec support technique continu." }],
+        selectCountryText: "Sélectionnez votre pays",
+        otherCountryPlaceholder: "Spécifiez votre pays",
+        phonePlaceholder: "612345678",
+        messagePlaceholder: "Parlez-nous de votre intérêt pour BridgeMind Games...",
+        footerText: "France (CET)",
+        copyrightText: "© 2024 BridgeMind Games. Tous droits réservés."
+      },
+      de: {
+        t: "BridgeMind Games Education",
+        p: "KI-gestütztes neuro-linguistisches Trainingssystem.",
+        v: "ale.mp4",
+        i: "alebr.jpg",
+        bW: "Videoanruf vereinbaren",
+        bI: "Informationen anfordern",
+        fH: "Registrierung",
+        fOrg: "Organisation",
+        fName: "Kontakt",
+        fMail: "Email",
+        fPhone: "Telefon",
+        fCity: "Land",
+        fMsg: "Nachricht",
+        fBtn: "Senden",
+        fOk: "Gesendet! Wir werden Sie bald kontaktieren.",
+        fWait: "Wird gesendet...",
+        fError: "Fehler beim Senden. Versuchen Sie es erneut ou kontaktieren Sie uns direkt.",
+        modalTitle: "Videoanruf vereinbaren",
+        step1Title: "Schritt 1: Wählen Sie den Tag",
+        step2Title: "Schritt 2: Wählen Sie die Uhrzeit (MEZ - Madrid)",
+        step3Title: "Schritt 3: Wählen Sie die Kontaktmethode",
+        scheduleText: "Montag bis Freitag, 9:00 - 18:00 Uhr",
+        tzTitle: "🌍 Ihre Ortszeit:",
+        tgCopyText: "Kopieren Sie den Benutzernamen und finden Sie mich auf Telegram",
+        days: ["Mon", "Die", "Mit", "Don", "Fre"],
+        daysFull: ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"],
+        messageTemplate: "Hallo, ich möchte einen Videoanruf für BridgeMind Games vereinbaren am: ",
+        selectDayFirst: "Bitte wählen Sie zuerst einen Tag",
+        selectTimeFirst: "Bitte wählen Sie zuerst eine Uhrzeit",
+        imageTexts: ["Kinder lernen Spanisch durch Bridgespiele mit KI", "Omar Sharif - Schauspieler, professioneller Bridgespieler und Weltlegende", "Die Zukunft des Sprachenlernens für alle Altersgruppen mit Spitzentechnologie", "BridgeMind Games - Kulturen durch Sprache verbinden"],
+        pi: [{ t: "🎮 KI-Spiele", d: "Gamifizierte Dynamiken mit künstlicher Intelligenz zur Verbesserung des kognitiven Lernens und der Wissensbewahrung." }, { t: "🧠 Messbarer ROI", d: "Metriken zur Bewertung des realen Fortschritts der Schüler mit greifbaren Ergebnissen und detaillierten Berichten." }, { t: "🏫 Bildungszentren", d: "Lösung anpassbar an den aktuellen Lehrplan, integrierbar in jede Bildungseinrichtung mit kontinuierlicher technischer Unterstützung." }],
+        selectCountryText: "Wählen Sie Ihr Land",
+        otherCountryPlaceholder: "Geben Sie Ihr Land an",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "Erzählen Sie uns von Ihrem Interesse an BridgeMind Games...",
+        footerText: "Deutschland (CET)",
+        copyrightText: "© 2024 BridgeMind Games. Alle Rechte vorbehalten."
+      },
+      it: {
+        t: "BridgeMind Games Education",
+        p: "Sistema di formazione neurolinguistica basato sull'IA.",
+        v: "ita.mp4",
+        i: "itabr.jpg",
+        bW: "Pianifica videochiamata",
+        bI: "Richiedi informazioni",
+        fH: "Registrazione",
+        fOrg: "Organizzazione",
+        fName: "Contatto",
+        fMail: "Email",
+        fPhone: "Telefono",
+        fCity: "Paese",
+        fMsg: "Messaggio",
+        fBtn: "Invia",
+        fOk: "Ricevuto! Ti contatteremo presto.",
+        fWait: "Invio...",
+        fError: "Errore nell'invio. Riprova o contatta direttamente.",
+        modalTitle: "Pianifica videochiamata",
+        step1Title: "Passo 1: Seleziona il giorno",
+        step2Title: "Passo 2: Selecçiona l'ora (CET - Madrid)",
+        step3Title: "Passo 3: Scegli il metodo di contatto",
+        scheduleText: "Lunedì a Venerdì, 9:00 - 18:00",
+        tzTitle: "🌍 Il tuo orario locale:",
+        tgCopyText: "Copia lo username e cercami su Telegram",
+        days: ["Lun", "Mar", "Mer", "Gio", "Ven"],
+        daysFull: ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"],
+        messageTemplate: "Ciao, vorrei pianificare una videochiamata per BridgeMind Games il: ",
+        selectDayFirst: "Si prega di selezionare prima un giorno",
+        selectTimeFirst: "Si prega di selezionare prima un'ora",
+        imageTexts: ["Bambini che imparano lo spagnolo attraverso il gioco del Bridge con IA", "Omar Sharif - Attore, giocatore professionista di Bridge e leggenda mondiale", "Il futuro dell'apprendimento delle lingue per tutte le età con tecnologia all'avanguardia", "BridgeMind Games - Connettere le culture attraverso il linguaggio"],
+        pi: [{ t: "🎮 Giochi IA", d: "Dinamiche gamificate che integrano l'intelligenza artificiale per migliorare l'apprendimento cognitivo e la ritenzione delle conoscenze." }, { t: "🧠 ROI Misurabile", d: "Sistema di metriche per valutare il progresso reale degli studenti con risultati tangibili e report dettagliati." }, { t: "🏫 Centri Educativi", d: "Soluzione adattabile al curriculum scolastico attuale, integrabile in qualsiasi istituzione educativa con supporto tecnico continuo." }],
+        selectCountryText: "Seleziona il tuo paese",
+        otherCountryPlaceholder: "Specifica il tuo paese",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "Parlaci del tuo interesse per BridgeMind Games...",
+        footerText: "Italia (CET)",
+        copyrightText: "© 2024 BridgeMind Games. Tutti i diritti riservati."
+      },
+      jp: {
+        t: "BridgeMind Games Education",
+        p: "AI駆動型神経言語トレーニングシステム。",
+        v: "jpn.mp4",
+        i: "jpnbrg.jpg",
+        bW: "ビデオ通話を予約",
+        bI: "情報をリクエスト",
+        fH: "組織登録",
+        fOrg: "組織名",
+        fName: "担当者",
+        fMail: "メール",
+        fPhone: "電話",
+        fCity: "国",
+        fMsg: "メッセージ",
+        fBtn: "送信",
+        fOk: "受信！ すぐにご連絡いたします。",
+        fWait: "送信中...",
+        fError: "送信エラー。もう一度試すか、直接お問い合わせください。",
+        modalTitle: "ビデオ通話を予約",
+        step1Title: "ステップ1：日を選択",
+        step2Title: "ステップ2：時間を選択（CET - マドリード）",
+        step3Title: "ステップ3：連絡方法を選択",
+        scheduleText: "月曜日から金曜日、9:00 - 18:00",
+        tzTitle: "🌍 あなたの現地時間：",
+        tgCopyText: "ユーザー名をコピーしてTelegramで検索してください",
+        days: ["月", "火", "水", "木", "金"],
+        daysFull: ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"],
+        messageTemplate: "こんにちは、BridgeMind Gamesのビデオ通話を予約したいです： ",
+        selectDayFirst: "まず日を選択してください",
+        selectTimeFirst: "まず時間を選択してください",
+        imageTexts: ["AIを活用したブリッジゲームでスペイン語を学ぶ子供たち", "オマー・シャリフ - 俳優、プロのブリッジプレーヤー、世界的なレジェンド", "最先端技術による全年齢向けの言語学習の未来", "BridgeMind Games - 言語を通じて文化をつなぐ"],
+        pi: [{ t: "🎮 AIゲーム", d: "認知学習を向上させるために人工知能を統合したゲーミフィケーションダイナミクス。" }, { t: "🧠 測定可能なROI", d: "実際の学生の進歩を評価するためのメトリクスシステム。" }, { t: "🏫 教育センター", d: "現在の学校カリキュラムに適応可能なソリューション。" }],
+        selectCountryText: "国を選択",
+        otherCountryPlaceholder: "国を指定してください",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "BridgeMind Gamesへのご関心についてお聞かせください...",
+        footerText: "日本 (CET)",
+        copyrightText: "© 2024 BridgeMind Games. 無断複写・転載を禁じます。"
+      },
+      ch: {
+        t: "BridgeMind Games Education",
+        p: "基于人工智能的神经语言训练系统。",
+        v: "chn.mp4",
+        i: "shbr.jpg",
+        bW: "安排视频通话",
+        bI: "请求信息",
+        fH: "机构登记",
+        fOrg: "机构名称",
+        fName: "联系人",
+        fMail: "电子邮件",
+        fPhone: "电话",
+        fCity: "国家",
+        fMsg: "信息",
+        fBtn: "发送",
+        fOk: "已收到！我们会尽快联系您。",
+        fWait: "发送中...",
+        fError: "发送错误。请重试或直接联系我们。",
+        modalTitle: "安排视频通话",
+        step1Title: "步骤1：选择日期",
+        step2Title: "步骤2：选择时间（CET - 马德里）",
+        step3Title: "步骤3：选择联系方式",
+        scheduleText: "周一至周五，9:00 - 18:00",
+        tzTitle: "🌍 您的当地时间：",
+        tgCopyText: "复制用户名并在Telegram上搜索我",
+        days: ["周一", "周二", "周三", "周四", "周五"],
+        daysFull: ["星期一", "星期二", "星期三", "星期四", "星期五"],
+        messageTemplate: "你好，我想为BridgeMind Games安排视频通话时间： ",
+        selectDayFirst: "请先选择日期",
+        selectTimeFirst: "请先选择时间",
+        imageTexts: ["通过AI桥牌游戏学习西班牙语的儿童", "奥马尔·沙里夫 - 演员、职业桥牌选手和世界传奇人物", "采用尖端技术的全年龄段语言学习的未来", "BridgeMind Games - 通过语言连接文化"],
+        pi: [{ t: "🎮 AI游戏", d: "集成人工智能的游戏化动态，以增强认知学习和知识保留。" }, { t: "🧠 可衡量的投资回报", d: "用于评估学生实际进步的指标系统。" }, { t: "🏫 教育中心", d: "完全适应当前学校课程的解决方案。" }],
+        selectCountryText: "选择您的国家",
+        otherCountryPlaceholder: "请指定您的国家",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "请告诉我们您对BridgeMind Games的兴趣...",
+        footerText: "中国 (CET)",
+        copyrightText: "© 2024 BridgeMind Games。保留所有权利。"
+      },
+      ar: {
+        t: "BridgeMind Games Education",
+        p: "نظام تدريب عصبي لغوي مدعوم بالذكاء الاصطناعي.",
+        v: "ara.mp4",
+        i: "dubr.jpg",
+        bW: "جدولة مكالمة فيديو",
+        bI: "طلب معلومات",
+        fH: "تسجيل المنظمات",
+        fOrg: "المؤسسة",
+        fName: "الاتصال",
+        fMail: "البريد",
+        fPhone: "هاتف",
+        fCity: "البلد",
+        fMsg: "رسالة",
+        fBtn: "إرسال",
+        fOk: "تم! سنتواصل معك قريباً.",
+        fWait: "جاري الإرسال...",
+        fError: "خطأ في الإرسال. حاول مرة أخرى أو اتصل مباشرة.",
+        modalTitle: "جدولة مكالمة فيديو",
+        step1Title: "الخطوة 1: حدد اليوم",
+        step2Title: "الخطوة 2: حدد الوقت (CET - مدريد)",
+        step3Title: "الخطوة 3: اختر طريقة الاتصال",
+        scheduleText: "من الاثنين إلى الجمعة، 9:00 - 18:00",
+        tzTitle: "🌍 وقتك المحلي:",
+        tgCopyText: "انسخ اسم المستخدم وابحث عني على Telegram",
+        days: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"],
+        daysFull: ["الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"],
+        messageTemplate: "مرحباً، أود جدولة مكالمة فيديو لـ BridgeMind Games في: ",
+        selectDayFirst: "يرجى تحديد اليوم أولاً",
+        selectTimeFirst: "يرجى تحديد الوقت أولاً",
+        imageTexts: ["أطفال يتعلمون الإسبانية من خلال ألعاب الجسر بالذكاء الاصطناعي", "عمر الشريف - ممثل، لاعب جسر محترف وأسطورة عالمية", "مستقبل تعلم اللغة لجميع الأعمار بتقنية متطورة", "BridgeMind Games - ربط الثقافات من خلال اللغة"],
+        pi: [{ t: "🎮 ألعاب الذكاء الاصطناعي", d: "ديناميكيات ممتعة تدمج الذكاء الاصطناعي لتحسين التعلم المعرفي." }, { t: "🧠 عائد استثمار قابل للقياس", d: "نظام مقاييس لتقييم التقدم الفعلي للطلاب." }, { t: "🏫 المراكز التعليمية", d: "حل قابل للتكيف مع المناهج المدرسية الحالية." }],
+        selectCountryText: "اختر بلدك",
+        otherCountryPlaceholder: "حدد بلدك",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "أخبرنا عن اهتمامك بـ BridgeMind Games...",
+        footerText: "الشرق الأوسط (CET)",
+        copyrightText: "© 2024 BridgeMind Games. جميع الحقوق محفوظة."
+      },
+      ru: {
+        t: "BridgeMind Games Education",
+        p: "Нейролингвистическая тренировочная система на базе ИИ для эффективного обучения.",
+        v: "rus.mp4",
+        i: "rubr.jpg",
+        bW: "Запланировать видеозвонок",
+        bI: "Запросить информацию",
+        fH: "Регистрация организаций",
+        fOrg: "Организация",
+        fName: "Контактное лицо",
+        fMail: "Электронная почта",
+        fPhone: "Телефон",
+        fCity: "Страна",
+        fMsg: "Ваше сообщение",
+        fBtn: "Отправить",
+        fOk: "Получено! Мы скоро свяжемся с вами.",
+        fWait: "Отправка...",
+        fError: "Ошибка отправки. Попробуйте еще раз или свяжитесь напрямую.",
+        modalTitle: "Запланировать видеозвонок",
+        step1Title: "Шаг 1: Выберите день",
+        step2Title: "Шаг 2: Выберите время (CET - Мадрид)",
+        step3Title: "Шаг 3: Выберите способ связи",
+        scheduleText: "Понедельник - Пятница, 9:00 - 18:00",
+        tzTitle: "🌍 Ваше местное время:",
+        tgCopyText: "Скопируйте имя пользователя и найдите меня в Telegram",
+        days: ["Пн", "Вт", "Ср", "Чт", "Пт"],
+        daysFull: ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"],
+        messageTemplate: "Здравствуйте, я хотел бы запланировать видеозвонок для BridgeMind Games на: ",
+        selectDayFirst: "Пожалуйста, сначала выберите день",
+        selectTimeFirst: "Пожалуйста, сначала выберите время",
+        imageTexts: [
+          "Дети изучают испанский через игру в Бридж с ИИ",
+          "Омар Шариф - Актер, профессиональный игрок в Бридж и мировая легенда",
+          "Будущее изучения языков для всех возрастов с передовыми технологиями",
+          "BridgeMind Games - Соединяем культуры через язык"
+        ],
+        pi: [
+          { t: "🎮 Игры с ИИ", d: "Геймифицированные динамики, интегрирующие искусственный интеллект для улучшения когнитивного обучения и сохранения знаний." },
+          { t: "🧠 Измеримая отдача", d: "Система метрик и аналитики для оценки реального прогресса студентов с измеримыми результатами." },
+          { t: "🏫 Образовательные центры", d: "Решение, полностью адаптируемое к текущей школьной программе." }
+        ],
+        selectCountryText: "Выберите вашу страну",
+        otherCountryPlaceholder: "Укажите вашу страну",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "Расскажите нам о вашем интересе к BridgeMind Games...",
+        footerText: "Россия (CET)",
+        copyrightText: "© 2024 BridgeMind Games. Все права защищены."
+      },
+      pt: {
+        t: "BridgeMind Games Education",
+        p: "Sistema de Treinamento Neurolinguístico com IA para aprendizagem eficaz.",
+        v: "por.mp4",
+        i: "porbr.jpg",
+        bW: "Agendar Videchamada",
+        bI: "Solicitar Informação",
+        fH: "Registo de Organizações",
+        fOrg: "Organização",
+        fName: "Pessoa de contacto",
+        fMail: "Email",
+        fPhone: "Telefone",
+        fCity: "País",
+        fMsg: "A sua mensagem",
+        fBtn: "Enviar",
+        fOk: "Recebido! Entraremos em contacto em breve.",
+        fWait: "A enviar...",
+        fError: "Erro no envio. Tente novamente ou contacte diretamente.",
+        modalTitle: "Agendar Videchamada",
+        step1Title: "Passo 1: Selecione o dia",
+        step2Title: "Passo 2: Selecione a hora (CET - Madrid)",
+        step3Title: "Passo 3: Escolha o método de contacto",
+        scheduleText: "Segunda a Sexta, 9:00 - 18:00",
+        tzTitle: "🌍 A sua hora local:",
+        tgCopyText: "Copie o username e procure-me no Telegram",
+        days: ["Seg", "Ter", "Qua", "Qui", "Sex"],
+        daysFull: ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"],
+        messageTemplate: "Olá, gostaria de agendar uma videchamada para BridgeMind Games no dia: ",
+        selectDayFirst: "Por favor, selecione primeiro um dia",
+        selectTimeFirst: "Por favor, selecione primeiro uma hora",
+        imageTexts: [
+          "Crianças a aprender espanhol através do jogo Bridge com IA",
+          "Omar Sharif - Ator, jogador profissional de Bridge e lenda mundial",
+          "O futuro da aprendizagem de línguas para todas as idades com tecnologia de ponta",
+          "BridgeMind Games - Conectando culturas através da linguagem"
+        ],
+        pi: [
+          { t: "🎮 Jogos com IA", d: "Dinâmicas gamificadas que integram inteligência artificial para melhorar a aprendizagem cognitiva." },
+          { t: "🧠 ROI Mensurável", d: "Sistema de métricas para avaliar o progresso real dos estudantes com resultados tangíveis." },
+          { t: "🏫 Centros Educativos", d: "Solução totalmente adaptável ao currículo escolar atual, integrável em qualquer instituição de ensino." }
+        ],
+        selectCountryText: "Selecione o seu país",
+        otherCountryPlaceholder: "Especifique o seu país",
+        phonePlaceholder: "1234567890",
+        messagePlaceholder: "Conte-nos sobre o seu interesse no BridgeMind Games...",
+        footerText: "Portugal (CET)",
+        copyrightText: "© 2024 BridgeMind Games. Todos os direitos reservados."
       }
     };
 
@@ -725,105 +1142,221 @@
     let selectedDay = null;
     let selectedDate = null;
     let selectedTime = null;
+    let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     
-    function init() {
-      // Crear banderas
+        function init() {
       const box = document.getElementById('flag-box');
-      const languages = ['es', 'en'];
+      const flags = { 
+        es:'es', en:'us', fr:'fr', de:'de', 
+        it:'it', jp:'jp', ch:'cn', ar:'sa',
+        ru:'ru', pt:'pt'
+      };
       
-      languages.forEach(lang => {
+      // Crear banderas inicialmente ocultas
+      Object.keys(dictionary).forEach(lang => {
         const btn = document.createElement('button');
-        btn.className = `f-btn ${lang === currentLang ? 'active' : ''}`;
-        btn.innerHTML = `<span class="flag-icon flag-icon-${lang === 'es' ? 'es' : 'us'}"></span> ${lang.toUpperCase()}`;
+        btn.className = `f-btn hidden-flag ${lang === currentLang ? 'active' : ''}`;
+        btn.innerHTML = `<span class="flag-icon flag-icon-${flags[lang]}"></span> ${lang.toUpperCase()}`;
         btn.onclick = () => switchLang(lang);
         box.appendChild(btn);
       });
+          function showFlagsOneByOne() {
+      const flagButtons = document.querySelectorAll('#flag-box .f-btn');
+      const sound = document.getElementById('flagSound');
+      let index = 0;
       
-      // Detectar idioma del navegador
-      const userLang = navigator.language || navigator.userLanguage;
-      if (userLang.startsWith('en')) {
-        switchLang('en');
-      } else {
-        switchLang('es');
+      function showNextFlag() {
+        if (index < flagButtons.length) {
+          // Mostrar bandera actual
+          flagButtons[index].classList.remove('hidden-flag');
+          flagButtons[index].classList.add('show-flag');
+          
+          // Reproducir sonido
+          if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => {
+              // Si hay error de autoplay, ignorar
+              console.log("Sonido no disponible: ", e);
+            });
+          }
+          
+          index++;
+          // Siguiente bandera en 150ms
+          setTimeout(showNextFlag, 150);
+        }
       }
       
-      // Configurar eventos
+      // Iniciar secuencia
+      showNextFlag();
+    }
+      detectCountry();
+      setupImageClicks();
       setupFormEvents();
-      setupDaySelector();
-      setupTimeSlots();
+      setupHeaderScroll();
+      switchLang('es');
       
-      // Configurar clics en imágenes
-      document.querySelectorAll('.gallery-item img').forEach((img, index) => {
-        img.addEventListener('click', () => {
-          const data = dictionary[currentLang];
-          alert(data.imageTexts[index] || "BridgeMind Games - Sistema de aprendizaje");
-        });
-      });
+      // Mostrar banderas una por una después de 5 segundos
+      setTimeout(showFlagsOneByOne, 5000);
+    }
+    
+    function detectCountry() {
+      const userLang = navigator.language || navigator.userLanguage;
+      const langMap = {
+        'es': 'es', 'en': 'en', 'fr': 'fr', 'de': 'de', 
+        'it': 'it', 'ja': 'jp', 'zh': 'ch', 'ar': 'ar',
+        'ru': 'ru', 'pt': 'pt'
+      };
       
-      // Crear badge 24/7 si no existe
-      if (!document.querySelector('.badge-24-7')) {
-        create24hBadge();
+      const langCode = userLang.substring(0, 2);
+      const detectedLang = langMap[langCode] || 'en';
+      
+      const countryNames = {
+        'es': 'España', 'en': 'International', 'fr': 'France', 
+        'de': 'Deutschland', 'it': 'Italia', 'jp': 'Japan', 
+        'ch': 'China', 'ar': 'Middle East',
+        'ru': 'Russia', 'pt': 'Portugal'
+      };
+      
+      document.getElementById('current-country-text').textContent = 
+        `BridgeMind Games - Sistema Global | ${countryNames[detectedLang]}`;
+      
+      if (detectedLang !== 'es') {
+        setTimeout(() => switchLang(detectedLang), 1000);
       }
+    }
+    
+    function setupImageClicks() {
+      document.querySelectorAll('.gallery img').forEach((img, index) => {
+        img.addEventListener('click', () => showImageInfo(index));
+      });
+    }
+    
+    function showImageInfo(index) {
+      const data = dictionary[currentLang] || dictionary.es;
+      const texts = data.imageTexts || [
+        "BridgeMind Games - Aprendizaje de idiomas mediante Bridge",
+        "Sistema Neuro-Lingüístico con IA",
+        "Tecnología de punta para educación",
+        "Conectando culturas a través del lenguaje"
+      ];
+      
+      const modal = document.createElement('div');
+      modal.className = 'image-modal';
+      modal.innerHTML = `
+        <div class="image-modal-content">
+          <button onclick="this.parentElement.parentElement.remove()" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:24px; cursor:pointer;">×</button>
+          <h3>${texts[index] || texts[0]}</h3>
+          <img src="${document.querySelectorAll('.gallery img')[index].src}" style="width:100%; border-radius:10px; margin:15px 0;">
+          <p><strong>BridgeMind Games</strong> - Sistema de aprendizaje de idiomas mediante el juego del Bridge potenciado por IA.</p>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      modal.style.display = 'block';
     }
     
     function switchLang(lang) {
       currentLang = lang;
-      const data = dictionary[lang];
+      const data = dictionary[lang] || dictionary.en;
       
-      // Actualizar textos
-      document.getElementById('txt-h1').textContent = data.t;
-      document.getElementById('txt-p').textContent = data.p;
-      document.getElementById('btn-wa-txt').textContent = data.bW;
-      document.getElementById('btn-info-txt').textContent = data.bI;
-      document.getElementById('f-header-txt').textContent = data.fH;
-      document.getElementById('l-org').textContent = data.fOrg;
-      document.getElementById('l-name').textContent = data.fName;
-      document.getElementById('l-mail').textContent = data.fMail;
-      document.getElementById('l-phone').textContent = data.fPhone;
-      document.getElementById('l-city').textContent = data.fCity;
-      document.getElementById('l-msg').textContent = data.fMsg;
-      document.getElementById('btn-submit-txt').textContent = data.fBtn;
-      document.getElementById('modal-title').textContent = data.modalTitle;
-      document.getElementById('step1-title').textContent = data.step1Title;
-      document.getElementById('step2-title').textContent = data.step2Title;
-      document.getElementById('step3-title').textContent = data.step3Title;
-      document.getElementById('schedule-text').textContent = data.scheduleText;
+      document.getElementById('txt-h1').innerText = data.t;
+      document.getElementById('txt-p').innerText = data.p;
+      document.getElementById('btn-wa-txt').innerText = data.bW;
+      document.getElementById('btn-info-txt').innerText = data.bI;
+      document.getElementById('f-header-txt').innerText = data.fH;
+      document.getElementById('l-org').innerText = data.fOrg;
+      document.getElementById('l-name').innerText = data.fName;
+      document.getElementById('l-mail').innerText = data.fMail;
+      document.getElementById('l-city').innerText = data.fCity;
+      document.getElementById('l-msg').innerText = data.fMsg;
+      document.getElementById('btn-submit-txt').innerText = data.fBtn;
+      document.getElementById('hidden-lang').value = lang;
+      document.getElementById('l-phone').innerText = data.fPhone;
       
-      // Actualizar imagen principal
-      const mainImg = document.querySelector('#img-target img');
-      if (mainImg) {
-        mainImg.src = data.i;
+      document.getElementById('modal-title').innerText = data.modalTitle;
+      document.getElementById('step1-title').innerText = data.step1Title;
+      document.getElementById('step2-title').innerText = data.step2Title;
+      document.getElementById('step3-title').innerText = data.step3Title;
+      document.getElementById('schedule-text').innerText = data.scheduleText;
+      document.getElementById('tz-title').innerText = data.tzTitle;
+      document.getElementById('tg-copy-text').innerText = data.tgCopyText;
+      
+      setupDaySelector();
+      
+      const wechatBtn = document.getElementById('wechat-btn');
+      if (lang === 'ch') {
+        wechatBtn.style.display = 'flex';
+      } else {
+        wechatBtn.style.display = 'none';
       }
       
-      // Actualizar video
-      const video = document.getElementById('video-src');
-      if (video) {
-        video.src = data.v;
-        document.getElementById('video-player').load();
+      const imgElement = document.getElementById('img-target');
+      if (imgElement) {
+        imgElement.src = data.i + '?v=' + Date.now();
       }
       
-      // Actualizar pilares
-      const pillarBox = document.getElementById('pillar-box');
-      if (pillarBox && data.pi) {
-        pillarBox.innerHTML = '';
-        data.pi.forEach(pillar => {
+      const videoSrc = document.getElementById('video-src');
+      const videoPlayer = document.getElementById('video-player');
+      if (videoSrc && videoPlayer) {
+        videoSrc.src = data.v + '?v=' + Date.now();
+        videoPlayer.load();
+      }
+      
+      const prefixMap = { 
+        es: '+34', en: '+1', fr: '+33', de: '+49', 
+        it: '+39', jp: '+81', ch: '+86', ar: '+971',
+        ru: '+7', pt: '+351'
+      };
+      const prefixSelect = document.getElementById('p-prefix');
+      if (prefixSelect) {
+        prefixSelect.value = prefixMap[lang] || '+34';
+      }
+      
+      const pBox = document.getElementById('pillar-box');
+      if (pBox && data.pi) {
+        pBox.innerHTML = '';
+        data.pi.forEach(item => {
           const card = document.createElement('div');
           card.className = 'card';
-          card.innerHTML = `<h3>${pillar.t}</h3><p>${pillar.d}</p>`;
-          pillarBox.appendChild(card);
+          card.innerHTML = `<h3>${item.t}</h3><p>${item.d}</p>`;
+          pBox.appendChild(card);
         });
       }
       
-      // Actualizar banderas activas
-      document.querySelectorAll('.f-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.textContent.includes(lang.toUpperCase())) {
-          btn.classList.add('active');
-        }
+      document.getElementById('main-body').style.direction = (lang === 'ar') ? 'rtl' : 'ltr';
+      
+      document.querySelectorAll('.nav-flags .f-btn').forEach(b => {
+        const txt = b.innerText.trim().toLowerCase();
+        b.classList.toggle('active', txt.includes(lang));
       });
       
-      // Actualizar selector de días
-      setupDaySelector();
+      // Actualizar placeholders y textos del formulario
+      const countrySelect = document.getElementById('country-select');
+      if (countrySelect) {
+        const firstOption = countrySelect.querySelector('option[value=""]');
+        if (firstOption) firstOption.textContent = data.selectCountryText;
+      }
+      
+      const otherCountryInput = document.getElementById('other-country');
+      if (otherCountryInput) {
+        otherCountryInput.placeholder = data.otherCountryPlaceholder;
+      }
+      
+      const phoneInput = document.getElementById('p-phone');
+      if (phoneInput) {
+        phoneInput.placeholder = data.phonePlaceholder;
+      }
+      
+      const messageTextarea = document.querySelector('textarea[name="mensaje"]');
+      if (messageTextarea) {
+        messageTextarea.placeholder = data.messagePlaceholder;
+      }
+      
+      // Actualizar footer
+      const footerDivs = document.querySelectorAll('footer div');
+      if (footerDivs.length >= 3) {
+        footerDivs[0].innerHTML = `<strong>BridgeMind Games Education</strong> | ${data.footerText}`;
+        footerDivs[2].textContent = data.copyrightText;
+      }
     }
     
     function setupFormEvents() {
@@ -831,14 +1364,23 @@
       const otherContainer = document.getElementById('other-country-container');
       
       countrySelect.addEventListener('change', function() {
-        otherContainer.style.display = this.value === 'OT' ? 'block' : 'none';
+        if (this.value === 'OT') {
+          otherContainer.style.display = 'block';
+          document.getElementById('other-country').required = true;
+        } else {
+          otherContainer.style.display = 'none';
+          document.getElementById('other-country').required = false;
+        }
       });
+      
+      setupDaySelector();
+      setupTimeSlots();
     }
     
     function setupDaySelector() {
       const daySelector = document.getElementById('day-selector');
       daySelector.innerHTML = '';
-      const data = dictionary[currentLang];
+      const data = dictionary[currentLang] || dictionary.es;
       
       const today = new Date();
       let daysAdded = 0;
@@ -846,30 +1388,33 @@
       
       while (daysAdded < 5) {
         currentDate.setDate(currentDate.getDate() + 1);
+        
         if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
           const btn = document.createElement('div');
           btn.className = 'day-btn';
           
           const dayName = data.days[daysAdded];
-          const dayNum = currentDate.getDate();
-          const month = currentDate.getMonth() + 1;
+          const dayNumber = currentDate.getDate();
+          const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                             'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+          const monthName = monthNames[currentDate.getMonth()];
           
-          btn.textContent = `${dayName} ${dayNum}/${month}`;
+          btn.textContent = `${dayName} ${dayNumber} ${monthName}`;
           
           const year = currentDate.getFullYear();
-          const monthStr = String(currentDate.getMonth() + 1).padStart(2, '0');
-          const dayStr = String(currentDate.getDate()).padStart(2, '0');
-          const fullDate = `${year}-${monthStr}-${dayStr}`;
+          const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+          const day = String(currentDate.getDate()).padStart(2, '0');
+          const fullDate = `${year}-${month}-${day}`;
           
-          btn.dataset.date = fullDate;
-          btn.dataset.dayName = data.daysFull[daysAdded];
+          btn.setAttribute('data-date', fullDate);
+          btn.setAttribute('data-day-full', data.daysFull[daysAdded]);
           
-          btn.onclick = function() {
+          btn.addEventListener('click', function() {
             document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('selected'));
             this.classList.add('selected');
-            selectedDay = this.dataset.dayName;
-            selectedDate = this.dataset.date;
-          };
+            selectedDay = this.getAttribute('data-day-full');
+            selectedDate = this.getAttribute('data-date');
+          });
           
           daySelector.appendChild(btn);
           daysAdded++;
@@ -882,16 +1427,44 @@
         slot.addEventListener('click', function() {
           document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
           this.classList.add('selected');
-          selectedTime = this.dataset.time;
+          selectedTime = this.getAttribute('data-time');
+          updateTimezoneInfo();
         });
       });
     }
     
+    function updateTimezoneInfo() {
+      if (!selectedTime) return;
+      
+      const cetHour = parseInt(selectedTime.split(':')[0]);
+      const cetMinute = parseInt(selectedTime.split(':')[1]);
+      
+      const cetDate = new Date();
+      cetDate.setHours(cetHour, cetMinute, 0, 0);
+      
+      const userTime = cetDate.toLocaleTimeString(currentLang === 'en' ? 'en-US' : 'es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: userTimezone,
+        timeZoneName: 'short'
+      });
+      
+      document.getElementById('timezone-info').style.display = 'block';
+      document.getElementById('user-timezone').textContent = userTime;
+    }
+    
     function toggleForm() {
-      const form = document.getElementById('form-wrap');
-      form.style.display = form.style.display === 'block' ? 'none' : 'block';
-      if (form.style.display === 'block') {
-        form.scrollIntoView({ behavior: 'smooth' });
+      const f = document.getElementById('form-wrap');
+      const isVisible = f.style.display === 'block';
+      f.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible) {
+        f.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          const firstField = document.querySelector('input[name="organizacion"]');
+          if (firstField) {
+            firstField.focus();
+          }
+        }, 300);
       }
     }
     
@@ -903,6 +1476,8 @@
       selectedTime = null;
       document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('selected'));
       document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      document.getElementById('timezone-info').style.display = 'none';
+      document.getElementById('telegram-info').style.display = 'none';
     }
     
     function closeCalendarModal() {
@@ -911,9 +1486,9 @@
     }
     
     function contactVia(method) {
-      const data = dictionary[currentLang];
+      const data = dictionary[currentLang] || dictionary.es;
       
-      if (!selectedDay) {
+      if (!selectedDay && !selectedDate) {
         alert(data.selectDayFirst);
         return;
       }
@@ -923,60 +1498,277 @@
         return;
       }
       
-      const message = `${data.messageTemplate}${selectedDay} ${selectedTime} CET`;
+      let displayDate = selectedDay;
+      if (selectedDate) {
+        const [year, month, day] = selectedDate.split('-');
+        const dateObj = new Date(year, month-1, day);
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        displayDate = dateObj.toLocaleDateString(currentLang === 'es' ? 'es-ES' : 'en-US', options);
+      }
+      
+      const fullDateTime = `${displayDate} ${selectedTime} CET (Madrid)`;
+      const message = encodeURIComponent(data.messageTemplate + fullDateTime);
+      
+      if (method === 'telegram') {
+        window.open(`https://t.me/BridgeMindGames`, '_blank');
+        closeCalendarModal();
+        return;
+      }
+      
+      if (method === 'wechat') {
+        alert('WeChat ID: bridgemindgames\n\nPor favor, agréganos en WeChat y envíanos el mensaje:\n\n' + data.messageTemplate + fullDateTime);
+        closeCalendarModal();
+        return;
+      }
       
       if (method === 'whatsapp') {
-        window.open(`https://wa.me/34634268663?text=${encodeURIComponent(message)}`, '_blank');
-      } else if (method === 'telegram') {
-        window.open(`https://t.me/BridgeMindGames`, '_blank');
-      }
-      
-      closeCalendarModal();
-    }
-    
-    function create24hBadge() {
-      const badge = document.createElement('div');
-      badge.className = 'badge-24-7';
-      badge.innerHTML = '<i class="fas fa-clock"></i><span>Asistencia 24/7</span>';
-      document.body.appendChild(badge);
-    }
-    
-    // Manejar envío del formulario
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const data = dictionary[currentLang];
-      const status = document.getElementById('form-status');
-      
-      status.textContent = 'Enviando...';
-      status.style.color = 'orange';
-      status.style.display = 'block';
-      
-      // Simular envío (en producción usarías fetch)
-      setTimeout(() => {
-        status.textContent = data.fOk;
-        status.style.color = 'green';
-        this.reset();
-        
-        setTimeout(() => {
-          status.style.display = 'none';
-          toggleForm();
-        }, 3000);
-      }, 1500);
-    });
-    
-    // Cerrar modal al hacer clic fuera
-    window.addEventListener('click', function(event) {
-      const modal = document.getElementById('calendarModal');
-      if (event.target === modal) {
+        window.open(`https://wa.me/34634268663?text=${message}`, '_blank');
         closeCalendarModal();
       }
-    });
+    }
     
-    // Inicializar cuando el DOM esté listo
+    function setupHeaderScroll() {
+      let lastScroll = 0;
+      const header = document.querySelector('header');
+      const countryTitle = document.querySelector('.country-title');
+      const spacer = document.querySelector('.spacer');
+      
+      window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+          header.classList.add('compact');
+          
+          if (countryTitle) {
+            countryTitle.style.opacity = '0';
+            countryTitle.style.height = '0';
+            countryTitle.style.padding = '0';
+            countryTitle.style.margin = '0';
+            countryTitle.style.overflow = 'hidden';
+            countryTitle.style.transition = 'all 0.3s ease';
+          }
+          
+          if (spacer) {
+            spacer.style.height = '70px';
+          }
+        } else {
+          header.classList.remove('compact');
+          
+          if (countryTitle) {
+            countryTitle.style.opacity = '1';
+            countryTitle.style.height = 'auto';
+            countryTitle.style.padding = '5px 20px';
+            countryTitle.style.marginTop = '0';
+            countryTitle.style.overflow = 'visible';
+          }
+          
+          if (spacer) {
+            spacer.style.height = '110px';
+          }
+        }
+        
+        lastScroll = currentScroll;
+      });
+    }
+    
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.onsubmit = function (e) {
+        e.preventDefault();
+        const data = dictionary[currentLang] || dictionary.es;
+        const status = document.getElementById('form-status');
+        const prefijo = document.getElementById('p-prefix').value;
+        const telefono = document.getElementById('p-phone').value;
+        const telefonoCompleto = prefijo + ' ' + telefono;
+        
+        const country = document.getElementById('country-select').value || 'XX';
+        const timestamp = Date.now().toString().slice(-6);
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        const uniqueCode = `BGM-${country}-${timestamp}${random}`;
+        
+        let hiddenPhone = document.getElementById('telefono-completo');
+        if (!hiddenPhone) {
+          hiddenPhone = document.createElement('input');
+          hiddenPhone.type = 'hidden';
+          hiddenPhone.name = 'telefono_completo';
+          hiddenPhone.id = 'telefono-completo';
+          this.appendChild(hiddenPhone);
+        }
+        hiddenPhone.value = telefonoCompleto;
+        
+        let hiddenCode = document.getElementById('unique-code');
+        if (!hiddenCode) {
+          hiddenCode = document.createElement('input');
+          hiddenCode.type = 'hidden';
+          hiddenCode.name = 'codigo_unico';
+          hiddenCode.id = 'unique-code';
+          this.appendChild(hiddenCode);
+        }
+        hiddenCode.value = uniqueCode;
+        
+        let hiddenDestLang = document.getElementById('dest-lang');
+        if (!hiddenDestLang) {
+          hiddenDestLang = document.createElement('input');
+          hiddenDestLang.type = 'hidden';
+          hiddenDestLang.name = 'idioma_destino';
+          hiddenDestLang.id = 'dest-lang';
+          this.appendChild(hiddenDestLang);
+        }
+        hiddenDestLang.value = 'es';
+        
+        status.style.display = "block";
+        status.innerText = data.fWait;
+        status.style.color = "orange";
+        
+        fetch(
+          "https://script.google.com/macros/s/AKfycbzEDDFBgsQcEMSSjfwNTPrWkPdcYmV9IBSDr7ysvfNdCA4tV14ItzuK0G6glm0N1bqyww/exec",
+          {
+            method: "POST",
+            body: new FormData(this),
+            mode: "no-cors"
+          }
+        )
+          .then(() => {
+            status.innerText = data.fOk;
+            status.style.color = "green";
+            this.reset();
+            document.getElementById('other-country-container').style.display = 'none';
+            setTimeout(() => {
+              status.style.display = "none";
+              toggleForm();
+            }, 3000);
+          })
+          .catch(() => {
+            status.innerText = data.fError;
+            status.style.color = "red";
+          });
+      };
+    }
+    
+    function createChatbot() {
+      const chatBtn = document.createElement('button');
+      chatBtn.className = 'chatbot-btn';
+      chatBtn.innerHTML = '💬';
+      chatBtn.title = 'BridgeMind Assistant 24/7';
+      chatBtn.onclick = toggleChatbot;
+      document.body.appendChild(chatBtn);
+      
+      const container = document.createElement('div');
+      container.id = 'chatbot-container';
+      container.innerHTML = `
+        <div style="background: var(--blue); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>🤖 BridgeMind Assistant</strong>
+            <div style="font-size: 0.8rem; opacity: 0.9;">24/7 - IA Multilingüe</div>
+          </div>
+          <button onclick="toggleChatbot()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">×</button>
+        </div>
+        <div id="chat-messages" style="height: 350px; overflow-y: auto; padding: 15px; background: #f9f9f9;">
+          <div style="text-align: left; margin-bottom: 10px;">
+            <div style="display: inline-block; background: #e9e9e9; color: black; padding: 10px 15px; border-radius: 15px; max-width: 80%;">
+              Hola, soy el asistente de BridgeMind Games. Puedo responder sobre nuestro sistema de aprendizaje de idiomas mediante Bridge y IA. ¿En qué puedo ayudarte?
+            </div>
+          </div>
+        </div>
+        <div style="padding: 15px; border-top: 1px solid #ddd; display: flex;">
+          <input type="text" id="chat-input" placeholder="Pregunta sobre BridgeMind..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px;">
+          <button onclick="sendChatMessage()" style="background: var(--blue); color: white; border: none; border-radius: 20px; padding: 0 20px; margin-left: 10px; cursor:pointer;">→</button>
+        </div>
+        <div style="padding: 10px 15px; background: #fff3cd; font-size: 0.8rem; text-align: center;">
+          ¿Pregunta compleja? <a href="#" onclick="toggleForm(); toggleChatbot();" style="color: var(--blue); font-weight:bold;">Contacta directamente</a>
+        </div>
+      `;
+      document.body.appendChild(container);
+    }
+    
+    function toggleChatbot() {
+      const container = document.getElementById('chatbot-container');
+      if (!container) {
+        createChatbot();
+        return;
+      }
+      container.style.display = container.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const userMessage = input.value.trim();
+      
+      if (!userMessage) return;
+      
+      const messagesDiv = document.getElementById('chat-messages');
+      const userMsg = document.createElement('div');
+      userMsg.style.textAlign = 'right';
+      userMsg.style.marginBottom = '10px';
+      userMsg.innerHTML = `
+        <div style="display: inline-block; background: var(--blue); color: white; padding: 10px 15px; border-radius: 15px; max-width: 80%;">
+          ${userMessage}
+        </div>
+      `;
+      messagesDiv.appendChild(userMsg);
+      input.value = '';
+      
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      
+      const complexKeywords = ['precio', 'costo', 'contrato', 'inversión', 'financiación', 'socio', 'colaboración', 'detallado'];
+      const isComplex = complexKeywords.some(keyword => 
+        userMessage.toLowerCase().includes(keyword.toLowerCase())
+      );
+      
+      setTimeout(() => {
+        const botMsg = document.createElement('div');
+        botMsg.style.textAlign = 'left';
+        botMsg.style.marginBottom = '10px';
+        
+        if (isComplex) {
+          botMsg.innerHTML = `
+            <div style="display: inline-block; background: #e9e9e9; color: black; padding: 10px 15px; border-radius: 15px; max-width: 80%;">
+              Para preguntas sobre financiación, colaboraciones o detalles específicos, te recomiendo contactarnos directamente mediante el formulario.
+              <br><br>
+              <a href="#" onclick="toggleForm(); toggleChatbot();" style="color: var(--blue); font-weight:bold;">📝 Ir al formulario de contacto</a>
+            </div>
+          `;
+        } else {
+          const responses = [
+            "BridgeMind Games utiliza el juego del Bridge para enseñar español mediante IA adaptativa.",
+            "Nuestro sistema neuro-lingüístico es 3x más efectivo que métodos tradicionales.",
+            "Trabajamos con instituciones educativas y federaciones de Bridge a nivel mundial.",
+            "El sistema se adapta automáticamente al nivel y progreso de cada estudiante.",
+            "¿Te gustaría agendar una videollamada para conocer más detalles?"
+          ];
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          
+          botMsg.innerHTML = `
+            <div style="display: inline-block; background: #e9e9e9; color: black; padding: 10px 15px; border-radius: 15px; max-width: 80%;">
+              ${randomResponse}
+            </div>
+          `;
+        }
+        
+        messagesDiv.appendChild(botMsg);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }, 800);
+    }
+    
+    window.onclick = function(event) {
+      const modal = document.getElementById('calendarModal');
+      if (event.target == modal) {
+        closeCalendarModal();
+      }
+      
+      if (event.target.className === 'image-modal') {
+        event.target.remove();
+      }
+    }
+    
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
+      document.addEventListener('DOMContentLoaded', function() {
+        init();
+        setTimeout(createChatbot, 3000);
+      });
     } else {
       init();
+      setTimeout(createChatbot, 3000);
     }
   </script>
 </body>
