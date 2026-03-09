@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BridgeMind Games - Bienvenido</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.98);
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      color: #333;
+    }
+    h1 {
+      color: #007bff;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      color: #555;
+    }
+    .question {
+      margin: 30px 0;
+      text-align: left;
+    }
+    .question label {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+    .option {
+      background: #f8f9fa;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+    }
+    .option:hover {
+      border-color: #007bff;
+      background: #e3f2fd;
+      transform: translateY(-2px);
+    }
+    .option.selected {
+      border-color: #ffc107;
+      background: #ffc107;
+      color: #000;
+      font-weight: bold;
+    }
+    .btn-continue {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: all 0.3s;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .btn-continue.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .btn-continue.active:hover {
+      background: #218838;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 BridgeMind Games</h1>
+    <p>Sistema Neuro-Lingüístico con IA para aprendizaje de idiomas</p>
+    
+    <div class="question">
+      <label>¿Quién eres?</label>
+      <div class="option" data-type="profesor" onclick="selectType(this)">👨‍🏫 Profesor / Educador</div>
+      <div class="option" data-type="estudiante" onclick="selectType(this)">🎓 Estudiante</div>
+      <div class="option" data-type="institucion" onclick="selectType(this)">🏫 Institución Educativa</div>
+      <div class="option" data-type="padre" onclick="selectType(this)">👨‍👩‍👧 Padre / Madre</div>
+    </div>
+    
+    <div class="question">
+      <label>¿Qué te interesa?</label>
+      <div class="option" data-interest="demo" onclick="selectInterest(this)">🎮 Ver demostración</div>
+      <div class="option" data-interest="info" onclick="selectInterest(this)">ℹ️ Más información</div>
+      <div class="option" data-interest="precio" onclick="selectInterest(this)">💰 Precios y planes</div>
+      <div class="option" data-interest="contacto" onclick="selectInterest(this)">📞 Contactar ahora</div>
+    </div>
+    
+    <button class="btn-continue" id="btnContinue" onclick="proceed()">Continuar →</button>
+  </div>
+  
+  <script>
+    let selectedType = null;
+    let selectedInterest = null;
+    
+    function selectType(element) {
+      document.querySelectorAll('[data-type]').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedType = element.getAttribute('data-type');
+      checkComplete();
+    }
+    
+    function selectInterest(element) {
+      document.querySelectorAll('[data-interest]').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedInterest = element.getAttribute('data-interest');
+      checkComplete();
+    }
+    
+    function checkComplete() {
+      const btn = document.getElementById('btnContinue');
+      if (selectedType && selectedInterest) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+    
+    function proceed() {
+      if (selectedType && selectedInterest) {
+        window.location.href = `index.html?tipo=${selectedType}&interes=${selectedInterest}`;
+      }
+    }
+  </script>
+</body>
+</html>
