@@ -1,81 +1,1255 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BridgeMindGames BGM</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0056b3; color: white; margin: 0; text-align: center; }
-        header { padding: 20px; }
-        .logo-bgm { max-width: 150px; }
-        .globo { font-size: 60px; display: block; margin: 15px auto; animation: spin 3s linear infinite; }
-        #my-photo { width: 180px; height: 180px; border-radius: 50%; border: 4px solid white; display: none; margin: 15px auto; object-fit: cover; }
-        
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridge Mind Games — BGM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .nav-flags { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px; }
-        .f-btn { 
-            background: white; border: none; padding: 8px 15px; border-radius: 20px; 
-            cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: bold;
-            opacity: 0; transform: translateY(10px); transition: 0.4s;
-        }
-        .f-btn.show { opacity: 1; transform: translateY(0); }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #020c1b 0%, #0a1f3d 40%, #0d2d5a 70%, #071628 100%);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      overflow-y: auto;
+      position: relative;
+    }
 
-        video { width: 90%; max-width: 700px; border-radius: 15px; border: 3px solid white; margin-bottom: 20px; }
-        
-        .gallery { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding-bottom: 40px; }
-        .gallery img { width: 200px; height: 140px; object-fit: cover; border-radius: 10px; border: 2px solid white; }
-    </style>
+    /* Estrellas */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 45%, rgba(255,255,255,0.5) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c9a96e, #ffd700, #c9a96e, transparent);
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    .bottom-line {
+      position: fixed;
+      bottom: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c9a96e, #ffd700, #c9a96e, transparent);
+      opacity: 0.3;
+      z-index: 10;
+    }
+
+    /* ── WRAPPER ── */
+    .page {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 20px 80px;
+      width: 100%;
+    }
+
+    /* ── HEADER ── */
+    .logo {
+      width: 100px;
+      filter: drop-shadow(0 0 30px rgba(201,169,110,0.5));
+      animation: glow 3s ease-in-out infinite alternate;
+      margin-bottom: 12px;
+    }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 20px rgba(201,169,110,0.3)); }
+      to   { filter: drop-shadow(0 0 50px rgba(201,169,110,0.8)); }
+    }
+    .gold-line {
+      width: 80px; height: 1px;
+      background: linear-gradient(90deg, transparent, #c9a96e, transparent);
+      margin: 12px auto;
+    }
+    .cards-row {
+      display: flex; gap: 10px;
+      font-size: 2rem;
+      margin: 6px 0 14px;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-7px); }
+    }
+    .card-suit { animation: flip 8s linear infinite; display: inline-block; }
+    .card-suit:nth-child(2) { animation-delay:-2s; }
+    .card-suit:nth-child(3) { animation-delay:-4s; }
+    .card-suit:nth-child(4) { animation-delay:-6s; }
+    @keyframes flip {
+      0%,80%,100% { transform: rotateY(0); }
+      40%         { transform: rotateY(180deg); }
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.7rem, 4.5vw, 2.8rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    h1 span { color: #c9a96e; }
+    .subtitle {
+      font-size: clamp(0.58rem, 1.3vw, 0.72rem);
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* ── STEPS ── */
+    .steps-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 28px 0 0;
+    }
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,169,110,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0;
+      transition: all 0.4s;
+    }
+    .step-dot.active {
+      border-color: #c9a96e;
+      color: #c9a96e;
+      box-shadow: 0 0 12px rgba(201,169,110,0.35);
+    }
+    .step-dot.done {
+      background: rgba(201,169,110,0.2);
+      border-color: #c9a96e;
+      color: #c9a96e;
+    }
+    .step-line {
+      width: 36px; height: 1px;
+      background: rgba(201,169,110,0.2);
+      transition: background 0.4s;
+    }
+    .step-line.done { background: rgba(201,169,110,0.6); }
+
+    /* ── PANEL GENÉRICO ── */
+    .panel {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 520px;
+      animation: fadeUp 0.45s ease forwards;
+    }
+    .panel.active { display: flex; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .panel-question {
+      font-size: clamp(0.75rem, 1.6vw, 0.88rem);
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 28px 0 20px;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    /* ── OPCIONES ── */
+    .options { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+
+    .opt-btn {
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(201,169,110,0.05);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 4px;
+      padding: 14px 20px;
+      cursor: pointer;
+      text-align: left;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      width: 100%;
+      transition: all 0.28s ease;
+    }
+    .opt-btn:hover {
+      background: rgba(201,169,110,0.12);
+      border-color: #c9a96e;
+      transform: translateX(5px);
+    }
+    .opt-btn.sel {
+      background: rgba(201,169,110,0.18);
+      border-color: #ffd700;
+      box-shadow: 0 0 14px rgba(201,169,110,0.15);
+    }
+    .opt-icon { font-size: 1.5rem; min-width: 34px; text-align: center; }
+    .opt-texts { display: flex; flex-direction: column; gap: 2px; }
+    .opt-title { font-size: 0.88rem; font-weight: 500; letter-spacing: 0.06em; color: #c9a96e; }
+    .opt-desc  { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 0.04em; font-weight: 300; }
+
+    /* Grid 2 col (niveles, juegos) */
+    .opts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+    .opts-grid .opt-btn { flex-direction: column; align-items: flex-start; gap: 6px; }
+    @media (max-width: 400px) { .opts-grid { grid-template-columns: 1fr; } }
+
+    /* Tag de materia libre */
+    .input-wrap {
+      width: 100%;
+      position: relative;
+      margin-top: 4px;
+    }
+    .free-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 4px;
+      padding: 13px 18px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .free-input:focus { border-color: #c9a96e; }
+    .free-input::placeholder { color: rgba(255,255,255,0.22); }
+
+    /* Sugerencias */
+    .chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      width: 100%;
+      margin-top: 12px;
+    }
+    .chip {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .chip:hover, .chip.sel {
+      border-color: #c9a96e;
+      color: #c9a96e;
+      background: rgba(201,169,110,0.1);
+    }
+    .chips-label {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    /* ── FAST TRACK ── */
+    .fast-track {
+      width: 100%;
+      max-width: 520px;
+      margin-top: 32px;
+      border: 1px solid rgba(201,169,110,0.15);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .fast-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      cursor: pointer;
+      background: rgba(201,169,110,0.04);
+      transition: background 0.2s;
+      border: none;
+      width: 100%;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .fast-header:hover { background: rgba(201,169,110,0.1); }
+    .fast-icon { font-size: 1.2rem; }
+    .fast-texts { text-align: left; }
+    .fast-title { font-size: 0.82rem; font-weight: 500; color: #c9a96e; letter-spacing: 0.1em; }
+    .fast-sub   { font-size: 0.67rem; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; margin-top: 2px; }
+    .fast-arrow {
+      margin-left: auto;
+      color: rgba(201,169,110,0.5);
+      font-size: 0.8rem;
+      transition: transform 0.3s;
+    }
+    .fast-arrow.open { transform: rotate(180deg); }
+
+    .fast-body {
+      display: none;
+      padding: 20px;
+      border-top: 1px solid rgba(201,169,110,0.1);
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fast-body.open { display: flex; animation: fadeUp 0.3s ease; }
+
+    .reg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 420px) { .reg-row { grid-template-columns: 1fr; } }
+
+    .reg-group { display: flex; flex-direction: column; gap: 5px; }
+    .reg-group.full { grid-column: 1/-1; }
+    .reg-label {
+      font-size: 0.65rem; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    .reg-input {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 4px;
+      padding: 11px 14px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+    .reg-input:focus { border-color: #c9a96e; }
+    .reg-input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .contact-toggle {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .toggle-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.2s;
+    }
+    .toggle-btn.sel {
+      border-color: #c9a96e;
+      color: #c9a96e;
+      background: rgba(201,169,110,0.1);
+    }
+
+    /* ── BOTÓN CONTINUAR ── */
+    .btn-continue {
+      display: none;
+      margin-top: 24px;
+      background: linear-gradient(135deg, rgba(201,169,110,0.18), rgba(201,169,110,0.08));
+      border: 1px solid #c9a96e;
+      border-radius: 4px;
+      padding: 13px 42px;
+      color: #c9a96e;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-continue.show { display: inline-block; animation: fadeUp 0.35s ease; }
+    .btn-continue:hover {
+      background: rgba(201,169,110,0.28);
+      box-shadow: 0 0 22px rgba(201,169,110,0.25);
+    }
+
+    .lang-note {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.18);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+
+    /* ── SUCCESS ── */
+    #panel-success {
+      text-align: center;
+    }
+    .success-icon { font-size: 3rem; margin-bottom: 16px; }
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: #c9a96e;
+      margin-bottom: 8px;
+    }
+    .success-sub {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+      margin-bottom: 28px;
+    }
+  </style>
 </head>
 <body>
+<div class="bottom-line"></div>
 
-    <header>
-        <img src="logo.png" class="logo-bgm">
-        <span id="globo-icon" class="globo">🌐</span>
-        <img id="my-photo" src="esp.jpg">
-    </header>
+<div class="page">
 
-    <nav class="nav-flags" id="flag-container"></nav>
+  <!-- HEADER -->
+  <img src="logo.png" class="logo" alt="BGM">
+  <div class="gold-line"></div>
+  <div class="cards-row">
+    <span class="card-suit">♠</span>
+    <span class="card-suit">♥</span>
+    <span class="card-suit">♦</span>
+    <span class="card-suit">♣</span>
+  </div>
+  <h1>Bridge Mind <span>Games</span></h1>
+  <p class="subtitle" id="txt-subtitle">Academia Universal · BGM</p>
+  <div class="gold-line"></div>
 
-    <video controls><source src="esp.mp4" type="video/mp4"></video>
+  <!-- INDICADOR DE PASOS -->
+  <div class="steps-indicator" id="steps-indicator">
+    <div class="step-dot active" id="dot-1">1</div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-dot" id="dot-2">2</div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-dot" id="dot-3">3</div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step-dot" id="dot-4">4</div>
+  </div>
 
-    <div class="gallery">
-        <img src="esp.jpg"> <img src="ico.jpg"> <img src="inbg.jpg"> <img id="foto-4" src="esbr.jpg"> </div>
+  <!-- ═══ PANEL 1 — QUÉ QUIERES APRENDER ═══ -->
+  <div class="panel active" id="panel-1">
+    <p class="panel-question" id="txt-q1">¿Qué quieres aprender?</p>
 
-    <script>
-        const flags = [
-            {n:'ES', c:'es', img:'esbr.jpg'}, {n:'EN', c:'us', img:'enbr.jpg'}, {n:'DE', c:'de', img:'enbr.jpg'},
-            {n:'IT', c:'it', img:'itabr.jpg'}, {n:'FR', c:'fr', img:'enbr.jpg'}, {n:'JP', c:'jp', img:'jpnbr.jpg'},
-            {n:'AR', c:'ae', img:'dubr.jpg'}, {n:'ZH', c:'cn', img:'dubr.jpg'}, {n:'PT', c:'pt', img:'dubr.jpg'},
-            {n:'IN', c:'in', img:'inbg.jpg'}
-        ];
+    <div class="input-wrap">
+      <input type="text" class="free-input" id="materia-input"
+        placeholder="Escribe una materia, habilidad, idioma..."
+        oninput="onMateriaInput(this.value)">
+    </div>
 
-        window.onload = () => {
-            // Secuencia inicial
-            setTimeout(() => {
-                document.getElementById('globo-icon').style.display = 'none';
-                document.getElementById('my-photo').style.display = 'block';
-            }, 3000);
+    <p class="chips-label" id="txt-suggestions">Sugerencias</p>
+    <div class="chips" id="chips-materias"></div>
 
-            // Banderas con escala musical
-            const container = document.getElementById('flag-container');
-            flags.forEach((f, i) => {
-                let btn = document.createElement('button');
-                btn.className = 'f-btn';
-                btn.innerHTML = `<span class="flag-icon flag-icon-${f.c}"></span> ${f.n}`;
-                
-                btn.onclick = () => {
-                    document.getElementById('foto-4').src = f.img; // Solo toca la foto 4
-                };
+    <button class="btn-continue" id="btn-1" onclick="goStep(2)">
+      Continuar →
+    </button>
+  </div>
 
-                container.appendChild(btn);
-                setTimeout(() => { 
-                    btn.classList.add('show');
-                    new Audio(`audio/note${i+1}.mp3`).play().catch(()=>{}); 
-                }, i * 200);
-            });
-        };
-    </script>
+  <!-- ═══ PANEL 2 — MODALIDAD ═══ -->
+  <div class="panel" id="panel-2">
+    <p class="panel-question" id="txt-q2">¿Cómo quieres aprender?</p>
+    <div class="options" id="opts-modalidad">
+
+      <button class="opt-btn" data-val="tradicional" onclick="selectModalidad(this)">
+        <span class="opt-icon">📚</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-m1">Tradicional</span>
+          <span class="opt-desc" id="txt-m1d">Clases estructuradas, currículo clásico</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="juegos-ia" onclick="selectModalidad(this)">
+        <span class="opt-icon">🎮</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-m2">Juegos + IA constante</span>
+          <span class="opt-desc" id="txt-m2d">Aprende jugando con agentes IA en todo momento</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="profesores" onclick="selectModalidad(this)">
+        <span class="opt-icon">👨‍🏫</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-m3">Con profesores de prestigio</span>
+          <span class="opt-desc" id="txt-m3d">Docentes internacionales especializados</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="combinado" onclick="selectModalidad(this)">
+        <span class="opt-icon">🔀</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-m4">Todo combinado</span>
+          <span class="opt-desc" id="txt-m4d">Juegos + IA + profesores según lo necesite</span>
+        </div>
+      </button>
+
+    </div>
+    <button class="btn-continue" id="btn-2" onclick="goStep(3)">Continuar →</button>
+  </div>
+
+  <!-- ═══ PANEL 3 — JUEGO ═══ -->
+  <div class="panel" id="panel-3">
+    <p class="panel-question" id="txt-q3">¿A través de qué juego?</p>
+    <div class="opts-grid" id="opts-juegos">
+
+      <button class="opt-btn" data-val="bridge" onclick="selectJuego(this)">
+        <span class="opt-icon">🃏</span>
+        <div class="opt-texts">
+          <span class="opt-title">Bridge</span>
+          <span class="opt-desc" id="txt-j1d">Estrategia, lógica y comunicación</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="ajedrez" onclick="selectJuego(this)">
+        <span class="opt-icon">♟️</span>
+        <div class="opt-texts">
+          <span class="opt-title">Ajedrez</span>
+          <span class="opt-desc" id="txt-j2d">Pensamiento crítico y planificación</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="poker" onclick="selectJuego(this)">
+        <span class="opt-icon">🎰</span>
+        <div class="opt-texts">
+          <span class="opt-title">Poker</span>
+          <span class="opt-desc" id="txt-j3d">Probabilidad, psicología y decisión</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="otro" onclick="selectJuego(this)">
+        <span class="opt-icon">✨</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-j4">Otro / Se crea</span>
+          <span class="opt-desc" id="txt-j4d">Proponemos el juego ideal o lo creamos</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="nosé" onclick="selectJuego(this)" style="grid-column:1/-1">
+        <span class="opt-icon">🤔</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-j5">No sé aún</span>
+          <span class="opt-desc" id="txt-j5d">BGM te recomienda el juego según tu materia</span>
+        </div>
+      </button>
+
+    </div>
+
+    <!-- Campo si elige "otro" -->
+    <div id="juego-otro-wrap" style="display:none; width:100%; margin-top:12px;">
+      <input type="text" class="free-input" id="juego-otro-input"
+        placeholder="Describe el juego que imaginas..."
+        oninput="onJuegoOtroInput(this.value)">
+    </div>
+
+    <button class="btn-continue" id="btn-3" onclick="goStep(4)">Continuar →</button>
+  </div>
+
+  <!-- ═══ PANEL 4 — NIVEL ═══ -->
+  <div class="panel" id="panel-4">
+    <p class="panel-question" id="txt-q4">¿Cuál es tu nivel actual?</p>
+    <div class="opts-grid" id="opts-nivel">
+
+      <button class="opt-btn" data-val="cero" onclick="selectNivel(this)">
+        <span class="opt-icon">🌱</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-n1">Desde cero</span>
+          <span class="opt-desc" id="txt-n1d">No tengo ningún conocimiento previo</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="basico" onclick="selectNivel(this)">
+        <span class="opt-icon">📗</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-n2">Básico</span>
+          <span class="opt-desc" id="txt-n2d">Conozco lo fundamental</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="intermedio" onclick="selectNivel(this)">
+        <span class="opt-icon">📈</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-n3">Intermedio</span>
+          <span class="opt-desc" id="txt-n3d">Tengo buenas bases</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="avanzado" onclick="selectNivel(this)">
+        <span class="opt-icon">⭐</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-n4">Avanzado</span>
+          <span class="opt-desc" id="txt-n4d">Domino bien el tema</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="experto" onclick="selectNivel(this)">
+        <span class="opt-icon">🏆</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-n5">Experto</span>
+          <span class="opt-desc" id="txt-n5d">Nivel profesional o de enseñanza</span>
+        </div>
+      </button>
+
+      <button class="opt-btn" data-val="evaluar" onclick="selectNivel(this)">
+        <span class="opt-icon">🔍</span>
+        <div class="opt-texts">
+          <span class="opt-title" id="txt-n6">Evalúame</span>
+          <span class="opt-desc" id="txt-n6d">No sé mi nivel, quiero un diagnóstico</span>
+        </div>
+      </button>
+
+    </div>
+    <button class="btn-continue" id="btn-4" onclick="finalizar()">Ir a BGM →</button>
+  </div>
+
+  <!-- ═══ PANEL SUCCESS ═══ -->
+  <div class="panel" id="panel-success">
+    <div class="success-icon">✦</div>
+    <h2 class="success-title" id="txt-success-title">Bienvenido a BGM</h2>
+    <p class="success-sub" id="txt-success-sub">Preparando tu experiencia personalizada...</p>
+    <div class="gold-line"></div>
+  </div>
+
+  <!-- ═══ FAST TRACK — REGISTRO RÁPIDO ═══ -->
+  <div class="fast-track" id="fast-track">
+    <button class="fast-header" onclick="toggleFast()">
+      <span class="fast-icon">⚡</span>
+      <div class="fast-texts">
+        <div class="fast-title" id="txt-ft-title">Registrarme y entrar directamente</div>
+        <div class="fast-sub" id="txt-ft-sub">Salta el proceso · Personalización después</div>
+      </div>
+      <span class="fast-arrow" id="fast-arrow">▼</span>
+    </button>
+
+    <div class="fast-body" id="fast-body">
+      <div class="reg-row">
+        <div class="reg-group">
+          <label class="reg-label" id="txt-ft-name">Nombre</label>
+          <input type="text" class="reg-input" id="ft-name" placeholder="Tu nombre">
+        </div>
+        <div class="reg-group">
+          <label class="reg-label" id="txt-ft-email">Email</label>
+          <input type="email" class="reg-input" id="ft-email" placeholder="tu@email.com">
+        </div>
+      </div>
+
+      <div class="reg-group full">
+        <label class="reg-label" id="txt-ft-contact">Forma de contacto preferida</label>
+        <div class="contact-toggle">
+          <button class="toggle-btn sel" data-ct="telefono" onclick="toggleContact(this)">📞 Teléfono</button>
+          <button class="toggle-btn" data-ct="whatsapp" onclick="toggleContact(this)">💬 WhatsApp</button>
+          <button class="toggle-btn" data-ct="telegram" onclick="toggleContact(this)">✈️ Telegram</button>
+          <button class="toggle-btn" data-ct="wechat" onclick="toggleContact(this)">🟢 WeChat</button>
+        </div>
+      </div>
+
+      <div class="reg-group full">
+        <label class="reg-label" id="txt-ft-contactval">Número o usuario</label>
+        <input type="text" class="reg-input" id="ft-contact" placeholder="+56 9 ..." oninput="checkFast()">
+      </div>
+
+      <button class="btn-continue show" id="btn-fast" onclick="fastRegister()" style="margin-top:8px;">
+        Entrar a BGM →
+      </button>
+    </div>
+  </div>
+
+  <p class="lang-note" id="txt-lang-note">Idioma detectado automáticamente</p>
+
+</div><!-- /page -->
+
+<script>
+// ═══════════════════════════════════════
+// TRADUCCIONES
+// ═══════════════════════════════════════
+const TR = {
+  es: {
+    subtitle:'Academia Universal · BGM',
+    q1:'¿Qué quieres aprender?', q2:'¿Cómo quieres aprender?',
+    q3:'¿A través de qué juego?', q4:'¿Cuál es tu nivel actual?',
+    suggestions:'Sugerencias',
+    materias:['Matemáticas','Idiomas','Ciencias','Historia','Arte','Tecnología','Negocios','Música','Programación','Filosofía'],
+    m1:'Tradicional', m1d:'Clases estructuradas, currículo clásico',
+    m2:'Juegos + IA constante', m2d:'Aprende jugando con agentes IA en todo momento',
+    m3:'Con profesores de prestigio', m3d:'Docentes internacionales especializados',
+    m4:'Todo combinado', m4d:'Juegos + IA + profesores según lo necesite',
+    j1d:'Estrategia, lógica y comunicación',
+    j2d:'Pensamiento crítico y planificación',
+    j3d:'Probabilidad, psicología y decisión',
+    j4:'Otro / Se crea', j4d:'Proponemos el juego ideal o lo creamos',
+    j5:'No sé aún', j5d:'BGM te recomienda el juego según tu materia',
+    n1:'Desde cero', n1d:'No tengo ningún conocimiento previo',
+    n2:'Básico', n2d:'Conozco lo fundamental',
+    n3:'Intermedio', n3d:'Tengo buenas bases',
+    n4:'Avanzado', n4d:'Domino bien el tema',
+    n5:'Experto', n5d:'Nivel profesional o de enseñanza',
+    n6:'Evalúame', n6d:'No sé mi nivel, quiero un diagnóstico',
+    successTitle:'Bienvenido a BGM',
+    successSub:'Preparando tu experiencia personalizada...',
+    ftTitle:'Registrarme y entrar directamente',
+    ftSub:'Salta el proceso · Personalización después',
+    ftName:'Nombre', ftEmail:'Email',
+    ftContact:'Forma de contacto preferida',
+    ftContactVal:'Número o usuario',
+    langNote:'Idioma detectado automáticamente',
+    materiaPlaceholder:'Escribe una materia, habilidad, idioma...',
+    juegoOtroPlaceholder:'Describe el juego que imaginas...',
+  },
+  en: {
+    subtitle:'Universal Academy · BGM',
+    q1:'What do you want to learn?', q2:'How do you want to learn?',
+    q3:'Through which game?', q4:'What is your current level?',
+    suggestions:'Suggestions',
+    materias:['Mathematics','Languages','Science','History','Art','Technology','Business','Music','Coding','Philosophy'],
+    m1:'Traditional', m1d:'Structured classes, classic curriculum',
+    m2:'Games + constant AI', m2d:'Learn by playing with AI agents at all times',
+    m3:'With prestigious teachers', m3d:'Specialized international educators',
+    m4:'All combined', m4d:'Games + AI + teachers as needed',
+    j1d:'Strategy, logic and communication',
+    j2d:'Critical thinking and planning',
+    j3d:'Probability, psychology and decision',
+    j4:'Other / Create one', j4d:'We propose the ideal game or create it',
+    j5:'Not sure yet', j5d:'BGM recommends the game based on your subject',
+    n1:'From scratch', n1d:'I have no prior knowledge',
+    n2:'Basic', n2d:'I know the fundamentals',
+    n3:'Intermediate', n3d:'I have good foundations',
+    n4:'Advanced', n4d:'I have strong command of the subject',
+    n5:'Expert', n5d:'Professional or teaching level',
+    n6:'Evaluate me', n6d:"I don't know my level, I want an assessment",
+    successTitle:'Welcome to BGM',
+    successSub:'Preparing your personalized experience...',
+    ftTitle:'Register and go in directly',
+    ftSub:'Skip the process · Personalization later',
+    ftName:'Name', ftEmail:'Email',
+    ftContact:'Preferred contact method',
+    ftContactVal:'Number or username',
+    langNote:'Language automatically detected',
+    materiaPlaceholder:'Write a subject, skill, language...',
+    juegoOtroPlaceholder:'Describe the game you imagine...',
+  },
+  fr: {
+    subtitle:'Académie Universelle · BGM',
+    q1:'Que voulez-vous apprendre ?', q2:'Comment voulez-vous apprendre ?',
+    q3:'Par quel jeu ?', q4:'Quel est votre niveau actuel ?',
+    suggestions:'Suggestions',
+    materias:['Mathématiques','Langues','Sciences','Histoire','Art','Technologie','Business','Musique','Programmation','Philosophie'],
+    m1:'Traditionnel', m1d:'Cours structurés, curriculum classique',
+    m2:'Jeux + IA constante', m2d:"Apprenez en jouant avec des agents IA à tout moment",
+    m3:'Avec des professeurs de prestige', m3d:'Enseignants internationaux spécialisés',
+    m4:'Tout combiné', m4d:'Jeux + IA + professeurs selon les besoins',
+    j1d:'Stratégie, logique et communication',
+    j2d:'Pensée critique et planification',
+    j3d:'Probabilité, psychologie et décision',
+    j4:'Autre / Créer', j4d:'Nous proposons le jeu idéal ou le créons',
+    j5:'Je ne sais pas encore', j5d:'BGM recommande le jeu selon votre matière',
+    n1:'Depuis zéro', n1d:"Je n'ai aucune connaissance préalable",
+    n2:'Basique', n2d:'Je connais les fondamentaux',
+    n3:'Intermédiaire', n3d:"J'ai de bonnes bases",
+    n4:'Avancé', n4d:'Je maîtrise bien le sujet',
+    n5:'Expert', n5d:'Niveau professionnel ou enseignant',
+    n6:'Évaluez-moi', n6d:'Je ne connais pas mon niveau',
+    successTitle:'Bienvenue chez BGM',
+    successSub:'Préparation de votre expérience personnalisée...',
+    ftTitle:'M\'inscrire et entrer directement',
+    ftSub:'Sauter le processus · Personnalisation après',
+    ftName:'Prénom', ftEmail:'Email',
+    ftContact:'Mode de contact préféré',
+    ftContactVal:'Numéro ou nom d\'utilisateur',
+    langNote:'Langue détectée automatiquement',
+    materiaPlaceholder:'Écrivez une matière, compétence, langue...',
+    juegoOtroPlaceholder:'Décrivez le jeu que vous imaginez...',
+  },
+  de: {
+    subtitle:'Universelle Akademie · BGM',
+    q1:'Was möchten Sie lernen?', q2:'Wie möchten Sie lernen?',
+    q3:'Durch welches Spiel?', q4:'Was ist Ihr aktuelles Niveau?',
+    suggestions:'Vorschläge',
+    materias:['Mathematik','Sprachen','Naturwissenschaften','Geschichte','Kunst','Technologie','Business','Musik','Programmierung','Philosophie'],
+    m1:'Traditionell', m1d:'Strukturierter Unterricht, klassischer Lehrplan',
+    m2:'Spiele + ständige KI', m2d:'Lernen durch Spielen mit KI-Agenten jederzeit',
+    m3:'Mit renommierten Lehrern', m3d:'Spezialisierte internationale Pädagogen',
+    m4:'Alles kombiniert', m4d:'Spiele + KI + Lehrer je nach Bedarf',
+    j1d:'Strategie, Logik und Kommunikation',
+    j2d:'Kritisches Denken und Planung',
+    j3d:'Wahrscheinlichkeit, Psychologie und Entscheidung',
+    j4:'Anderes / Erstellen', j4d:'Wir schlagen das ideale Spiel vor oder erstellen es',
+    j5:'Noch nicht sicher', j5d:'BGM empfiehlt das Spiel nach Ihrem Fach',
+    n1:'Von Null', n1d:'Keine Vorkenntnisse',
+    n2:'Grundlegend', n2d:'Ich kenne die Grundlagen',
+    n3:'Mittel', n3d:'Ich habe gute Grundkenntnisse',
+    n4:'Fortgeschritten', n4d:'Ich beherrsche das Thema gut',
+    n5:'Experte', n5d:'Professionelles oder Lehrniveau',
+    n6:'Bewerte mich', n6d:'Ich kenne mein Niveau nicht',
+    successTitle:'Willkommen bei BGM',
+    successSub:'Ihre personalisierte Erfahrung wird vorbereitet...',
+    ftTitle:'Registrieren und direkt einsteigen',
+    ftSub:'Prozess überspringen · Personalisierung später',
+    ftName:'Name', ftEmail:'E-Mail',
+    ftContact:'Bevorzugte Kontaktmethode',
+    ftContactVal:'Nummer oder Benutzername',
+    langNote:'Sprache automatisch erkannt',
+    materiaPlaceholder:'Fach, Fähigkeit, Sprache eingeben...',
+    juegoOtroPlaceholder:'Beschreiben Sie das Spiel, das Sie sich vorstellen...',
+  },
+  it: {
+    subtitle:'Accademia Universale · BGM',
+    q1:'Cosa vuoi imparare?', q2:'Come vuoi imparare?',
+    q3:'Attraverso quale gioco?', q4:'Qual è il tuo livello attuale?',
+    suggestions:'Suggerimenti',
+    materias:['Matematica','Lingue','Scienze','Storia','Arte','Tecnologia','Business','Musica','Programmazione','Filosofia'],
+    m1:'Tradizionale', m1d:'Lezioni strutturate, curriculum classico',
+    m2:'Giochi + IA costante', m2d:'Impara giocando con agenti IA in ogni momento',
+    m3:'Con professori di prestigio', m3d:'Docenti internazionali specializzati',
+    m4:'Tutto combinato', m4d:'Giochi + IA + professori secondo necessità',
+    j1d:'Strategia, logica e comunicazione',
+    j2d:'Pensiero critico e pianificazione',
+    j3d:'Probabilità, psicologia e decisione',
+    j4:'Altro / Si crea', j4d:'Proponiamo il gioco ideale o lo creiamo',
+    j5:'Non so ancora', j5d:'BGM raccomanda il gioco in base alla materia',
+    n1:'Da zero', n1d:'Non ho alcuna conoscenza precedente',
+    n2:'Base', n2d:'Conosco i fondamentali',
+    n3:'Intermedio', n3d:'Ho buone basi',
+    n4:'Avanzato', n4d:'Padroneggio bene l\'argomento',
+    n5:'Esperto', n5d:'Livello professionale o di insegnamento',
+    n6:'Valutami', n6d:'Non conosco il mio livello',
+    successTitle:'Benvenuto in BGM',
+    successSub:'Preparazione della tua esperienza personalizzata...',
+    ftTitle:'Registrarmi e entrare direttamente',
+    ftSub:'Salta il processo · Personalizzazione dopo',
+    ftName:'Nome', ftEmail:'Email',
+    ftContact:'Metodo di contatto preferito',
+    ftContactVal:'Numero o nome utente',
+    langNote:'Lingua rilevata automaticamente',
+    materiaPlaceholder:'Scrivi una materia, competenza, lingua...',
+    juegoOtroPlaceholder:'Descrivi il gioco che immagini...',
+  },
+  pt: {
+    subtitle:'Academia Universal · BGM',
+    q1:'O que você quer aprender?', q2:'Como quer aprender?',
+    q3:'Através de qual jogo?', q4:'Qual é o seu nível atual?',
+    suggestions:'Sugestões',
+    materias:['Matemática','Idiomas','Ciências','História','Arte','Tecnologia','Negócios','Música','Programação','Filosofia'],
+    m1:'Tradicional', m1d:'Aulas estruturadas, currículo clássico',
+    m2:'Jogos + IA constante', m2d:'Aprenda jogando com agentes IA a todo momento',
+    m3:'Com professores de prestígio', m3d:'Docentes internacionais especializados',
+    m4:'Tudo combinado', m4d:'Jogos + IA + professores conforme necessário',
+    j1d:'Estratégia, lógica e comunicação',
+    j2d:'Pensamento crítico e planejamento',
+    j3d:'Probabilidade, psicologia e decisão',
+    j4:'Outro / Criar', j4d:'Propomos o jogo ideal ou o criamos',
+    j5:'Ainda não sei', j5d:'BGM recomenda o jogo conforme sua matéria',
+    n1:'Do zero', n1d:'Não tenho nenhum conhecimento prévio',
+    n2:'Básico', n2d:'Conheço o fundamental',
+    n3:'Intermediário', n3d:'Tenho boas bases',
+    n4:'Avançado', n4d:'Domino bem o assunto',
+    n5:'Especialista', n5d:'Nível profissional ou de ensino',
+    n6:'Me avalie', n6d:'Não sei meu nível, quero um diagnóstico',
+    successTitle:'Bem-vindo ao BGM',
+    successSub:'Preparando sua experiência personalizada...',
+    ftTitle:'Registrar-me e entrar diretamente',
+    ftSub:'Pular o processo · Personalização depois',
+    ftName:'Nome', ftEmail:'Email',
+    ftContact:'Forma de contato preferida',
+    ftContactVal:'Número ou usuário',
+    langNote:'Idioma detectado automaticamente',
+    materiaPlaceholder:'Escreva uma matéria, habilidade, idioma...',
+    juegoOtroPlaceholder:'Descreva o jogo que imagina...',
+  },
+  ja: {
+    subtitle:'ユニバーサル・アカデミー · BGM',
+    q1:'何を学びたいですか？', q2:'どのように学びたいですか？',
+    q3:'どのゲームを通じて？', q4:'現在のレベルは？',
+    suggestions:'提案',
+    materias:['数学','語学','理科','歴史','芸術','技術','ビジネス','音楽','プログラミング','哲学'],
+    m1:'従来型', m1d:'構造化されたクラス、古典的カリキュラム',
+    m2:'ゲーム＋常時AI', m2d:'AIエージェントとゲームで学ぶ',
+    m3:'著名な教師と', m3d:'専門国際教育者',
+    m4:'すべて組み合わせ', m4d:'ゲーム＋AI＋教師を必要に応じて',
+    j1d:'戦略、論理、コミュニケーション',
+    j2d:'批判的思考と計画',
+    j3d:'確率、心理学、意思決定',
+    j4:'その他 / 作成', j4d:'最適なゲームを提案または作成',
+    j5:'まだ決めていない', j5d:'BGMが科目に合わせてゲームを推薦',
+    n1:'ゼロから', n1d:'事前知識なし',
+    n2:'基礎', n2d:'基本を知っている',
+    n3:'中級', n3d:'良い基礎がある',
+    n4:'上級', n4d:'テーマをよく理解している',
+    n5:'専門家', n5d:'プロまたは教育レベル',
+    n6:'評価してほしい', n6d:'自分のレベルがわからない',
+    successTitle:'BGMへようこそ',
+    successSub:'あなたの個別体験を準備中...',
+    ftTitle:'登録してすぐに入る',
+    ftSub:'プロセスをスキップ · 後でカスタマイズ',
+    ftName:'名前', ftEmail:'メール',
+    ftContact:'連絡方法',
+    ftContactVal:'番号またはユーザー名',
+    langNote:'言語は自動的に検出されました',
+    materiaPlaceholder:'科目、スキル、言語を入力...',
+    juegoOtroPlaceholder:'思い描くゲームを説明してください...',
+  },
+  ar: {
+    subtitle:'أكاديمية عالمية · BGM',
+    q1:'ماذا تريد أن تتعلم؟', q2:'كيف تريد أن تتعلم؟',
+    q3:'من خلال أي لعبة؟', q4:'ما هو مستواك الحالي؟',
+    suggestions:'اقتراحات',
+    materias:['الرياضيات','اللغات','العلوم','التاريخ','الفن','التكنولوجيا','الأعمال','الموسيقى','البرمجة','الفلسفة'],
+    m1:'تقليدي', m1d:'دروس منظمة، مناهج كلاسيكية',
+    m2:'الألعاب + الذكاء الاصطناعي المستمر', m2d:'تعلم بالألعاب مع وكلاء الذكاء الاصطناعي',
+    m3:'مع أساتذة مرموقين', m3d:'معلمون دوليون متخصصون',
+    m4:'كل شيء مجتمعاً', m4d:'ألعاب + ذكاء اصطناعي + أساتذة حسب الحاجة',
+    j1d:'الاستراتيجية والمنطق والتواصل',
+    j2d:'التفكير النقدي والتخطيط',
+    j3d:'الاحتمالية وعلم النفس واتخاذ القرار',
+    j4:'أخرى / إنشاء', j4d:'نقترح اللعبة المثالية أو ننشئها',
+    j5:'لست متأكداً بعد', j5d:'BGM يوصي باللعبة حسب مادتك',
+    n1:'من الصفر', n1d:'لا توجد معرفة مسبقة',
+    n2:'أساسي', n2d:'أعرف الأساسيات',
+    n3:'متوسط', n3d:'لديّ أسس جيدة',
+    n4:'متقدم', n4d:'أتقن الموضوع جيداً',
+    n5:'خبير', n5d:'المستوى المهني أو التعليمي',
+    n6:'قيّمني', n6d:'لا أعرف مستواي، أريد تشخيصاً',
+    successTitle:'مرحباً بك في BGM',
+    successSub:'جارٍ تحضير تجربتك الشخصية...',
+    ftTitle:'التسجيل والدخول مباشرة',
+    ftSub:'تخطى العملية · التخصيص لاحقاً',
+    ftName:'الاسم', ftEmail:'البريد الإلكتروني',
+    ftContact:'طريقة الاتصال المفضلة',
+    ftContactVal:'الرقم أو اسم المستخدم',
+    langNote:'تم اكتشاف اللغة تلقائيًا',
+    materiaPlaceholder:'اكتب مادة أو مهارة أو لغة...',
+    juegoOtroPlaceholder:'صف اللعبة التي تتخيلها...',
+  },
+  zh: {
+    subtitle:'全球学院 · BGM',
+    q1:'您想学什么？', q2:'您想如何学习？',
+    q3:'通过哪种游戏？', q4:'您目前的水平？',
+    suggestions:'建议',
+    materias:['数学','语言','科学','历史','艺术','技术','商业','音乐','编程','哲学'],
+    m1:'传统方式', m1d:'结构化课程，经典课程体系',
+    m2:'游戏 + 持续AI', m2d:'随时与AI代理一起学习游戏',
+    m3:'名师指导', m3d:'专业国际教育者',
+    m4:'全部组合', m4d:'游戏 + AI + 教师按需使用',
+    j1d:'策略、逻辑与沟通',
+    j2d:'批判性思维与规划',
+    j3d:'概率、心理学与决策',
+    j4:'其他 / 创建', j4d:'我们提议理想游戏或创建它',
+    j5:'还不确定', j5d:'BGM根据您的学科推荐游戏',
+    n1:'从零开始', n1d:'没有任何先前知识',
+    n2:'基础', n2d:'了解基本知识',
+    n3:'中级', n3d:'有良好基础',
+    n4:'高级', n4d:'掌握程度高',
+    n5:'专家', n5d:'专业或教学水平',
+    n6:'评估我', n6d:'我不知道自己的水平',
+    successTitle:'欢迎来到BGM',
+    successSub:'正在准备您的个性化体验...',
+    ftTitle:'注册并直接进入',
+    ftSub:'跳过流程 · 稍后个性化',
+    ftName:'姓名', ftEmail:'邮箱',
+    ftContact:'首选联系方式',
+    ftContactVal:'号码或用户名',
+    langNote:'语言已自动检测',
+    materiaPlaceholder:'输入学科、技能、语言...',
+    juegoOtroPlaceholder:'描述您想象中的游戏...',
+  },
+  hi: {
+    subtitle:'विश्वव्यापी अकादमी · BGM',
+    q1:'आप क्या सीखना चाहते हैं?', q2:'आप कैसे सीखना चाहते हैं?',
+    q3:'किस खेल के माध्यम से?', q4:'आपका वर्तमान स्तर क्या है?',
+    suggestions:'सुझाव',
+    materias:['गणित','भाषाएँ','विज्ञान','इतिहास','कला','प्रौद्योगिकी','व्यवसाय','संगीत','प्रोग्रामिंग','दर्शन'],
+    m1:'पारंपरिक', m1d:'संरचित कक्षाएं, क्लासिक पाठ्यक्रम',
+    m2:'खेल + निरंतर AI', m2d:'AI एजेंटों के साथ खेलकर सीखें',
+    m3:'प्रतिष्ठित शिक्षकों के साथ', m3d:'विशेषज्ञ अंतर्राष्ट्रीय शिक्षक',
+    m4:'सब संयुक्त', m4d:'खेल + AI + शिक्षक जरूरत के अनुसार',
+    j1d:'रणनीति, तर्क और संचार',
+    j2d:'आलोचनात्मक सोच और योजना',
+    j3d:'संभावना, मनोविज्ञान और निर्णय',
+    j4:'अन्य / बनाएं', j4d:'हम आदर्श खेल प्रस्तावित करते हैं या बनाते हैं',
+    j5:'अभी तय नहीं', j5d:'BGM आपके विषय के अनुसार खेल सुझाएगा',
+    n1:'शून्य से', n1d:'कोई पूर्व ज्ञान नहीं',
+    n2:'बुनियादी', n2d:'मूल बातें जानता हूँ',
+    n3:'मध्यवर्ती', n3d:'अच्छी नींव है',
+    n4:'उन्नत', n4d:'विषय में अच्छी पकड़',
+    n5:'विशेषज्ञ', n5d:'पेशेवर या शिक्षण स्तर',
+    n6:'मेरा मूल्यांकन करें', n6d:'मुझे अपना स्तर नहीं पता',
+    successTitle:'BGM में आपका स्वागत है',
+    successSub:'आपका व्यक्तिगत अनुभव तैयार हो रहा है...',
+    ftTitle:'पंजीकरण करें और सीधे प्रवेश करें',
+    ftSub:'प्रक्रिया छोड़ें · बाद में व्यक्तिगतकरण',
+    ftName:'नाम', ftEmail:'ईमेल',
+    ftContact:'पसंदीदा संपर्क माध्यम',
+    ftContactVal:'नंबर या उपयोगकर्ता नाम',
+    langNote:'भाषा स्वचालित रूप से पहचानी गई',
+    materiaPlaceholder:'विषय, कौशल, भाषा लिखें...',
+    juegoOtroPlaceholder:'अपने कल्पित खेल का वर्णन करें...',
+  }
+};
+
+// ═══════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════
+let currentLang = 'es';
+let state = { materia:'', modalidad:'', juego:'', nivel:'', juegoOtro:'' };
+let contactType = 'telefono';
+
+// ═══════════════════════════════════════
+// DETECTAR IDIOMA
+// ═══════════════════════════════════════
+const langMap = { es:'es', en:'en', fr:'fr', de:'de', it:'it', pt:'pt', ja:'ja', ar:'ar', zh:'zh', hi:'hi' };
+const nav = navigator.language || navigator.userLanguage || 'en';
+currentLang = langMap[nav.substring(0,2)] || 'en';
+applyLang(currentLang);
+
+function applyLang(lang) {
+  currentLang = lang;
+  const t = TR[lang] || TR.en;
+
+  document.getElementById('txt-subtitle').textContent = t.subtitle;
+  document.getElementById('txt-q1').textContent = t.q1;
+  document.getElementById('txt-q2').textContent = t.q2;
+  document.getElementById('txt-q3').textContent = t.q3;
+  document.getElementById('txt-q4').textContent = t.q4;
+  document.getElementById('txt-suggestions').textContent = t.suggestions;
+  document.getElementById('txt-m1').textContent = t.m1;
+  document.getElementById('txt-m1d').textContent = t.m1d;
+  document.getElementById('txt-m2').textContent = t.m2;
+  document.getElementById('txt-m2d').textContent = t.m2d;
+  document.getElementById('txt-m3').textContent = t.m3;
+  document.getElementById('txt-m3d').textContent = t.m3d;
+  document.getElementById('txt-m4').textContent = t.m4;
+  document.getElementById('txt-m4d').textContent = t.m4d;
+  document.getElementById('txt-j1d').textContent = t.j1d;
+  document.getElementById('txt-j2d').textContent = t.j2d;
+  document.getElementById('txt-j3d').textContent = t.j3d;
+  document.getElementById('txt-j4').textContent = t.j4;
+  document.getElementById('txt-j4d').textContent = t.j4d;
+  document.getElementById('txt-j5').textContent = t.j5;
+  document.getElementById('txt-j5d').textContent = t.j5d;
+  document.getElementById('txt-n1').textContent = t.n1;
+  document.getElementById('txt-n1d').textContent = t.n1d;
+  document.getElementById('txt-n2').textContent = t.n2;
+  document.getElementById('txt-n2d').textContent = t.n2d;
+  document.getElementById('txt-n3').textContent = t.n3;
+  document.getElementById('txt-n3d').textContent = t.n3d;
+  document.getElementById('txt-n4').textContent = t.n4;
+  document.getElementById('txt-n4d').textContent = t.n4d;
+  document.getElementById('txt-n5').textContent = t.n5;
+  document.getElementById('txt-n5d').textContent = t.n5d;
+  document.getElementById('txt-n6').textContent = t.n6;
+  document.getElementById('txt-n6d').textContent = t.n6d;
+  document.getElementById('txt-success-title').textContent = t.successTitle;
+  document.getElementById('txt-success-sub').textContent = t.successSub;
+  document.getElementById('txt-ft-title').textContent = t.ftTitle;
+  document.getElementById('txt-ft-sub').textContent = t.ftSub;
+  document.getElementById('txt-ft-name').textContent = t.ftName;
+  document.getElementById('txt-ft-email').textContent = t.ftEmail;
+  document.getElementById('txt-ft-contact').textContent = t.ftContact;
+  document.getElementById('txt-ft-contactval').textContent = t.ftContactVal;
+  document.getElementById('txt-lang-note').textContent = t.langNote;
+  document.getElementById('materia-input').placeholder = t.materiaPlaceholder;
+  document.getElementById('juego-otro-input').placeholder = t.juegoOtroPlaceholder;
+  document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+
+  // Chips de materias
+  buildChips(t.materias);
+}
+
+// ═══════════════════════════════════════
+// CHIPS DE MATERIAS
+// ═══════════════════════════════════════
+function buildChips(materias) {
+  const wrap = document.getElementById('chips-materias');
+  wrap.innerHTML = '';
+  materias.forEach(m => {
+    const c = document.createElement('button');
+    c.className = 'chip';
+    c.textContent = m;
+    c.onclick = () => {
+      document.querySelectorAll('.chip').forEach(x => x.classList.remove('sel'));
+      c.classList.add('sel');
+      document.getElementById('materia-input').value = m;
+      state.materia = m;
+      document.getElementById('btn-1').classList.add('show');
+    };
+    wrap.appendChild(c);
+  });
+}
+
+// ═══════════════════════════════════════
+// PANEL 1 — MATERIA
+// ═══════════════════════════════════════
+function onMateriaInput(val) {
+  state.materia = val.trim();
+  document.querySelectorAll('.chip').forEach(x => x.classList.remove('sel'));
+  document.getElementById('btn-1').classList.toggle('show', val.trim().length > 1);
+}
+
+// ═══════════════════════════════════════
+// PANEL 2 — MODALIDAD
+// ═══════════════════════════════════════
+function selectModalidad(btn) {
+  document.querySelectorAll('#opts-modalidad .opt-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.modalidad = btn.dataset.val;
+  document.getElementById('btn-2').classList.add('show');
+}
+
+// ═══════════════════════════════════════
+// PANEL 3 — JUEGO
+// ═══════════════════════════════════════
+function selectJuego(btn) {
+  document.querySelectorAll('#opts-juegos .opt-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.juego = btn.dataset.val;
+  const otroWrap = document.getElementById('juego-otro-wrap');
+  if (state.juego === 'otro') {
+    otroWrap.style.display = 'block';
+    document.getElementById('btn-3').classList.remove('show');
+  } else {
+    otroWrap.style.display = 'none';
+    document.getElementById('btn-3').classList.add('show');
+  }
+}
+
+function onJuegoOtroInput(val) {
+  state.juegoOtro = val.trim();
+  document.getElementById('btn-3').classList.toggle('show', val.trim().length > 2);
+}
+
+// ═══════════════════════════════════════
+// PANEL 4 — NIVEL
+// ═══════════════════════════════════════
+function selectNivel(btn) {
+  document.querySelectorAll('#opts-nivel .opt-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.nivel = btn.dataset.val;
+  document.getElementById('btn-4').classList.add('show');
+}
+
+// ═══════════════════════════════════════
+// NAVEGACIÓN DE PASOS
+// ═══════════════════════════════════════
+let currentStep = 1;
+
+function goStep(n) {
+  // Desactivar panel actual
+  document.getElementById('panel-' + currentStep).classList.remove('active');
+  // Marcar dot actual como done
+  document.getElementById('dot-' + currentStep).classList.remove('active');
+  document.getElementById('dot-' + currentStep).classList.add('done');
+  if (currentStep < 4) {
+    document.getElementById('line-' + currentStep).classList.add('done');
+  }
+  // Activar nuevo panel
+  currentStep = n;
+  document.getElementById('panel-' + n).classList.add('active');
+  document.getElementById('dot-' + n).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function finalizar() {
+  // Registrar
+  saveData({
+    tipo: 'flujo_completo',
+    materia: state.materia,
+    modalidad: state.modalidad,
+    juego: state.juego,
+    juegoOtro: state.juegoOtro,
+    nivel: state.nivel,
+    lang: currentLang,
+    fast: false
+  });
+
+  // Mostrar success
+  document.getElementById('panel-4').classList.remove('active');
+  document.getElementById('dot-4').classList.remove('active');
+  document.getElementById('dot-4').classList.add('done');
+  document.getElementById('steps-indicator').style.display = 'none';
+  document.getElementById('fast-track').style.display = 'none';
+  document.getElementById('panel-success').classList.add('active');
+
+  // Ir a index después de 2s
+  setTimeout(() => {
+    const params = new URLSearchParams({
+      materia: state.materia,
+      modalidad: state.modalidad,
+      juego: state.juego !== 'otro' ? state.juego : state.juegoOtro,
+      nivel: state.nivel,
+      lang: currentLang,
+      evaluar: state.nivel === 'evaluar' ? '1' : '0'
+    });
+    window.location.href = 'index.html?' + params.toString();
+  }, 2200);
+}
+
+// ═══════════════════════════════════════
+// FAST TRACK
+// ═══════════════════════════════════════
+function toggleFast() {
+  const body = document.getElementById('fast-body');
+  const arrow = document.getElementById('fast-arrow');
+  const open = body.classList.toggle('open');
+  arrow.classList.toggle('open', open);
+}
+
+function toggleContact(btn) {
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  contactType = btn.dataset.ct;
+}
+
+function fastRegister() {
+  const name  = document.getElementById('ft-name').value.trim();
+  const email = document.getElementById('ft-email').value.trim();
+  const contact = document.getElementById('ft-contact').value.trim();
+
+  if (!name || !email) {
+    document.getElementById('ft-name').style.borderColor = !name ? '#ff2d6b' : '';
+    document.getElementById('ft-email').style.borderColor = !email ? '#ff2d6b' : '';
+    return;
+  }
+
+  saveData({
+    tipo: 'fast_track',
+    nombre: name,
+    email: email,
+    contactType: contactType,
+    contact: contact,
+    lang: currentLang,
+    fast: true
+  });
+
+  // Mostrar success
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('steps-indicator').style.display = 'none';
+  document.getElementById('fast-track').style.display = 'none';
+  document.getElementById('panel-success').classList.add('active');
+
+  setTimeout(() => {
+    window.location.href = 'index.html?fast=1&lang=' + currentLang;
+  }, 2000);
+}
+
+// ═══════════════════════════════════════
+// GUARDAR DATOS
+// ═══════════════════════════════════════
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzEDDFBgsQcEMSSjfwNTPrWkPdcYmV9IBSDr7ysvfNdCA4tV14ItzuK0G6glm0N1bqyww/exec";
+
+function saveData(obj) {
+  // sessionStorage para index.html
+  sessionStorage.setItem('bgm_data', JSON.stringify(obj));
+  // localStorage backup
+  const all = JSON.parse(localStorage.getItem('bgm_leads') || '[]');
+  all.push({ ...obj, date: new Date().toISOString(), ua: navigator.userAgent });
+  localStorage.setItem('bgm_leads', JSON.stringify(all));
+  // Google Sheets (silencioso)
+  const fd = new FormData();
+  Object.entries({ ...obj, fecha: new Date().toISOString(), ua: navigator.userAgent })
+    .forEach(([k,v]) => fd.append(k, v));
+  fetch(SHEET_URL, { method:'POST', body:fd, mode:'no-cors' }).catch(()=>{});
+}
+
+// Registrar visita inicial
+setTimeout(() => saveData({ tipo:'visita_welcome', lang:currentLang }), 2500);
+</script>
 </body>
 </html>
