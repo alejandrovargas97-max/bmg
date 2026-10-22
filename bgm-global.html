@@ -38,7 +38,7 @@ function translate(code){
 document.querySelectorAll('[data-lang]').forEach(btn=>btn.addEventListener('click',()=>translate(btn.dataset.lang)));
 document.querySelectorAll('dialog .close').forEach(btn=>btn.addEventListener('click',()=>btn.closest('dialog').close()));
 document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
-$('open-bridge').addEventListener('click',()=>$('bridge-dialog').showModal());
+$('open-bridge').addEventListener('click',()=>{window.location.href='bgm-bridge.html';});
 $('open-guide').addEventListener('click',()=>$('guide-dialog').showModal());
 document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{$('guide-answer').dataset.answer=btn.dataset.answer;$('guide-answer').textContent=dictionaries[language][Number(btn.dataset.answer)];}));
 $('motion').addEventListener('click',()=>{const paused=document.body.classList.toggle('paused');$('motion').textContent=dictionaries[language][paused?29:28];$('motion').setAttribute('aria-pressed',String(paused));});
