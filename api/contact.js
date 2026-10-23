@@ -1,4 +1,4 @@
-const ENDPOINT='https://script.google.com/macros/s/AKfycbwvf3zCnu_yAFjD62w6O7VI9aIXDHgkmPGeVAmb9-9UFvx-JsihEsGRC7hO45aVQhifbQ/exec';
+const ENDPOINT='https://script.google.com/macros/s/AKfycbzpvU5cMT5bzX2_Iq81BcObVnqxXMpqoFc6Vs4yjZzFQH6LiLRUH-aEnmdol4UUMQRVHg/exec';
 function reply(res,status,data){res.setHeader('Cache-Control','no-store');return res.status(status).json(data);}
 module.exports=async function handler(req,res){
  if(req.method!=='POST'){res.setHeader('Allow','POST');return reply(res,405,{ok:false,error:'METHOD_NOT_ALLOWED'});}
