@@ -16,13 +16,14 @@ function makeBgmMiniDeal(index=0){
 const examples=[
 {south:"AS KS 4S AH 7H 3H KD 6D 2D QC 5C 3C 2C",north:"QS 8S 3S KH 6H 2H AD 8D 4D 3D 8C 6C 4C"},
 {south:"AS QS 5S KH 8H 4H AD KD 3D JC 7C 4C 2C",north:"KS 7S 2S AH 6H 2H QD 9D 6D 4D 9C 6C 3C"},
-{south:"AS KS QS JS QH 7H 3H KD 8D 4D 8C 6C 4C",north:"8S 6S 2S AH KH 2H AD 6D 2D 9C 5C 3C 2C"}
+{south:"AS KS QS JS QH 7H 3H KD 8D 4D 8C 6C 4C",north:"8S 6S 2S AH KH 2H AD 6D 2D 9C 5C 3C 2C"},
+{south:"AH KH 4H AD 7D 3D KC 6C 2C QS 5S 3S 2S",north:"QH 8H 3H KD 6D 2D AC 8C 4C 3C 8S 6S 4S"}
 ];
 const ex=examples[index%examples.length],north=ex.north.split(" "),south=ex.south.split(" "),used=new Set([...north,...south]),rest=[];
 for(const suit of ["S","H","D","C"])for(const rank of "AKQJT98765432")if(!used.has(rank+suit))rest.push(rank+suit);
 const hands=[north,rest.filter((_,i)=>i%2===0),south,rest.filter((_,i)=>i%2===1)];
 const base=ue(index+1,91000+index);
-return {...base,initial:hands.map(h=>[...h]),hands:hands.map(h=>[...h]),contract:{level:1,strain:"NT",declarer:2,leader:3,multiplier:1},phase:"play",turn:3,dummyVisible:true,lessonWinners:7+index%3};
+return {...base,initial:hands.map(h=>[...h]),hands:hands.map(h=>[...h]),contract:{level:1,strain:"NT",declarer:2,leader:3,multiplier:1},phase:"play",turn:3,dummyVisible:true,lessonWinners:[7,8,9,7][index%4]};
 }
 
 const bgmClassExtra={"es":{"tag":"Aprender jugando. Mejorar disfrutando.","omar":"Omar Sharif · Cine y bridge","omarText":"Su fama como actor llevó el bridge a públicos que quizá nunca se habían acercado a una mesa. En esta bienvenida descubriremos también esa faceta del juego: pasión, encuentros y compañeros.","history":"Historia, conversación y motivación · unos 30 minutos","practice":"Conceptos básicos y práctica guiada · unos 90 minutos","pdf":"PDF descargables: pendientes de incorporar y de conectar con la finalización de cada clase."},"en":{"tag":"Learn by playing. Enjoy getting better.","omar":"Omar Sharif · Cinema and bridge","omarText":"His fame as an actor brought bridge to audiences who might never have approached a card table. Our welcome explores the passion, encounters and partnerships behind the game.","history":"History, conversation and motivation · about 30 minutes","practice":"Basics and guided practice · about 90 minutes","pdf":"Downloadable PDFs: pending creation and lesson-completion access."},"it":{"tag":"Imparare giocando. Migliorare divertendosi.","omar":"Omar Sharif · Cinema e bridge","omarText":"La sua fama di attore ha avvicinato al bridge un pubblico nuovo. Scopriremo la passione, gli incontri e le amicizie che accompagnano questo gioco.","history":"Storia, conversazione e motivazione · circa 30 minuti","practice":"Concetti di base e pratica guidata · circa 90 minuti","pdf":"PDF scaricabili: da preparare e collegare al completamento delle lezioni."},"zh":{"tag":"在游戏中学习，在快乐中进步。","omar":"奥马尔·沙里夫 · 电影与桥牌","omarText":"他的演员身份让更多人认识了桥牌。欢迎课将一起探索这个游戏带来的热情、相遇与伙伴关系。","history":"历史、交流与学习动力 · 约30分钟","practice":"基础知识与指导练习 · 约90分钟","pdf":"PDF讲义及课程完成后的下载功能待开发。"}};
@@ -31,7 +32,7 @@ const L=bgmClassLabels[lang]||bgmClassLabels.es,D=bgmLessonContent[lang]||bgmLes
 const [students,setStudents]=_.useState(4),[kind,setKind]=_.useState("basic"),[lesson,setLesson]=_.useState(0),[topic,setTopic]=_.useState(""),[playing,setPlaying]=_.useState(false),[paused,setPaused]=_.useState(true),[showHands,setShowHands]=_.useState(false),[deal,setDeal]=_.useState(()=>makeBgmMiniDeal()),[round,setRound]=_.useState(0),[dealIndex,setDealIndex]=_.useState(0);
 const mini=kind==="basic"&&lesson===1;
 const button=(label,fn)=>C.jsx("button",{type:"button",onClick:fn,children:label});
-const nextDeal=()=>{setPaused(true);setDealIndex(dealIndex+1);setDeal(mini?makeBgmMiniDeal(dealIndex+1):ue(dealIndex+2));setRound(round+1)};
+const nextDeal=()=>{if(mini&&dealIndex>=3){setPaused(true);setPlaying(false);return;}setPaused(true);setDealIndex(dealIndex+1);setDeal(mini?makeBgmMiniDeal(dealIndex+1):ue(dealIndex+2));setRound(round+1)};
 const openPractice=()=>{setPaused(true);setShowHands(false);setDealIndex(0);setDeal(mini?makeBgmMiniDeal():ue());setRound(round+1);setPlaying(true)};
 const referenceLinks=C.jsxs("p",{className:"class-references",children:[D.sources+": ",C.jsx("a",{href:"https://www.aebridge.com/sites/default/files/AEB/Manual_Bandit.pdf",target:"_blank",rel:"noopener noreferrer",children:"AEB"})," · ",C.jsx("a",{href:"https://www.ebu.co.uk/documents/education-and-teaching/pdfs/minibridge-manual-for-teachers.pdf",target:"_blank",rel:"noopener noreferrer",children:"EBU"})]});
 return C.jsxs("div",{className:"bgm-classroom",children:[
@@ -53,7 +54,7 @@ C.jsx("h3",{children:D.notes}),C.jsx("ol",{children:D.rules.map((text,i)=>C.jsx(
 ]}):C.jsxs("section",{className:"class-notes",children:[C.jsx("p",{children:D.pending}),C.jsx("button",{className:"gold",onClick:openPractice,children:L[15]})]}),
 C.jsx("p",{className:"class-pdf-pending",children:X.pdf}),C.jsx("p",{className:"class-price",children:L[21]+" · "+L[22]})
 ]}):C.jsxs(C.Fragment,{children:[
-C.jsxs("section",{className:"class-controls",children:[C.jsx("strong",{children:L[8]+" · "+(kind==="basic"?L[5]+" "+lesson:topic||L[4])}),mini&&C.jsx("span",{children:D.goal+" · "+D.hand+" "+(dealIndex%3+1)+" · "+({es:"Ganadoras directas",en:"Top winners",it:"Prese immediate",zh:"直接赢墩"}[lang]||"Top winners")+": "+deal.lessonWinners}),button(paused?L[10]:L[9],()=>setPaused(!paused)),button(showHands?L[12]:L[11],()=>setShowHands(!showHands)),button(L[13],()=>{setPaused(true);setRound(round+1)}),button(L[14],nextDeal),button(L[16],()=>setPlaying(false)),paused&&C.jsx("span",{role:"status",children:L[24]})]}),
+C.jsxs("section",{className:"class-controls",children:[C.jsx("strong",{children:L[8]+" · "+(kind==="basic"?L[5]+" "+lesson:topic||L[4])}),mini&&C.jsx("span",{children:D.goal+" · "+D.hand+" "+(dealIndex+1)+(mini?" / 4":"")+" · "+({es:"Ganadoras directas",en:"Top winners",it:"Prese immediate",zh:"直接赢墩"}[lang]||"Top winners")+": "+deal.lessonWinners}),button(paused?L[10]:L[9],()=>setPaused(!paused)),button(showHands?L[12]:L[11],()=>setShowHands(!showHands)),button(L[13],()=>{setPaused(true);setRound(round+1)}),button(mini&&dealIndex===3?L[16]:L[14],nextDeal),button(L[16],()=>setPlaying(false)),paused&&C.jsx("span",{role:"status",children:L[24]})]}),
 C.jsx("div",{className:"class-practice",children:C.jsx(Re,{lang,onBack:()=>setPlaying(false),onLanguageChange,initialGame:deal,teaching:{paused,showHands,mini,notes:D.rules,pointsLabel:D.points,notice:D.note,title:D.goal,onNext:nextDeal}},round)})
 ]})
 ]})}
