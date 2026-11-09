@@ -4,7 +4,7 @@
 <style>
 :root{font-family:system-ui,Arial,sans-serif;color:#eef9f2;background:#0b1820}*{box-sizing:border-box}body{margin:0}header{padding:14px 22px;background:#102b30;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid #c8a65f}h1{font-size:1.35rem;margin:0}small,.muted{color:#a9c4c5}.wrap{max-width:1100px;margin:auto;padding:18px}.panel{background:#132a32;border:1px solid #31505a;border-radius:14px;padding:14px;margin-bottom:12px}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}button,select{padding:9px 12px;border:1px solid #8bb9af;background:#1f4e4b;color:#fff;border-radius:9px;cursor:pointer;font-weight:600}button:hover{background:#2b6661}button:disabled{opacity:.35;cursor:not-allowed}.primary{background:#a77a28;border-color:#d6af63}.pill{background:#254750;padding:5px 9px;border-radius:20px}#status{min-height:45px;line-height:1.5}.table{background:radial-gradient(ellipse,#217453,#104735);border:4px solid #b1924d;border-radius:90px;min-height:430px;display:grid;grid-template-columns:1fr 2fr 1fr;grid-template-rows:auto 1fr auto;gap:8px;padding:16px;align-items:center;text-align:center}.seat{padding:8px;border-radius:12px;background:#10372fcc}.north{grid-column:2;grid-row:1}.west{grid-column:1;grid-row:2}.east{grid-column:3;grid-row:2}.south{grid-column:2;grid-row:3}.center{grid-column:2;grid-row:2}.cards{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:7px}.card{font-size:1rem;min-width:39px;padding:8px 5px;border:1px solid #777;color:#16232a;background:#fffefa;border-radius:6px;font-weight:800}.red{color:#b52b38}.card.playable{outline:3px solid #eec46f;cursor:pointer}.card:not(button){display:inline-block}.face{display:inline-block;background:#d9e5df;color:#1f4e4b;border:1px solid #a8bbb6;padding:7px;border-radius:5px;margin:2px;font-size:.9rem}.trick{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px}.trick span{background:#e9ede5;color:#182c2e;border-radius:8px;padding:9px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.stat{padding:12px;background:#1a3b43;border-radius:10px}.stat strong{display:block;font-size:1.35rem;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:.91rem}td,th{padding:8px;border-bottom:1px solid #37535b;text-align:left}th{color:#e4c681}#results{overflow-x:auto}.warn{border-left:4px solid #caa85a;padding-left:10px}.hidden{display:none}@media(max-width:650px){.wrap{padding:8px}.table{padding:8px;border-radius:48px;grid-template-columns:60px 1fr 60px;min-height:395px}.seat{padding:4px;font-size:.78rem}.card{font-size:.85rem;min-width:30px;padding:6px 2px}.face{padding:4px}.west,.east{word-break:break-word}}
 </style></head><body>
-<header><h1>♠ BGM Bridge · <span style="color:#edc775">Desafío</span></h1><span class="pill">Versión de pruebas · v0.3</span></header>
+<header><h1>♠ BGM Bridge · <span style="color:#edc775">Desafío</span></h1><span class="pill">Versión de pruebas · v0.4</span></header>
 <main class="wrap"><p id="backLink" hidden><a style="color:#edc775" href="bgm-bridge.html?lang=es">← BGM Bridge</a></p><p id="storageNote" aria-live="polite"></p>
 <section class="panel"><div class="toolbar"><label>Jugador <select id="player"><option value="A">A</option><option value="B">B</option></select></label><button class="primary" id="start">Iniciar / continuar</button><label>Manos <select id="size"><option>4</option><option selected>8</option><option>12</option><option>16</option><option>20</option></select></label><button id="newRun">Nuevo desafío</button><button id="comparison">Ver comparación</button><button id="demo">Cargar ejemplo de 8 manos</button></div><p class="muted">Cada jugador realiza las ocho manos por separado. Los repartos, contratos y reglas de los bots son los mismos. Las partidas quedan guardadas en este navegador.</p><p id="demoNote" class="muted"></p></section>
 <section id="game" class="hidden"><div class="grid" id="stats"></div><section class="panel"><div id="status" aria-live="polite"></div><div class="toolbar"><button id="claimDemo" hidden>Reclamar bazas</button></div><p id="claimStatus" aria-live="polite"></p>
@@ -76,6 +76,7 @@ const defaultPlayer=()=>({board:1,results:[],game:null});
 const storageKey='bgm-bridge-challenges-v1';
 const route=new URLSearchParams(location.search);
 const demoLink=route.get('demo')==='4h';
+const directPreview=location.pathname==='/';
 let data;
 try { data=JSON.parse(localStorage.getItem(storageKey)); } catch {}
 data??={next:1,active:null,runs:{}};
@@ -101,7 +102,8 @@ function createRun(count,demo=false) {
 function activateRun(run) {
   active=run;
   data.active=run.id;
-  $('player').value='A';
+  $('player').value=run.selectedPlayer||'A';
+  try { history.replaceState({...history.state,bgmChallengeRun:run.id},''); } catch {}
   $('size').value=String(run.count);
   $('demoNote').textContent=run.demo
     ? 'Ejemplo de 4♥. A tiene siete resultados de muestra y B tiene ocho. La mano 8 de A empieza tras cuatro bazas ganadas.'
@@ -137,6 +139,10 @@ function start() {
   clearTimeout(timer);
   $('claimPanel').classList.add('hidden');
   const player=$('player').value;
+  if(active.selectedPlayer!==player) {
+    active.selectedPlayer=player;
+    persist();
+  }
   state={player,...load(player)};
   if(state.board<=active.count&&!state.game) newBoard();
   $('game').classList.toggle('hidden',state.board>active.count);
@@ -273,11 +279,18 @@ $('backLink').hidden=!demoLink;
 if(demoLink) {
   const lang=route.get('lang');
   if(['es','en','zh','it'].includes(lang)) $('backLink').querySelector('a').href='bgm-bridge.html?lang='+lang;
+}
+const resumed=data.runs[history.state?.bgmChallengeRun];
+if(resumed) {
+  activateRun(resumed);
+} else if(demoLink) {
   const lastDemo=Object.values(data.runs).findLast(run=>run.demo);
   if(lastDemo) activateRun(lastDemo);
   else createRun(8,true);
 } else if(active) {
   activateRun(active);
+} else if(directPreview) {
+  createRun(8,true);
 } else {
   updateRunList();
   render();
