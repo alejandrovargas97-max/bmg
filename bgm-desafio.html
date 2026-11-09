@@ -2,31 +2,128 @@
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BGM Bridge · Desafío</title>
 <style>
-:root{font-family:system-ui,Arial,sans-serif;color:#eef9f2;background:#0b1820}*{box-sizing:border-box}body{margin:0}header{padding:14px 22px;background:#102b30;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid #c8a65f}h1{font-size:1.35rem;margin:0}small,.muted{color:#a9c4c5}.wrap{max-width:1100px;margin:auto;padding:18px}.panel{background:#132a32;border:1px solid #31505a;border-radius:14px;padding:14px;margin-bottom:12px}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}button,select{padding:9px 12px;border:1px solid #8bb9af;background:#1f4e4b;color:#fff;border-radius:9px;cursor:pointer;font-weight:600}button:hover{background:#2b6661}button:disabled{opacity:.35;cursor:not-allowed}.primary{background:#a77a28;border-color:#d6af63}.pill{background:#254750;padding:5px 9px;border-radius:20px}#status{min-height:45px;line-height:1.5}.table{background:radial-gradient(ellipse,#217453,#104735);border:4px solid #b1924d;border-radius:90px;min-height:430px;display:grid;grid-template-columns:1fr 2fr 1fr;grid-template-rows:auto 1fr auto;gap:8px;padding:16px;align-items:center;text-align:center}.seat{padding:8px;border-radius:12px;background:#10372fcc}.north{grid-column:2;grid-row:1}.west{grid-column:1;grid-row:2}.east{grid-column:3;grid-row:2}.south{grid-column:2;grid-row:3}.center{grid-column:2;grid-row:2}.cards{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:7px}.card{font-size:1rem;min-width:39px;padding:8px 5px;border:1px solid #777;color:#16232a;background:#fffefa;border-radius:6px;font-weight:800}.red{color:#b52b38}.card.playable{outline:3px solid #eec46f;cursor:pointer}.card:not(button){display:inline-block}.face{display:inline-block;background:#d9e5df;color:#1f4e4b;border:1px solid #a8bbb6;padding:7px;border-radius:5px;margin:2px;font-size:.9rem}.trick{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px}.trick span{background:#e9ede5;color:#182c2e;border-radius:8px;padding:9px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.stat{padding:12px;background:#1a3b43;border-radius:10px}.stat strong{display:block;font-size:1.35rem;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:.91rem}td,th{padding:8px;border-bottom:1px solid #37535b;text-align:left}th{color:#e4c681}#results{overflow-x:auto}.warn{border-left:4px solid #caa85a;padding-left:10px}.hidden{display:none}@media(max-width:650px){.wrap{padding:8px}.table{padding:8px;border-radius:48px;grid-template-columns:60px 1fr 60px;min-height:395px}.seat{padding:4px;font-size:.78rem}.card{font-size:.85rem;min-width:30px;padding:6px 2px}.face{padding:4px}.west,.east{word-break:break-word}}
+:root{font:15px/1.4 system-ui,Arial,sans-serif;color:#eef5f1;background:#0d3027;--gold:#e8ba61;--ink:#102820}
+*{box-sizing:border-box}
+body{margin:0}
+h1,h2,h3,p{margin:0}
+[hidden],.hidden{display:none!important}
+.shell{max-width:1040px;margin:auto;padding:0 12px 18px}
+.top{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:2px solid var(--gold)}
+.top img{width:34px;height:34px;border-radius:6px}
+.top h1{font-size:1.05rem;letter-spacing:.06em;color:var(--gold)}
+.top h1 span{color:#eaf4ed;font-weight:500;letter-spacing:0}
+.top a{color:inherit}
+.top details{position:relative;margin-left:auto}
+.top details>.toolbar{position:absolute;z-index:2;right:0;top:calc(100% + 5px);width:min(360px,calc(100vw - 24px));padding:10px;background:#102820;border:1px solid #62877c;border-radius:8px}
+summary{cursor:pointer}
+.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+button,select{font:inherit;color:inherit;background:#102820;border:1px solid #54776b;border-radius:7px;padding:5px 10px;min-height:32px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--gold)}
+button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #fff;outline-offset:2px}
+button:disabled{cursor:default;opacity:.55}
+.primary,#claimDemo{color:#20190b;background:var(--gold);border-color:var(--gold);font-weight:700}
+#demoNote,#storageNote,#claimStatus{color:#d4e8de;font-size:.87rem}
+#demoNote:not(:empty),#storageNote:not(:empty){padding:7px 0}
+#game:not(.hidden)~#demoNote{padding:4px 0}
+#status{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:space-between;padding:7px 0;font-size:.91rem}
+#status strong{color:var(--gold)}
+.solo-board{--card-w:clamp(22px,6.65vw,43px);--card-h:clamp(41px,9vw,63px);background:radial-gradient(#206c4f,#0c392d);border:1px solid var(--gold);border-radius:12px;display:grid;grid-template-columns:84px minmax(0,1fr) 84px;grid-template-rows:auto minmax(190px,1fr) auto;gap:4px;padding:6px;min-height:clamp(365px,60vh,570px);box-shadow:inset 0 0 40px #0003}
+.solo-seat{min-width:0;padding:4px;border:1px solid transparent;border-radius:7px;background:#06211655;align-self:center;text-align:center}
+.solo-seat-name{display:flex;justify-content:center;align-items:center;gap:6px;margin-bottom:4px;font-size:.87rem;line-height:1.15}
+.solo-seat-name span{font-size:.74rem;color:#d6e8df}
+.solo-seat-0{grid-area:1/1/auto/-1;align-self:start}.solo-seat-1{grid-area:2/3}.solo-seat-2{grid-area:3/1/auto/-1;align-self:end}.solo-seat-3{grid-area:2/1}
+.solo-seat-1 .solo-seat-name,.solo-seat-3 .solo-seat-name{flex-direction:column;gap:2px}
+.solo-seat.solo-active{border-color:var(--gold)}.solo-active strong,.solo-dummy .solo-seat-name span{color:var(--gold)}
+.solo-hand{display:flex;justify-content:center;gap:1px;min-width:0}
+.solo-card{display:flex;flex:0 0 var(--card-w);width:var(--card-w);height:var(--card-h);flex-direction:column;align-items:flex-start;justify-content:space-between;padding:2px 0 3px 3px;margin:0;min-height:0;border-radius:4px;border:1px solid #b5a87f;background:#fffef8;color:#101b17;font:clamp(17px,4.9vw,27px)/1 Arial,Helvetica,sans-serif;box-shadow:1px 1px 2px #0004;text-align:left}
+.solo-card b{letter-spacing:-.07em}
+.solo-card:disabled{opacity:1}
+.solo-card.playable{border-bottom:3px solid var(--gold)}
+.suit-H{color:#b0172d}.suit-D{color:#a64c09}.suit-C{color:#146940}
+.solo-backs{display:flex;justify-content:center;min-height:31px}
+.solo-back{width:22px;height:32px;flex:0 0 22px;border:1px solid #a99968;border-radius:3px;background:repeating-linear-gradient(45deg,#153a4c,#153a4c 3px,#244859 4px,#153a4c 5px);color:#e8ba61;font:10px/30px Arial,sans-serif}
+.solo-seat-1 .solo-back+.solo-back,.solo-seat-3 .solo-back+.solo-back{margin-left:-18px}
+.solo-middle{grid-area:2/2;align-self:center;display:grid;place-items:center;gap:6px}
+.solo-table-cards{display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);justify-items:center;align-items:center;width:min(155px,100%);height:145px;min-width:0;position:relative}
+.felt-logo{grid-area:1/1/-1/-1;width:min(104px,80%);opacity:.19;border-radius:4px}
+.played-seat{z-index:1}.played-N{grid-area:1/2}.played-E{grid-area:2/3}.played-S{grid-area:3/2}.played-W{grid-area:2/1}
+.played-seat .solo-card{--card-w:32px;--card-h:43px;font-size:18px}
+.turn{font-size:.8rem;border-radius:4px;background:#062116bb;padding:2px 5px}
+.claim-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:6px 0}
+.claim-controls:empty{display:none}
+#claimPanel{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.section{margin-top:8px;border-top:1px solid #4c7164;padding:7px 0}
+.section>summary{color:var(--gold);font-weight:700}
+.section .toolbar{margin:7px 0}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:6px;border-bottom:1px solid #37584d;text-align:left}
+th{color:var(--gold)}
+#handHistory h3,#analysisPanel h3{margin:7px 0 4px}
+.review-board{min-height:270px;grid-template-columns:1fr minmax(45px,.5fr) 1fr;grid-template-rows:auto 1fr auto}
+.review-board .solo-seat{grid-column:2;min-width:0;max-width:100%;justify-self:center;text-align:left}
+.review-board .solo-seat-1{grid-column:3}.review-board .solo-seat-3{grid-column:1}
+.review-board .solo-seat strong{display:block;text-align:center}
+.review-suit{display:block;color:#eaf4ed;font-variant-numeric:tabular-nums}
+.review-suit b{display:inline-block;width:1em;color:#eaf4ed}
+.review-suit .suit-H{color:#ff8895}.review-suit .suit-D{color:#ffb771}.review-suit .suit-C{color:#86ddaa}
+@media(max-width:600px){
+ .shell{padding-inline:5px}.top h1{font-size:.9rem}
+ .solo-board{--card-w:clamp(19px,calc((100vw - 42px)/13),32px);grid-template-columns:57px minmax(0,1fr) 57px;min-height:375px;gap:2px;padding:4px}
+ .solo-card{padding-left:2px}.solo-seat{padding:3px}.solo-hand{gap:0}
+ .solo-seat-name{font-size:.77rem}.solo-seat-name span{font-size:.66rem}
+ .solo-seat-1 .solo-back+.solo-back,.solo-seat-3 .solo-back+.solo-back{margin-left:-20px}
+ .review-board{grid-template-columns:1fr minmax(16px,.2fr) 1fr;min-height:250px;font-size:.76rem}
+}
 </style></head><body>
-<header><h1>♠ BGM Bridge · <span style="color:#edc775">Desafío</span></h1><span class="pill">Versión de pruebas · v0.4</span></header>
-<main class="wrap"><p id="backLink" hidden><a style="color:#edc775" href="bgm-bridge.html?lang=es">← BGM Bridge</a></p><p id="storageNote" aria-live="polite"></p>
-<section class="panel"><div class="toolbar"><label>Jugador <select id="player"><option value="A">A</option><option value="B">B</option></select></label><button class="primary" id="start">Iniciar / continuar</button><label>Manos <select id="size"><option>4</option><option selected>8</option><option>12</option><option>16</option><option>20</option></select></label><button id="newRun">Nuevo desafío</button><button id="comparison">Ver comparación</button><button id="demo">Cargar ejemplo de 8 manos</button></div><p class="muted">Cada jugador realiza las ocho manos por separado. Los repartos, contratos y reglas de los bots son los mismos. Las partidas quedan guardadas en este navegador.</p><p id="demoNote" class="muted"></p></section>
-<section id="game" class="hidden"><div class="grid" id="stats"></div><section class="panel"><div id="status" aria-live="polite"></div><div class="toolbar"><button id="claimDemo" hidden>Reclamar bazas</button></div><p id="claimStatus" aria-live="polite"></p>
-<div id="claimPanel" class="panel hidden"><p>¿Cuántas de las nueve bazas restantes reclamas?</p><div class="toolbar"><button id="claim8">Reclamar 8</button><button id="claim9">Reclamar 9</button><button id="claimClose">Cerrar</button></div></div><div class="table"><div class="seat north"><b>N · Bot compañero (muerto)</b><div class="cards" id="north"></div></div><div class="seat west"><b>O · Bot</b><div id="west"></div></div><div class="seat east"><b>E · Bot</b><div id="east"></div></div><div class="center"><b id="turn">Mesa</b><div class="trick" id="trick"></div></div><div class="seat south"><b>S · Tú</b><div class="cards" id="south"></div></div></div></section></section>
-<section class="panel" id="results"><h2>Comparación por IMP</h2><div id="compareBody"></div></section>
-<section class="panel"><h2>Historial de desafíos</h2><div class="toolbar">
-<label>Desafío <select id="savedRun"></select></label><button id="reviewRun">Revisar</button><button id="exportRun">Exportar desafío</button><button id="analysisRun">Analizar</button>
-</div><div id="reviewPanel" class="hidden"><div id="savedResults"></div>
-<label>Mano <select id="savedBoard"></select></label>
-<div id="handHistory" class="panel" aria-live="polite"></div></div>
-<section id="analysisPanel" class="panel hidden"><h3>Bridgemito · DDS3 (Double Dummy)</h3><p>Integración pendiente. La revisión y la exportación del desafío ya están disponibles.</p><ul>
-<li>Tabla de bazas alcanzables para cada declarante y cada denominación, incluidos los contratos sin triunfo.</li>
-<li>Comparación de salidas y alternativas de carteo en posiciones guardadas.</li>
-<li>Evaluación con las cuatro manos visibles y ambos bandos jugando de forma óptima.</li>
-</ul></section></section>
-<section class="panel warn"><b>Alcance:</b> siete resultados de A y ocho de B son ejemplos ficticios. La mano 8 de A recrea el caso de 4♥ por Sur con un reparto de prueba. Los contratos de los nuevos desafíos están predefinidos en esta versión.</section>
+<main class="shell">
+<header class="top">
+  <img src="data:image/webp;base64,UklGRp4RAABXRUJQVlA4IJIRAADQRACdASqgAKAAPmEokEYkIqGhLDlKcIAMCWYA1fI1/sGtG+O80qxP4b8PcWpVXl38/+dL/Z+q/zAP1G6Wvmb/ab9gPd39Hf9v9QD+m/4brWP2q9gr9ufTd/dT4L/7H/y/23+Af9lf//ejP4Lwb/FfnX7n+VXrHZB+oj+y9DP5X9yPxv5i/mR8R/4v8rvOn4h/3nqBfj38v/xH9g8Izui9V8wX2D+f/63++fjv6Pn9h6C/Xn2AP5X/T/9f5SXhF+X+wH/Nf7H/3v7t7sP9J/5f8/+V3tc/Pv8p/5vcK/mH9f/6P+I7R/7if//3T/2qPx7yTMn57mJYKMt+aEywVaNlK41Hbw9/OXjEkYgjz/O/DpMvqxlq+geqp56Q8KKWgSh0RfiO75kgfQbNYp0CbnliXOS6S0qDx/GV7agjvg5gkXadczEJkkVdjAD6VmT/QIBaQHPgWAFH3hqxlQLDad5+kudBIJ+hmfNOwN0nC1KXOj+K5lHLCiLhAbqu25VHZ/G9xSZ53vOCOBXbv06Li29h2CbHHiqsXjSLI6OLj9VdHr7wci/Loqa5ITYOuSh3UtrXC1sXxsDd1RUwpAwvRXax0lE6TasL3NWpzLaPcNA+TChuqhM4HeOSZhTx9umtJq43lR/j+m4SnIHtoNyMNp6RbOHYm/gGmU7cNUt4/SvX54jyaqeWTHiBDZW+pVMWWwc3bbv6pS8B4KAqzHR7cvrNloxsRPHrIyX2gsU1LwQAAP79bvLf7G+xXcfGsAABXzQf9Xn81tQ/Ui7oh2g2d5qusOYM1AqAQyFFW7P5V/8We9qeMobME/glxmPaUrZn4Fp3hFsSyFuHoLL+U51y+v4TGuzQ9aXTlE1oB79Fe0D0/9FD4AI0Tv740jrkS6bRaySt+x0OSpgxbOc6YN908Q8+tFu0es7dGWEPF5ULpqkiLLiAl0sxhMJAUNKys20Hwrnwv+ghEIhM1gVHkxNiVT0a9V6W1JXHf1iiG5O1zt7gEJhCLckxDhf3QxxF4IZUVh9Qn6BUl4F07IDujOq4j7tcw/XdmXHbonf4LdMdyauFEgw2seCpt3CFiLpipyO+N2IZQ3VNPb6OgN9W4h0+oSQeZqBqvE6Tp/rGPjHmAjSwNPvRUYjl56lYQwT2M7mPVxbFEKSfqpyUo6+qAXLUIqVIAlLA4KoWqNs14WBTyybyN0RK57KKI0R48klH7iPYkYBrkXIS9m2W0jnPkOiZafWP/cK7KSxYfMIt3DT8cfnU9dxEAaiYWWaD/wHH6x21+4ETZY5sTHF2X9BgxUAd6fxXtIZBUX0JTERSG+6tzf8C1cyG7r0QtqT1jJQYu/3HgLphtepWredoQXMJtX9Q7DPu1cQWOTroUYItlwMwIH7hA3qpJL7RqrwMvslGs/HJ+Snmron/nD6p6KYo0CcazQ7xaLPzRHjMxRqVnwSnK5HavuFgaulWwqdtAeDrDxviR4THq/R4fjlGf+61U6cDiFfdk6vgfa7xnEHusyfpFCDuLIoc+I43rwbzqTXhaDn+YcyRkLqpm9HfKZ5ZqghZc5gS1FF4C0LBMrM5jgjICKdW0UG0jzHmGGkpFxaGg6Jqy4/tlCTJPOwvJok/YevOh+zsq0yrPAnnRub4fTD83dbIXRZ6wYKCVSdxFITfWDhpNlIecChuwUUOIbNq0OcNG9qZPuEO4T8qhtNkTHI2bq1kZeMCH14vKNm63d+9Wy+jy+5tg6TCSMjQXPJZx5YbuuIgJioK/iLmwyw8ZG8oz6gq0JBiLsOxH/xWPFYpINAVmj/3zWOQg5bKlY7H444u/QEu6HVHdJd74uSjW/UfyS/DF1edUzdkXaqUaAxT5POC/HmSABB9e/nMmlulhZhmDhV78HFGqQ2J5jIG+DutwVE9XYDFYhht8Kz6HD1k5EokxBvnQUhMEEJjrJAu6uAcavy0k9IyM7T3SrqgTCAttpQzRNG4PTwogbhfphaOGjZW/Mhu7verRbp9HX78Id7vVAXYJtT5GtCxDpn4/N6t33/IgDfv9opHHW3J3+a3juJIZgNsCoXhDSELRJ39Xugo+aRoyAMfC77YME0Ld7Rv6Z5qYfQWxsZRV+qjFc3J0nOAv6YzdYyQkuk7hLT7H3fnrX/r7vmEjwiP0iR1et3yxEUbqyiSXQ8jFIU28qaJRQyPA6glTWySmP5qWTiU2MFyPO8FiYEry0ONg4efvQY1iJMq+KKQNtYxJQpM3spjYx9+dZTbWG6OYB4h/I/vChVZH0KQboyPs2rS/vku46dUqZbBDtPSU/NjFrDQT+7vv02Cv+ZQ8Y2FphKALQITZ+kUL4xKC6gYmpRGr340XyadKhRNkSgIbUZqFxzdQildrG2RJzAmX32i3uz2OvJTj1rbW3BnDEFvU656oY7pHpPHyrk04WGbpOWwOSXZxAtZH2GHNqS9itSERmry0aCx5BPRU4JYyJ9srL/5NM/5GfAl2/oB1mQFtjvMWN1jleMjb9EwfUZ0kygiZXOC48+nfa2c0Tyz0T3mVvwONux+KkIpDPcwkFtIcxAVSjEgHpthJQ3dBjoSQgKoDlUu/m7R7JO6f1IKyWPx+gM+X8On9eYHKTcAWj3Dro/pm7bMZ7x4ywwg3wR14qDdQkevx6yEWzbXgQEIgNj3vDqZtgcjnuLRRMKEXmQnSOnaNRsG+lItaQzf/CFzYy45i/LYK1ZG8sEaHjTdek0h2hJ5FVEji0HHGwZiW5Z6hF68RX9VA6J6jCBW/CDOIBmnq0UFp3mD6KFTRESXf9/OCwohmDAPFQFJkZPZJ87OLosiET11l0LnZ62lImPiYCc2DhmLZjsOl0pQCX/aILoFvGWH8pcM0JRdSv2PzX+lHgFlUijVKQmM9bFnV4lN5uKUKbeNvRSD1K+kxZp3PVJKTnOcA/oiMkvifSQMpY4Zf5c1b19TRDBDnw14cf73NL7yZVrbL6eCt9XIsieK+yzyDp8eBIhnBq3fIl1BLSJj91bAHZzK2KCMOcysg/AiWmjfS/4yWcG9USLQwi/yf9WL4HNsmEPOpznl9W5k38HOEjeHvp48Rn04QPOtvKs//2myuHlm/J7Tp2hyl6+5pPy9sU/0mubgRjbDgM+sioIEww5A/zD90NvonYH9RmZMDUPI5/6x6bt/DuvoIknkZnFGtbLA/3dpjL5nav9UNunryrLF7eRW2eyxNxslQwO2PLSZLu1hSOn4+jSzUKn6Dmnley6D2nFEmwE4Eqe0btz3enSKyAm+Nxd4WK4nCFJvk8e4lZO/yA2MgvpoSPR6KvpoTYmB1vsxOpNKRqNTV/X3aeZO7Utf/PiciJpx18mVqQwVdNL2xtDjyZ4muzBFHfeNqyNrPYksmTtnNjRQ9X+Dk95TP8QO7Zii08GcJHhyKp9ZzjdMULZ57aVG6VUpoqjc1uPRvlS3J0Gf7Z7vXYN6/Ao9td4gWU8+OPUIoZQ/0Jq53Fjc4KeclqYwz2XMnLQ5r1eOQDAnlz6a1icDs7k0XxG4RNDo5MHiLu83A1BBx4Ei6E+wzciX7aKfiv0XI8CCY/+BvFD/gmDUciv4tgBv85zoG8bKCD/eZlL/nPyNnkyXyeTSE+2pvyFOlirn0dCYslP0+7PsvEw5JHiFTePMDv+FMkyzL5syzENrlQF9cXNfS7BI/L/c+DTI1u7pGCJ/6noiQv/jDN+5Uu4ToxWPgEYVa8/CtAyZBGDEcL/FmmbpWiLq1D9j1tHUJntycSqNQH7uf1tYS5dIivx2IETWJvcuCTbsrqjJ2tiunt0YxMoh4FsLzxe0hQG2Ma0ev7BN7PcX7Y3GsV6hpBqpiwqHCuxYzI8nZLG+oFqMSQfrWXOFdlC6nt9yd9vjcRgVq4seu7AEPNpsY21dsh80sMvBjBos9gk70G7ew/AAEbyikXxuz5jeeXG8gh9BrGcNSlJcqziznjOyYjrm5tiR4fLQ/r0Ql6DtLX7tUkK1swnR5g0Rs2tjBElf21+LTdWgnRGZHmr/DPh3GoahKkDd9VPxxiXv6rzojt/1FtuyJsSBQOxoUfvE6iverVx/PL+S1f+UosHMM6mmEdTwRikWLKh4gWU0zo07H0jNd+bLQQVFMxx5JPYfVUOgx23NyTJ5qdx/hcMyq5lug997eAE9DiyRNLZa8CVJZPsFNAMnJKGGiN1OX3f90yLrMRkUekKbhn+DR/NMnvvznq5q9XmAR7s83QqVcVamDPlKGQdtWIlZn33iOIeNNUdRIh4v9g0iQO6LWeOcELPCfR8hPk58aselKWA3tvj86JIZ+ymt77NSt7YsyhlxR4vOiSpuDGYZ4YUL7C90o2HR7hRDrabn8kBrlyxibuosKCkrPlO1/k3QFnrVKw6wDqz/ohi5P0X29HSWWa0ydCCYbE1dbcn0efV0/k/3oqbwa6NrPV16dBgaPYDxHGw/5Igr3eOmlqq5F36iocEuIxTL/4duECADknVfPL15grfuagSF1c93LPCwHzTXyC/31HrXsPQNBgtGTal4e6To6dEdLJOAj/or7xfrBhvYEyf4pZEaMxXLwZkF+lYDEFS2cXBJZKoIVRCStUbiB8pHNJOwdyJ8VjwCw1sZMo09oNG451uBveR8NWOkCZtZiZ3rLy5QnoiSeUMu2O0ftrjfJNXsLQtN85CIaJsAOKSQjtO4VmwpWTXuXUcv9PvdaA43sQcTRgeG4gi7m36Y79JeALWfLq6HVOt2c0nql89Z0mHDXvapcif4YfagQQED22A2GnlBn/jqc+WSNjJ2j8RuF3z+MOonrfsxOHcWqjUCFluBVWF8048ZHfTU/rBGnaFHEZP576KiKoxlmYhsx6UZnOtwy+GDnvKJfFL5BUA765pcez2bWk7OG7Nib1pBH28kRKfM6qE7T2aOi4Mx9rPaldGEg7KuZFik7/qzBy53t3U1AzlH/uyf9pYsof41fmmT4fX4KznvEYL5GpD/YfS2l9C90riu+MaHTMwpVoLaYBlk4n5sNTVjJM7EGq4r4BYqYtnwOrlZVgF+gvDzI+suNhd93YN3P9Hs5/ihG3TwH1vprems9l+lgAOKFUn3pTUOnvObWP8vDXnxGHzM5/3E/L1n/lrVFliXaPfkDYXm2rBi4lWm319a3+OrB/QaX1NS2fYV9cS/rJhjNLsgKMMYCkpsOPvx7knlXHTikcgZNOIOIhPH8UYoZ9Q76dqcyDzRE66cF0jpwMNs6mTzseWj/zEp7cmjHGB1G6Z7kOrzv/SFR0nDMTCuD9yHw1ASi4bpWmqe4u3xYZtGeSjXkcaec2zYrS3+VFicrr7Jgehl0e6AyoYP2UPKeaMFi2l6419JDsfvwRtNL8EO3Zsq4tL/M3LIT3vxEjeVcfWFKXRmQPS6Mx7Pic+kO8Z18Q0GMU1p12dHb/afWAQ6QIZjwSHX95pLn4p+rB2K3+qwEMAzR9a7proLOGwNogORIm11fcsGWcOh8f1obH1kzjsVCbWM7C5Ze9c2/GJ4LgfStajYWRkpdsynvgkyLbSDNIHHz4TuadB164uFkWMbatHhqoPPqYARbTe8Du0mdphepqBbzIJUejgdGReuQLgkP+0ooxvtUjQIrUlUns1U4GOx4hIPAnocKeiLqX7NIa27wbQqmPyAgcBXe9LKmMayPgnVYBsBqf7mRlDUDD/sVhwhYLbnN5/guvHkBaY/1s2fzcqgWB/nqH5r7xtr1NeLO+I+5e4Xif5ekmlcj7Db9CA1PNw9LBS1+/3FP5PuLLEGHyhDJXOV8eITCaBgIclYRRp+B5F4YUe4sGTGJ4g0TNIWqQn/zOhJ8DQyEZST6sPZ2hcAX059ILlOe4weJIL6py8Zla7spO5AA1sZu1lUvDTW5xnNyv96vzcC6eIWpMU1Gy8GB9uG3aVIZNu9tQgsNvAbrgBMxV+0v4La6gTrYXBVNL55eoivXD9lvqEGbwGNGmNCTiGw67oIVmzP8pmzXwuRI+L0nh9GwAPeeRUFPbbeProCsIAYNaTJ3aAAhcAA" alt="">
+  <a id="backLink" href="bgm-bridge.html?lang=es" hidden>← BGM Bridge</a>
+  <h1>BGM BRIDGE <span>· Desafío</span></h1>
+  <details id="setup"><summary>Opciones</summary><div class="toolbar">
+    <label>Jugador <select id="player"><option value="A">A</option><option value="B">B</option></select></label>
+    <label>Manos <select id="size"><option>4</option><option selected>8</option><option>12</option><option>16</option><option>20</option></select></label>
+    <button id="newRun">Nuevo desafío</button>
+    <button id="demo">Cargar ejemplo de 8 manos</button>
+  </div></details>
+</header>
+<p id="storageNote" role="status"></p>
+<section id="game" class="hidden" aria-label="Mesa de Desafío">
+  <div id="status" aria-live="polite"></div>
+  <div class="solo-board" aria-label="Mesa de bridge">
+    <section class="solo-seat solo-seat-0" id="seat-N" aria-label="Norte"><div class="solo-seat-name"><strong>Norte</strong><span id="info-N"></span></div><div id="north"></div></section>
+    <section class="solo-seat solo-seat-3" id="seat-W" aria-label="Oeste"><div class="solo-seat-name"><strong>Oeste</strong><span id="info-W"></span></div><div id="west"></div></section>
+    <div class="solo-middle"><div class="solo-table-cards" id="trick" aria-label="Baza"></div><span class="turn" id="turn"></span></div>
+    <section class="solo-seat solo-seat-1" id="seat-E" aria-label="Este"><div class="solo-seat-name"><strong>Este</strong><span id="info-E"></span></div><div id="east"></div></section>
+    <section class="solo-seat solo-seat-2" id="seat-S" aria-label="Sur"><div class="solo-seat-name"><strong>Sur · Tú</strong><span id="info-S"></span></div><div id="south"></div></section>
+  </div>
+  <div class="claim-controls">
+    <button id="claimDemo" hidden>Reclamar bazas</button>
+    <div id="claimPanel" class="hidden"><button id="claim8">Reclamar 8</button><button id="claim9">Reclamar 9</button><button id="claimClose">Cerrar</button></div>
+    <p id="claimStatus" role="status"></p>
+  </div>
+</section>
+<div class="toolbar"><button id="start" class="primary">Iniciar / continuar</button><button id="playAgain" class="primary" hidden>Volver a jugar 4♥</button></div>
+<p id="demoNote"></p>
+<details class="section" id="results"><summary>Resultados e IMP</summary><div id="compareBody" class="table-scroll"></div></details>
+<details class="section" id="historySection"><summary>Historial de desafíos</summary>
+  <div class="toolbar"><label>Desafío <select id="savedRun"></select></label><button id="reviewRun">Revisar</button><button id="exportRun">Exportar desafío</button><button id="analysisRun">Analizar</button></div>
+  <div id="reviewPanel" class="hidden"><div id="savedResults" class="table-scroll"></div><label>Mano <select id="savedBoard"></select></label><div id="handHistory" aria-live="polite"></div></div>
+  <section id="analysisPanel" class="hidden"><h3>Bridgemito · DDS3 (Double Dummy)</h3><p>Integración pendiente. La revisión y la exportación del desafío ya están disponibles.</p><ul>
+    <li>Tabla de bazas alcanzables para cada declarante y cada denominación.</li>
+    <li>Comparación de salidas y alternativas de carteo en posiciones guardadas.</li>
+    <li>Evaluación con las cuatro manos visibles y ambos bandos jugando de forma óptima.</li>
+  </ul></section>
+</details>
 </main>
 <script>
 (()=>{'use strict';
 const S=['S','H','D','C'], ranks='23456789TJQKA', symbols={S:'♠',H:'♥',D:'♦',C:'♣'}, seats=['N','E','S','W'];
 const contracts=[['NT',1],['H',2],['S',2],['NT',3],['D',3],['S',4],['H',4],['NT',2]];
 const $=id=>document.getElementById(id);let state=null;
+const feltLogo='<img class="felt-logo" src="'+document.querySelector('.top img').getAttribute('src')+'" alt="">';
+const names={N:'Norte',E:'Este',S:'Sur',W:'Oeste'};
 const claimDeal = {"S":["AS","KS","AD","KD","AC","KH","QH","JH","TH","9H","8H","7H","6H"],"N":["4S","5S","4D","5D","QS","9S","4H","QD","9D","QC","9C","6C","4C"],"E":["6S","7S","6D","7D","JS","8S","3H","JD","8D","JC","8C","5C","3C"],"W":["2S","3S","2D","3D","AH","2C","TS","5H","2H","TD","KC","TC","7C"]};
 const claimOpening = [
   [['W','2S'],['N','4S'],['E','6S'],['S','AS']],
@@ -62,7 +159,7 @@ function submitClaim(requested) {
     game.tricksNS += requested;
     game.tricksEW += 9-requested;
     finish();
-    $('reviewPanel').scrollIntoView({block:'nearest'});
+    $('results').open=true;
   } else {
     save();
     render();
@@ -101,25 +198,28 @@ function createRun(count,demo=false) {
 }
 function activateRun(run) {
   active=run;
+  $('results').open=Boolean(run.completedAt);
+  $('historySection').open=false;
   data.active=run.id;
   $('player').value=run.selectedPlayer||'A';
   try { history.replaceState({...history.state,bgmChallengeRun:run.id},''); } catch {}
   $('size').value=String(run.count);
   $('demoNote').textContent=run.demo
-    ? 'Ejemplo de 4♥. A tiene siete resultados de muestra y B tiene ocho. La mano 8 de A empieza tras cuatro bazas ganadas.'
-    : `Desafío ${run.id} · ${run.count} manos. A y B reciben los mismos repartos.`;
+    ? 'Prueba de 4♥ · Cuatro bazas iniciales ya jugadas.'
+    : '';
+  if(run.demo&&run.completedAt) $('demoNote').textContent='Prueba de 4♥ finalizada.';
   persist();
   updateRunList(run.id);
   start();
 }
 function contractFor(board) { return contracts[(board-1)%contracts.length]; }
 function seedFor(board) { return 540011+board*1093+Math.imul(active.id,65537); }
-$('demo').onclick=()=>createRun(8,true);
-$('newRun').onclick=()=>createRun(Number($('size').value));
+$('demo').onclick=$('playAgain').onclick=()=>{ $('setup').open=false; createRun(8,true); };
+$('newRun').onclick=()=>{ $('setup').open=false; createRun(Number($('size').value)); };
 function random(seed){return()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296}}
 function deal(seed){let deck=S.flatMap(s=>[...ranks].map(r=>r+s)),rnd=random(seed);for(let i=deck.length-1;i>0;i--){let j=Math.floor(rnd()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}return {N:deck.slice(0,13),E:deck.slice(13,26),S:deck.slice(26,39),W:deck.slice(39)}}
 function suit(c){return c[1]}function strength(c){return ranks.indexOf(c[0])}function sortHand(a){return [...a].sort((x,y)=>S.indexOf(suit(x))-S.indexOf(suit(y))||strength(y)-strength(x))}
-function cardMarkup(c){return `<span class="${'HD'.includes(suit(c))?'red':''}">${symbols[suit(c)]}${c[0].replace('T','10')}</span>`}
+function cardMarkup(c){return `<span class="suit-${suit(c)}">${symbols[suit(c)]}${c[0].replace('T','10')}</span>`}
 function load(player) { return active?.players[player]||defaultPlayer(); }
 function save() {
   if(!state||!active) return;
@@ -146,6 +246,9 @@ function start() {
   state={player,...load(player)};
   if(state.board<=active.count&&!state.game) newBoard();
   $('game').classList.toggle('hidden',state.board>active.count);
+  $('start').hidden=Boolean(state.game)||state.board>active.count;
+  $('playAgain').hidden=!(active.demo&&state.board>active.count);
+  if(active.completedAt) $('results').open=true;
   render();
   if(state.game) advanceBots();
 }
@@ -169,9 +272,13 @@ function finish() {
   state.game=null;
   save();
   $('game').classList.add('hidden');
+  $('start').hidden=state.board>active.count;
+  $('playAgain').hidden=!(active.demo&&state.board>active.count);
+  $('results').open=true;
   render();
   if(active.completedAt) {
     updateRunList(active.id);
+    $('historySection').open=true;
     openReview(result.board);
   } else if(state.board<=active.count) {
     $('demoNote').textContent=`Mano ${result.board} guardada. Pulsa Iniciar / continuar para jugar la mano ${state.board}.`;
@@ -179,13 +286,52 @@ function finish() {
     $('demoNote').textContent=`Jugador ${state.player} finalizado. Selecciona al otro jugador para continuar el desafío.`;
   }
 }
-function render(){let a=load('A').results,b=load('B').results;$('compareBody').innerHTML=resultsMarkup(active?.count??8,a,b);if(!state)return;let g=state.game,done=state.results.length;
-$('claimDemo').hidden=!canClaim();
-if(!canClaim()) $('claimPanel').classList.add('hidden');
-$('claimStatus').textContent=g?.claimEvents?.at(-1)?.accepted===false
-  ? 'Reclamo de 9 rechazado. Oeste conserva el as de triunfo (♥A). Puedes seguir jugando o reclamar 8 mientras sigas en esta posición.'
-  : '';
-$('stats').innerHTML=`<div class="stat">Jugador<strong>${state.player}</strong></div><div class="stat">Progreso<strong>${done}/${active.count} manos</strong></div><div class="stat">Estado<strong>${state.board>active.count?'Finalizado':'Mano '+state.board}</strong></div>`;if(!g){$('status').textContent=state.board>active.count?'Has completado tus ocho manos. Puedes ver la comparación.':'Pulsa Iniciar / continuar.';return}let [trump,level]=currentContract();$('status').innerHTML=`<b>Mano ${state.board}/${active.count} · Contrato ${level}${symbols[trump]||'ST'} por Sur</b> · Bazas NS ${g.tricksNS} / EO ${g.tricksEW} · Carta ${g.played}/52. ${g.turn==='N'?'Te corresponde jugar desde el muerto.':g.turn==='S'?'Te corresponde jugar desde Sur.':'Juega el bot '+g.turn+'.'}`;for(let seat of ['N','S']){let el=$(seat==='N'?'north':'south');let allowed=g.turn===seat?legal(g.hands[seat]):[];el.innerHTML=sortHand(g.hands[seat]).map(c=>`<button class="card ${allowed.includes(c)?'playable':''}" data-seat="${seat}" data-card="${c}" ${allowed.includes(c)?'':'disabled'}>${cardMarkup(c)}</button>`).join('')}for(let seat of ['E','W'])$(seat==='E'?'east':'west').innerHTML=`<div class="face">${g.hands[seat].length} cartas ocultas</div>`;$('turn').textContent=`Turno: ${g.turn}`;$('trick').innerHTML=g.trick.map(x=>`<span>${x.seat}: ${cardMarkup(x.card)}</span>`).join('')||'<span>Inicio de baza</span>';document.querySelectorAll('.card.playable').forEach(el=>el.onclick=()=>play(el.dataset.seat,el.dataset.card))}
+function boardCard(card,seat,canPlay=false) {
+  const suitCode=suit(card);
+  const rank=card[0]==='T'?'10':card[0];
+  const face=`<b>${rank}</b><span>${symbols[suitCode]}</span>`;
+  const style=`solo-card suit-${suitCode}`;
+  return seat
+    ? `<button class="${style}${canPlay?' playable':''}" data-seat="${seat}" data-card="${card}" ${canPlay?'':'disabled'}>${face}</button>`
+    : `<span class="${style}">${face}</span>`;
+}
+function render(){
+  $('compareBody').innerHTML=resultsMarkup(active?.count??8,load('A').results,load('B').results);
+  const game=state?.game;
+  if(!game) return;
+  $('claimDemo').hidden=!canClaim();
+  if(!canClaim()) $('claimPanel').classList.add('hidden');
+  $('claimStatus').textContent=game.claimEvents?.at(-1)?.accepted===false && canClaim()
+    ? 'Reclamo de 9 rechazado. Oeste conserva el as de triunfo (♥A).'
+    : '';
+  const [trump,level]=currentContract();
+  $('status').innerHTML=`<span>Mano ${state.board}/${active.count} · ${level}${symbols[trump]||'ST'} por Sur · Jugador ${state.player}</span><strong>N/S ${game.tricksNS} · E/O ${game.tricksEW}</strong>`;
+  const hands={N:'north',E:'east',S:'south',W:'west'};
+  for(const seat of seats){
+    const cards=game.hands[seat];
+    const isDummy=seat==='N'&&game.played>0;
+    const visible=seat==='S'||isDummy;
+    const hand=$(hands[seat]);
+    $('seat-'+seat).classList.toggle('solo-active',game.turn===seat);
+    $('seat-'+seat).classList.toggle('solo-dummy',isDummy);
+    $('info-'+seat).textContent=isDummy?'Muerto':seat==='S'?`${cards.length} cartas`:`Bot · ${cards.length}`;
+    hand.className=visible?'solo-hand':'solo-backs';
+    if(visible){
+      const allowed=game.turn===seat?legal(cards):[];
+      hand.innerHTML=sortHand(cards).map(card=>boardCard(card,seat,allowed.includes(card))).join('');
+    } else {
+      hand.innerHTML='<span class="solo-back" aria-hidden="true">♠</span>'.repeat(cards.length);
+    }
+  }
+  $('turn').textContent=game.turn==='N'?'Juega desde el muerto':`Turno: ${names[game.turn]}`;
+  const trick=game.trick.length?game.trick:game.lastTrick||[];
+  $('trick').innerHTML=trick.length
+    ? trick.map(({seat,card})=>`<div class="played-seat played-${seat}" aria-label="${names[seat]}">${boardCard(card)}</div>`).join('')
+    : feltLogo;
+  document.querySelectorAll('.solo-card.playable').forEach(card=>{
+    card.onclick=()=>play(card.dataset.seat,card.dataset.card);
+  });
+}
 const impLimits=[20,50,90,130,170,220,270,320,370,430,500,600,750,900,1100,1300,1500,1750,2000,2250,2500,3000,3500,4000];function imp(delta){let n=impLimits.findIndex(x=>Math.abs(delta)<x);return Math.sign(delta)*(n<0?24:n)}
 function boardRows(count,a,b) {
   return Array.from({length:count},(_,i)=>{
@@ -237,8 +383,14 @@ function reviewBoard() {
     $('handHistory').textContent='Esta mano contiene resultados de ejemplo. No tiene un reparto ni un carteo guardados.';
     return;
   }
-  const handMarkup=(seat,position,name)=>`<div class="seat ${position}"><b>${name}</b><div class="cards">${sortHand(hands[seat]).map(c=>`<span class="card">${cardMarkup(c)}</span>`).join('')}</div></div>`;
-  const table=`<div class="table">${handMarkup('N','north','Norte')}${handMarkup('W','west','Oeste')}<div class="center"><b>Mano ${board}</b></div>${handMarkup('E','east','Este')}${handMarkup('S','south','Sur')}</div>`;
+  const handMarkup=(seat,index)=>{
+    const suits=['S','H','C','D'].map(code=>{
+      const ranks=sortHand(hands[seat]).filter(card=>suit(card)===code).map(card=>card[0]==='T'?'10':card[0]);
+      return `<span class="review-suit"><b class="suit-${code}">${symbols[code]}</b> ${ranks.join(' ')||'—'}</span>`;
+    }).join('');
+    return `<div class="solo-seat solo-seat-${index}"><strong>${names[seat]}</strong>${suits}</div>`;
+  };
+  const table=`<div class="solo-board review-board">${seats.map(handMarkup).join('')}<div class="solo-middle"><strong>Mano ${board}</strong></div></div>`;
   const playback=(player,result)=>{
     if(result.sample) return `<p>${player} · Resultado de ejemplo.</p>`;
     const plays=result.playHistory||[];
@@ -274,11 +426,11 @@ $('exportRun').onclick=()=>{
 };
 $('start').onclick=start;
 $('player').onchange=start;
-$('comparison').onclick=()=>$('results').scrollIntoView({behavior:'smooth'});
-$('backLink').hidden=!demoLink;
+
+$('backLink').hidden=!demoLink||directPreview;
 if(demoLink) {
   const lang=route.get('lang');
-  if(['es','en','zh','it'].includes(lang)) $('backLink').querySelector('a').href='bgm-bridge.html?lang='+lang;
+  if(['es','en','zh','it'].includes(lang)) $('backLink').href='bgm-bridge.html?lang='+lang;
 }
 const resumed=data.runs[history.state?.bgmChallengeRun];
 if(resumed) {
