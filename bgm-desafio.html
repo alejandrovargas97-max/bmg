@@ -7,9 +7,9 @@
 <header><h1>♠ BGM Bridge · <span style="color:#edc775">Desafío</span></h1><span class="pill">Prototipo local · v0.1</span></header>
 <main class="wrap">
 <section class="panel"><div class="toolbar"><label>Jugador <select id="player"><option value="A">A</option><option value="B">B</option></select></label><button class="primary" id="start">Iniciar / continuar</button><button id="reset">Reiniciar este jugador</button><button id="comparison">Ver comparación</button><button id="demo">Cargar ejemplo de 8 manos</button></div><p class="muted">Cada jugador realiza las ocho manos por separado. Los repartos, contratos y reglas de los bots son los mismos. Las partidas quedan guardadas en este navegador.</p><p id="demoNote" class="muted"></p></section>
-<section id="game" class="hidden"><div class="grid" id="stats"></div><section class="panel"><div id="status" aria-live="polite"></div><div class="toolbar"><button id="claimDemo">Reclamar bazas (demostración)</button><span class="muted">Prueba visual; pendiente de conectar al motor de reclamos.</span></div><div id="claimPanel" class="panel hidden" aria-live="polite"><b>Reclamo del declarante</b><p>Indica cuántas bazas restantes reclamas. En el juego definitivo, ambos defensores podrán aceptar o rechazar.</p><label>Bazas restantes reclamadas <select id="claimCount"></select></label><div class="toolbar"><button id="claimSend">Proponer reclamo</button><button id="claimAccept" class="hidden">Simular aceptación de ambos defensores</button><button id="claimReject" class="hidden">Simular rechazo de un defensor</button><button id="claimClose">Cerrar</button></div><p id="claimStatus"></p></div><div class="table"><div class="seat north"><b>N · Bot compañero (muerto)</b><div class="cards" id="north"></div></div><div class="seat west"><b>O · Bot</b><div id="west"></div></div><div class="seat east"><b>E · Bot</b><div id="east"></div></div><div class="center"><b id="turn">Mesa</b><div class="trick" id="trick"></div></div><div class="seat south"><b>S · Tú</b><div class="cards" id="south"></div></div></div></section></section>
-<section class="panel" id="results"><h2>Comparación por IMP</h2><div id="compareBody"></div></section>
-<section class="panel warn"><b>Alcance de esta demostración:</b> los resultados de ejemplo son ficticios. La octava mano A se puede jugar; el panel de reclamo muestra aceptación y rechazo simulados, sin adjudicar bazas ni modificar la puntuación. La mesa visual es provisional, pendiente de reutilizar la mesa original de BGM Bridge. No es aún el motor de producción.</section>
+<section id="game" class="hidden"><div class="grid" id="stats"></div><section class="panel"><div id="status" aria-live="polite"></div><div class="toolbar"><button id="claimDemo">Reclamar bazas (demo)</button></div><div id="claimPanel" class="panel hidden"><p>Reclamo de prueba: los defensores pueden aceptar o rechazar. No adjudica bazas todavía.</p><label>Bazas reclamadas <select id="claimCount"></select></label><div class="toolbar"><button id="claimSend">Proponer</button><button id="claimAccept" class="hidden">Simular aceptación</button><button id="claimReject" class="hidden">Simular rechazo</button><button id="claimClose">Cerrar</button></div><p id="claimStatus"></p></div><div class="table"><div class="seat north"><b>N · Bot compañero (muerto)</b><div class="cards" id="north"></div></div><div class="seat west"><b>O · Bot</b><div id="west"></div></div><div class="seat east"><b>E · Bot</b><div id="east"></div></div><div class="center"><b id="turn">Mesa</b><div class="trick" id="trick"></div></div><div class="seat south"><b>S · Tú</b><div class="cards" id="south"></div></div></div></section></section>
+<section class="panel" id="results"><h2>Comparación por IMP</h2><div id="compareBody"></div><div class="toolbar"><button id="recoverHand">Recuperar mano 8 de A</button><button id="exportHand">Exportar registro de mano 8</button></div><div id="handHistory" class="panel" aria-live="polite">El registro de la mano 8 aparecerá aquí al terminarla. Puedes volver mañana a este mismo navegador.</div></section>
+<section class="panel warn"><b>Alcance:</b> siete resultados de A y ocho de B son ejemplos ficticios. La mano 8 de A se juega y se registra carta por carta. El reclamo es solo demostración visual, sin adjudicación real. No reemplaza la mesa original de BGM Bridge ni el motor definitivo.</section>
 </main>
 <script>
 (()=>{'use strict';
@@ -22,15 +22,15 @@ function suit(c){return c[1]}function strength(c){return ranks.indexOf(c[0])}fun
 function cardMarkup(c){return `<span class="${'HD'.includes(suit(c))?'red':''}">${symbols[suit(c)]}${c[0].replace('T','10')}</span>`}
 function load(p){try{return JSON.parse(localStorage.getItem('bgm-desafio-'+p))||{board:1,results:[]}}catch{return {board:1,results:[]}}}
 function save(){if(state)localStorage.setItem('bgm-desafio-'+state.player,JSON.stringify({board:state.board,results:state.results,game:state.game}))}
-function newBoard(){let n=state.board,{N,E,S:sh,W}=deal(n);state.game={hands:{N,E,S:sh,W},trick:[],leader:'E',turn:'E',tricksNS:0,tricksEW:0,played:0};save()}
+function newBoard(){let n=state.board,{N,E,S:sh,W}=deal(n);state.game={hands:{N,E,S:sh,W},trick:[],leader:'E',turn:'E',tricksNS:0,tricksEW:0,played:0,history:[],startedAt:new Date().toISOString()};save()}
 function start(){let p=$('player').value,data=load(p);state={player:p,board:data.board,results:data.results,game:data.game||null};if(state.board<=8&&!state.game)newBoard();$('game').classList.toggle('hidden',state.board>8);render();if(state.game)advanceBots()}
 function legal(hand){if(!state.game.trick.length)return [...hand];let led=suit(state.game.trick[0].card),same=hand.filter(c=>suit(c)===led);return same.length?same:[...hand]}
 function winner(trick,trump){let led=suit(trick[0].card),best=trick[0];for(let x of trick.slice(1)){let a=suit(x.card),b=suit(best.card);if((a===trump&&b!==trump)||(a===b&&strength(x.card)>strength(best.card)))best=x;else if(a===led&&b!==led&&b!==trump)best=x}return best.seat}
 function botPick(seat){let g=state.game,hand=legal(g.hands[seat]);const trump=contracts[state.board-1][0];let sorted=[...hand].sort((a,b)=>strength(a)-strength(b)||S.indexOf(suit(a))-S.indexOf(suit(b)));if(!g.trick.length)return sorted[0];let winning=sorted.filter(c=>winner([...g.trick,{seat,card:c}],trump)===seat);return winning.length?winning[0]:sorted[0]}
-function play(seat,card){let g=state.game;if(!g||g.turn!==seat||!legal(g.hands[seat]).includes(card))return;g.hands[seat].splice(g.hands[seat].indexOf(card),1);g.trick.push({seat,card});g.played++;if(g.trick.length===4){let win=winner(g.trick,contracts[state.board-1][0]);if('NS'.includes(win))g.tricksNS++;else g.tricksEW++;g.leader=win;g.turn=win;g.lastTrick=[...g.trick];g.trick=[]}else g.turn=seats[(seats.indexOf(seat)+1)%4];save();render();if(g.played===52)finish();else advanceBots()}
+function play(seat,card){let g=state.game;if(!g||g.turn!==seat||!legal(g.hands[seat]).includes(card))return;g.hands[seat].splice(g.hands[seat].indexOf(card),1);g.history??=[];g.history.push({seq:g.played+1,trickNo:Math.floor(g.played/4)+1,seat,card,at:new Date().toISOString()});g.trick.push({seat,card});g.played++;if(g.trick.length===4){let win=winner(g.trick,contracts[state.board-1][0]);g.history[g.history.length-1].trickWinner=win;if('NS'.includes(win))g.tricksNS++;else g.tricksEW++;g.leader=win;g.turn=win;g.lastTrick=[...g.trick];g.trick=[]}else g.turn=seats[(seats.indexOf(seat)+1)%4];save();render();if(g.played===52)finish();else advanceBots()}
 let timer=null;function advanceBots(){clearTimeout(timer);if(!state?.game)return;let turn=state.game.turn;if(turn==='S'||turn==='N')return;timer=setTimeout(()=>{if(state?.game&&state.game.turn===turn)play(turn,botPick(turn))},170)}
 function score(tricks,strain,level){let made=tricks-(6+level),base=strain==='NT'?40+30*(level-1):'HS'.includes(strain)?30*level:20*level;if(made<0)return made*50;return base+(base>=100?300:50)+made*(strain==='NT'||'HS'.includes(strain)?30:20)}
-function finish(){let g=state.game,[strain,level]=contracts[state.board-1];let result={board:state.board,tricks:g.tricksNS,score:score(g.tricksNS,strain,level),contract:level+strain};state.results.push(result);state.board++;state.game=null;save();$('game').classList.add('hidden');render();setTimeout(()=>{if(state&&state.board<=8&&confirm(`Mano ${result.board} terminada: ${result.tricks} bazas NS, ${result.score} puntos. ¿Continuar con la mano ${state.board}?`)){newBoard();$('game').classList.remove('hidden');render();advanceBots()}},100)}
+function finish(){let g=state.game,[strain,level]=contracts[state.board-1];let result={board:state.board,tricks:g.tricksNS,score:score(g.tricksNS,strain,level),contract:level+strain,dealSeed:540011+state.board*1093,playHistory:g.history||[],startedAt:g.startedAt||null,finishedAt:new Date().toISOString(),sample:false};state.results.push(result);state.board++;state.game=null;save();$('game').classList.add('hidden');render();setTimeout(()=>{if(state&&state.board<=8&&confirm(`Mano ${result.board} terminada: ${result.tricks} bazas NS, ${result.score} puntos. ¿Continuar con la mano ${state.board}?`)){newBoard();$('game').classList.remove('hidden');render();advanceBots()}},100)}
 function render(){let a=load('A').results,b=load('B').results;renderComparison(a,b);if(!state)return;let g=state.game,done=state.results.length;$('stats').innerHTML=`<div class="stat">Jugador<strong>${state.player}</strong></div><div class="stat">Progreso<strong>${done}/8 manos</strong></div><div class="stat">Estado<strong>${state.board>8?'Finalizado':'Mano '+state.board}</strong></div>`;if(!g){$('status').textContent=state.board>8?'Has completado tus ocho manos. Puedes ver la comparación.':'Pulsa Iniciar / continuar.';return}let [trump,level]=contracts[state.board-1];$('status').innerHTML=`<b>Mano ${state.board}/8 · Contrato ${level}${symbols[trump]||'ST'} por Sur</b> · Bazas NS ${g.tricksNS} / EO ${g.tricksEW} · Carta ${g.played}/52. ${g.turn==='N'?'Te corresponde jugar desde el muerto.':g.turn==='S'?'Te corresponde jugar desde Sur.':'Juega el bot '+g.turn+'.'}`;for(let seat of ['N','S']){let el=$(seat==='N'?'north':'south');let allowed=g.turn===seat?legal(g.hands[seat]):[];el.innerHTML=sortHand(g.hands[seat]).map(c=>`<button class="card ${allowed.includes(c)?'playable':''}" data-seat="${seat}" data-card="${c}" ${allowed.includes(c)?'':'disabled'}>${cardMarkup(c)}</button>`).join('')}for(let seat of ['E','W'])$(seat==='E'?'east':'west').innerHTML=`<div class="face">${g.hands[seat].length} cartas ocultas</div>`;$('turn').textContent=`Turno: ${g.turn}`;$('trick').innerHTML=g.trick.map(x=>`<span>${x.seat}: ${cardMarkup(x.card)}</span>`).join('')||'<span>Inicio de baza</span>';document.querySelectorAll('.card.playable').forEach(el=>el.onclick=()=>play(el.dataset.seat,el.dataset.card))}
 const impLimits=[20,50,90,130,170,220,270,320,370,430,500,600,750,900,1100,1300,1500,1750,2000,2250,2500,3000,3500,4000];function imp(delta){let n=impLimits.findIndex(x=>Math.abs(delta)<x);return Math.sign(delta)*(n<0?24:n)}
 function renderComparison(a,b){let total=0,rows='';for(let i=1;i<=8;i++){let x=a.find(r=>r.board===i),y=b.find(r=>r.board===i),d=x&&y?imp(x.score-y.score):null;if(d!==null)total+=d;rows+=`<tr><td>${i}</td><td>${x?x.contract+' · '+x.tricks+' bazas · '+x.score:'Pendiente'}</td><td>${y?y.contract+' · '+y.tricks+' bazas · '+y.score:'Pendiente'}</td><td>${d===null?'—':(d>0?'+':'')+d}</td></tr>`}$('compareBody').innerHTML=`<table><thead><tr><th>Mano</th><th>Jugador A</th><th>Jugador B</th><th>IMP A−B</th></tr></thead><tbody>${rows}</tbody></table><p><b>IMP acumulados: ${a.length===8&&b.length===8?total:'Pendiente de completar ambos jugadores'}</b></p><small>El IMP se calcula sobre diferencias de puntuación NS con la escala estándar de 24 intervalos; A positivo favorece al jugador A.</small>`}
@@ -38,36 +38,40 @@ $('start').onclick=start;$('player').onchange=()=>{state=null;$('game').classLis
 })();
 </script>
 <script>
-// Solo presentación: no modifica el motor de cartas ni adjudica reclamos.
 (()=>{
-  const $=id=>document.getElementById(id);
-  const contracts=['1NT','2H','2S','3NT','3D','4S','4H','2NT'];
-  const scoresA=[90,110,-50,400,110,420,-100];
-  const tricksA=[7,8,7,9,9,10,8];
-  const scoresB=[120,140,110,430,130,-50,620,120];
-  const tricksB=[8,9,8,10,10,9,12,8];
-  const make=(scores,tricks)=>scores.map((score,i)=>({board:i+1,contract:contracts[i],tricks:tricks[i],score,sample:true}));
-  $('demo').onclick=()=>{
-    if(!confirm('¿Cargar resultados ficticios de prueba? Se sustituirá el progreso guardado de A y B en este navegador.'))return;
-    localStorage.setItem('bgm-desafio-A',JSON.stringify({board:8,results:make(scoresA,tricksA)}));
-    localStorage.setItem('bgm-desafio-B',JSON.stringify({board:9,results:make(scoresB,tricksB)}));
-    $('player').value='A';$('start').click();
-    $('demoNote').textContent='MODO EJEMPLO: A tiene siete resultados ficticios y juega la mano 8. B tiene ocho resultados ficticios. Ninguno procede de partidas reales.';
-    $('results').scrollIntoView({behavior:'smooth'});
-  };
-  $('claimDemo').onclick=()=>{
-    const played=Number(($('status').textContent.match(/Carta (\d+)\/52/)||[])[1]||0);
-    const remaining=13-Math.floor(played/4);
-    $('claimCount').innerHTML=Array.from({length:remaining+1},(_,i)=>`<option value="${i}" ${i===remaining?'selected':''}>${i}</option>`).join('');
-    $('claimPanel').classList.remove('hidden');$('claimStatus').textContent='Reclamo aún no propuesto.';
-    $('claimAccept').classList.add('hidden');$('claimReject').classList.add('hidden');
-  };
-  $('claimSend').onclick=()=>{
-    $('claimStatus').textContent=`Reclamas ${$('claimCount').value} bazas restantes. Esperando respuesta de ambos defensores (simulada).`;
-    $('claimAccept').classList.remove('hidden');$('claimReject').classList.remove('hidden');
-  };
-  $('claimAccept').onclick=()=>{$('claimStatus').textContent='DEMO: ambos defensores aceptan. No se adjudican bazas en esta versión.';};
-  $('claimReject').onclick=()=>{$('claimStatus').textContent='DEMO: un defensor rechaza. El juego continúa sin alterar las bazas.';};
-  $('claimClose').onclick=()=>{$('claimPanel').classList.add('hidden');};
+const $=id=>document.getElementById(id);
+const contracts=['1NT','2H','2S','3NT','3D','4S','4H','2NT'];
+const make=(scores,tricks)=>scores.map((score,i)=>({board:i+1,contract:contracts[i],score,tricks:tricks[i],sample:true}));
+const getA=()=>{try{return JSON.parse(localStorage.getItem('bgm-desafio-A'))||{}}catch{return {}}};
+$('demo').onclick=()=>{
+  if(!confirm('¿Cargar el ejemplo? Sustituye el progreso de prueba guardado de A y B en este navegador.'))return;
+  localStorage.setItem('bgm-desafio-A',JSON.stringify({board:8,results:make([90,110,-50,400,110,420,-100],[7,8,7,9,9,10,8])}));
+  localStorage.setItem('bgm-desafio-B',JSON.stringify({board:9,results:make([120,140,110,430,130,-50,620,120],[8,9,8,10,10,9,12,8])}));
+  $('player').value='A';$('start').click();
+  $('demoNote').textContent='Ejemplo ficticio: A juega únicamente la mano 8; B ya tiene ocho resultados ilustrativos.';
+};
+$('claimDemo').onclick=()=>{
+  const played=Number(($('status').textContent.match(/Carta (\d+)\/52/)||[])[1]||0);
+  const remaining=Math.max(0,13-Math.floor(played/4));
+  $('claimCount').innerHTML=Array.from({length:remaining+1},(_,i)=>`<option value="${i}" ${i===remaining?'selected':''}>${i}</option>`).join('');
+  $('claimPanel').classList.remove('hidden');$('claimStatus').textContent='Reclamo aún no propuesto.';
+  $('claimAccept').classList.add('hidden');$('claimReject').classList.add('hidden');
+};
+$('claimSend').onclick=()=>{$('claimStatus').textContent=`Propuesta de ${$('claimCount').value} bazas. Respuestas simuladas:`;$('claimAccept').classList.remove('hidden');$('claimReject').classList.remove('hidden');};
+$('claimAccept').onclick=()=>{$('claimStatus').textContent='DEMO: ambos defensores aceptan. Puntuación sin cambios.';};
+$('claimReject').onclick=()=>{$('claimStatus').textContent='DEMO: un defensor rechaza; el juego continúa.';};
+$('claimClose').onclick=()=>{$('claimPanel').classList.add('hidden');};
+function getHistory(){return getA().results?.find(x=>x.board===8)}
+$('recoverHand').onclick=()=>{
+ const r=getHistory(),g=getA().game;
+ if(!r?.playHistory?.length){$('handHistory').textContent=g?.history?.length?`Mano 8 en curso: ${g.history.length}/52 cartas registradas. Pulsa Iniciar / continuar para seguir.`:'La mano 8 todavía no tiene cartas registradas.';return}
+ const rows=Array.from({length:13},(_,i)=>{const plays=r.playHistory.filter(x=>x.trickNo===i+1);const winner=plays.find(x=>x.trickWinner)?.trickWinner||'—';return `<tr><td>${i+1}</td><td>${plays.map(x=>`${x.seat}: ${x.card}`).join(' · ')}</td><td>${winner}</td></tr>`}).join('');
+ $('handHistory').innerHTML=`<p><b>Mano 8 de A</b> · ${r.contract} · ${r.tricks} bazas · ${r.score} puntos · Finalizada: ${new Date(r.finishedAt).toLocaleString('es')}</p><table><thead><tr><th>Baza</th><th>Cartas en orden</th><th>Ganador</th></tr></thead><tbody>${rows}</tbody></table><p class="muted">Registro completo para futura revisión de decisiones; todavía no constituye un análisis de calidad.</p>`;
+};
+$('exportHand').onclick=()=>{
+ const r=getHistory();if(!r?.playHistory?.length){$('recoverHand').click();return}
+ const data={format:'BGM-Bridge-Desafio-Hand-v1',player:'A',board:8,seed:r.dealSeed,contract:r.contract,result:r.score,tricks:r.tricks,startedAt:r.startedAt,finishedAt:r.finishedAt,plays:r.playHistory};
+ const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.href=url;a.download='BGM_Desafio_A_Mano_08.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 })();
 </script></body></html>
