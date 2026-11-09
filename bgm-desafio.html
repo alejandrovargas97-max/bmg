@@ -6,10 +6,10 @@
 </style></head><body>
 <header><h1>♠ BGM Bridge · <span style="color:#edc775">Desafío</span></h1><span class="pill">Prototipo local · v0.1</span></header>
 <main class="wrap">
-<section class="panel"><div class="toolbar"><label>Jugador <select id="player"><option value="A">A</option><option value="B">B</option></select></label><button class="primary" id="start">Iniciar / continuar</button><button id="reset">Reiniciar este jugador</button><button id="comparison">Ver comparación</button></div><p class="muted">Cada jugador realiza las ocho manos por separado. Los repartos, contratos y reglas de los bots son los mismos. Las partidas quedan guardadas en este navegador.</p></section>
-<section id="game" class="hidden"><div class="grid" id="stats"></div><section class="panel"><div id="status" aria-live="polite"></div><div class="table"><div class="seat north"><b>N · Bot compañero (muerto)</b><div class="cards" id="north"></div></div><div class="seat west"><b>O · Bot</b><div id="west"></div></div><div class="seat east"><b>E · Bot</b><div id="east"></div></div><div class="center"><b id="turn">Mesa</b><div class="trick" id="trick"></div></div><div class="seat south"><b>S · Tú</b><div class="cards" id="south"></div></div></div></section></section>
+<section class="panel"><div class="toolbar"><label>Jugador <select id="player"><option value="A">A</option><option value="B">B</option></select></label><button class="primary" id="start">Iniciar / continuar</button><button id="reset">Reiniciar este jugador</button><button id="comparison">Ver comparación</button><button id="demo">Cargar ejemplo de 8 manos</button></div><p class="muted">Cada jugador realiza las ocho manos por separado. Los repartos, contratos y reglas de los bots son los mismos. Las partidas quedan guardadas en este navegador.</p><p id="demoNote" class="muted"></p></section>
+<section id="game" class="hidden"><div class="grid" id="stats"></div><section class="panel"><div id="status" aria-live="polite"></div><div class="toolbar"><button id="claimDemo">Reclamar bazas (demostración)</button><span class="muted">Prueba visual; pendiente de conectar al motor de reclamos.</span></div><div id="claimPanel" class="panel hidden" aria-live="polite"><b>Reclamo del declarante</b><p>Indica cuántas bazas restantes reclamas. En el juego definitivo, ambos defensores podrán aceptar o rechazar.</p><label>Bazas restantes reclamadas <select id="claimCount"></select></label><div class="toolbar"><button id="claimSend">Proponer reclamo</button><button id="claimAccept" class="hidden">Simular aceptación de ambos defensores</button><button id="claimReject" class="hidden">Simular rechazo de un defensor</button><button id="claimClose">Cerrar</button></div><p id="claimStatus"></p></div><div class="table"><div class="seat north"><b>N · Bot compañero (muerto)</b><div class="cards" id="north"></div></div><div class="seat west"><b>O · Bot</b><div id="west"></div></div><div class="seat east"><b>E · Bot</b><div id="east"></div></div><div class="center"><b id="turn">Mesa</b><div class="trick" id="trick"></div></div><div class="seat south"><b>S · Tú</b><div class="cards" id="south"></div></div></div></section></section>
 <section class="panel" id="results"><h2>Comparación por IMP</h2><div id="compareBody"></div></section>
-<section class="panel warn"><b>Alcance de esta primera versión:</b> juego de cartas con obligación de asistir al palo, ocho manos reproducibles, tres posiciones de bot y puntuación de contrato con comparación IMP. Para probar el flujo se usan contratos predeterminados y Sur como declarante. Todavía falta integrar la subasta completa, vulnerabilidad real, reclamos y motor de bots competitivo BEN/DDS. No es aún el motor de producción de BGM Bridge.</section>
+<section class="panel warn"><b>Alcance de esta demostración:</b> los resultados de ejemplo son ficticios. La octava mano A se puede jugar; el panel de reclamo muestra aceptación y rechazo simulados, sin adjudicar bazas ni modificar la puntuación. La mesa visual es provisional, pendiente de reutilizar la mesa original de BGM Bridge. No es aún el motor de producción.</section>
 </main>
 <script>
 (()=>{'use strict';
@@ -35,5 +35,39 @@ function render(){let a=load('A').results,b=load('B').results;renderComparison(a
 const impLimits=[20,50,90,130,170,220,270,320,370,430,500,600,750,900,1100,1300,1500,1750,2000,2250,2500,3000,3500,4000];function imp(delta){let n=impLimits.findIndex(x=>Math.abs(delta)<x);return Math.sign(delta)*(n<0?24:n)}
 function renderComparison(a,b){let total=0,rows='';for(let i=1;i<=8;i++){let x=a.find(r=>r.board===i),y=b.find(r=>r.board===i),d=x&&y?imp(x.score-y.score):null;if(d!==null)total+=d;rows+=`<tr><td>${i}</td><td>${x?x.contract+' · '+x.tricks+' bazas · '+x.score:'Pendiente'}</td><td>${y?y.contract+' · '+y.tricks+' bazas · '+y.score:'Pendiente'}</td><td>${d===null?'—':(d>0?'+':'')+d}</td></tr>`}$('compareBody').innerHTML=`<table><thead><tr><th>Mano</th><th>Jugador A</th><th>Jugador B</th><th>IMP A−B</th></tr></thead><tbody>${rows}</tbody></table><p><b>IMP acumulados: ${a.length===8&&b.length===8?total:'Pendiente de completar ambos jugadores'}</b></p><small>El IMP se calcula sobre diferencias de puntuación NS con la escala estándar de 24 intervalos; A positivo favorece al jugador A.</small>`}
 $('start').onclick=start;$('player').onchange=()=>{state=null;$('game').classList.add('hidden');renderComparison(load('A').results,load('B').results)};$('reset').onclick=()=>{let p=$('player').value;if(confirm(`¿Borrar las partidas de prueba del jugador ${p} en este navegador?`)){localStorage.removeItem('bgm-desafio-'+p);state=null;start()}};$('comparison').onclick=()=>{$('results').scrollIntoView({behavior:'smooth'})};renderComparison(load('A').results,load('B').results);
+})();
+</script>
+<script>
+// Solo presentación: no modifica el motor de cartas ni adjudica reclamos.
+(()=>{
+  const $=id=>document.getElementById(id);
+  const contracts=['1NT','2H','2S','3NT','3D','4S','4H','2NT'];
+  const scoresA=[90,110,-50,400,110,420,-100];
+  const tricksA=[7,8,7,9,9,10,8];
+  const scoresB=[120,140,110,430,130,-50,620,120];
+  const tricksB=[8,9,8,10,10,9,12,8];
+  const make=(scores,tricks)=>scores.map((score,i)=>({board:i+1,contract:contracts[i],tricks:tricks[i],score,sample:true}));
+  $('demo').onclick=()=>{
+    if(!confirm('¿Cargar resultados ficticios de prueba? Se sustituirá el progreso guardado de A y B en este navegador.'))return;
+    localStorage.setItem('bgm-desafio-A',JSON.stringify({board:8,results:make(scoresA,tricksA)}));
+    localStorage.setItem('bgm-desafio-B',JSON.stringify({board:9,results:make(scoresB,tricksB)}));
+    $('player').value='A';$('start').click();
+    $('demoNote').textContent='MODO EJEMPLO: A tiene siete resultados ficticios y juega la mano 8. B tiene ocho resultados ficticios. Ninguno procede de partidas reales.';
+    $('results').scrollIntoView({behavior:'smooth'});
+  };
+  $('claimDemo').onclick=()=>{
+    const played=Number(($('status').textContent.match(/Carta (\d+)\/52/)||[])[1]||0);
+    const remaining=13-Math.floor(played/4);
+    $('claimCount').innerHTML=Array.from({length:remaining+1},(_,i)=>`<option value="${i}" ${i===remaining?'selected':''}>${i}</option>`).join('');
+    $('claimPanel').classList.remove('hidden');$('claimStatus').textContent='Reclamo aún no propuesto.';
+    $('claimAccept').classList.add('hidden');$('claimReject').classList.add('hidden');
+  };
+  $('claimSend').onclick=()=>{
+    $('claimStatus').textContent=`Reclamas ${$('claimCount').value} bazas restantes. Esperando respuesta de ambos defensores (simulada).`;
+    $('claimAccept').classList.remove('hidden');$('claimReject').classList.remove('hidden');
+  };
+  $('claimAccept').onclick=()=>{$('claimStatus').textContent='DEMO: ambos defensores aceptan. No se adjudican bazas en esta versión.';};
+  $('claimReject').onclick=()=>{$('claimStatus').textContent='DEMO: un defensor rechaza. El juego continúa sin alterar las bazas.';};
+  $('claimClose').onclick=()=>{$('claimPanel').classList.add('hidden');};
 })();
 </script></body></html>
