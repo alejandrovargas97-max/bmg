@@ -63,10 +63,10 @@ table{width:100%;border-collapse:collapse;font-size:.88rem}
 th,td{padding:6px;border-bottom:1px solid #37584d;text-align:left}
 th{color:var(--gold)}
 #handHistory h3,#analysisPanel h3{margin:7px 0 4px}
-.review-board{min-height:270px;grid-template-columns:1fr minmax(45px,.5fr) 1fr;grid-template-rows:auto 1fr auto}
-.review-board .solo-seat{grid-column:2;min-width:0;max-width:100%;justify-self:center;text-align:left}
-.review-board .solo-seat-1{grid-column:3}.review-board .solo-seat-3{grid-column:1}
-.review-board .solo-seat strong{display:block;text-align:center}
+.review-board{min-height:270px;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-rows:auto 1fr auto}
+.review-board .solo-seat-0,.review-board .solo-seat-2{justify-self:stretch}
+.review-board .solo-seat-1,.review-board .solo-seat-3{justify-self:center;text-align:left}
+.review-board .solo-seat-name{font-weight:700}
 .review-suit{display:block;color:#eaf4ed;font-variant-numeric:tabular-nums}
 .review-suit b{display:inline-block;width:1em;color:#eaf4ed}
 .review-suit .suit-H{color:#ff8895}.review-suit .suit-D{color:#ffb771}.review-suit .suit-C{color:#86ddaa}
@@ -76,7 +76,7 @@ th{color:var(--gold)}
  .solo-card{padding-left:2px}.solo-seat{padding:3px}.solo-hand{gap:1px}.solo-hand .solo-card.suit-start:not(:first-child){margin-inline-start:2px}
  .solo-seat-name{font-size:.77rem}.solo-seat-name span{font-size:.66rem}
  .solo-seat-1 .solo-back+.solo-back,.solo-seat-3 .solo-back+.solo-back{margin-left:-20px}
- .review-board{grid-template-columns:1fr minmax(16px,.2fr) 1fr;min-height:250px;font-size:.76rem}
+ .review-board{min-height:250px;font-size:.76rem}
 }
 </style></head><body>
 <main class="shell">
@@ -308,6 +308,12 @@ function boardCard(card,seat,canPlay=false,suitStart=false) {
     ? `<button class="${style}${canPlay?' playable':''}" data-seat="${seat}" data-card="${card}" ${canPlay?'':'disabled'}>${face}</button>`
     : `<span class="${style}">${face}</span>`;
 }
+function handCards(cards,trump,seat,allowed=[]) {
+  const ordered=sortHand(cards,trump);
+  return ordered.map((card,index)=>boardCard(
+    card,seat,allowed.includes(card),index>0&&suit(card)!==suit(ordered[index-1])
+  )).join('');
+}
 function render(){
   $('compareBody').innerHTML=resultsMarkup(active?.count??8,load('A').results,load('B').results);
   const game=state?.game;
@@ -333,10 +339,7 @@ function render(){
       const allowed=game.turn===seat?legal(cards):[];
       hand.setAttribute('role','group');
       hand.setAttribute('aria-label',names[seat]);
-      const ordered=sortHand(cards,trump);
-      hand.innerHTML=ordered.map((card,index)=>boardCard(
-        card,seat,allowed.includes(card),index>0&&suit(card)!==suit(ordered[index-1])
-      )).join('');
+      hand.innerHTML=handCards(cards,trump,seat,allowed);
     } else {
       hand.setAttribute('role','group');
       hand.setAttribute('aria-label',`${cards.length} cartas ocultas`);
@@ -405,11 +408,15 @@ function reviewBoard() {
   }
   const trump=(row.A.initialHands?row.A:row.B).contract.slice(1);
   const handMarkup=(seat,index)=>{
+    const label=`<div class="solo-seat-name">${names[seat]}</div>`;
+    if(seat==='N'||seat==='S') {
+      return `<div class="solo-seat solo-seat-${index}">${label}<div class="solo-hand" role="group" aria-label="${names[seat]}">${handCards(hands[seat],trump)}</div></div>`;
+    }
     const suits=displaySuitOrder(trump).map(code=>{
       const ranks=sortHand(hands[seat]).filter(card=>suit(card)===code).map(card=>card[0]==='T'?'10':card[0]);
       return `<span class="review-suit"><b class="suit-${code}">${symbols[code]}</b> ${ranks.join(' ')||'—'}</span>`;
     }).join('');
-    return `<div class="solo-seat solo-seat-${index}"><strong>${names[seat]}</strong>${suits}</div>`;
+    return `<div class="solo-seat solo-seat-${index}">${label}${suits}</div>`;
   };
   const table=`<div class="solo-board review-board">${seats.map(handMarkup).join('')}<div class="solo-middle"><strong>Mano ${board}</strong></div></div>`;
   const playback=(player,result)=>{
