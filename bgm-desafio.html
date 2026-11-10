@@ -7,7 +7,7 @@
 body{margin:0}
 h1,h2,h3,p{margin:0}
 [hidden],.hidden{display:none!important}
-.shell{max-width:1040px;margin:auto;padding:0 12px 18px}
+.shell{width:100%;padding:0 8px 12px}
 .top{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:2px solid var(--gold)}
 .top img{width:34px;height:34px;border-radius:6px}
 .top h1{font-size:1.05rem;letter-spacing:.06em;color:var(--gold)}
@@ -27,7 +27,7 @@ button:disabled{cursor:default;opacity:.55}
 #game:not(.hidden)~#demoNote{padding:4px 0}
 #status{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:space-between;padding:7px 0;font-size:.91rem}
 #status strong{color:var(--gold)}
-.solo-board{--card-w:clamp(22px,6.65vw,43px);--card-h:clamp(41px,9vw,63px);background:radial-gradient(#206c4f,#0c392d);border:1px solid var(--gold);border-radius:12px;display:grid;grid-template-columns:84px minmax(0,1fr) 84px;grid-template-rows:auto minmax(190px,1fr) auto;gap:4px;padding:6px;min-height:clamp(365px,60vh,570px);box-shadow:inset 0 0 40px #0003}
+.solo-board{--card-w:clamp(22px,6.65vw,43px);--card-h:clamp(41px,9vw,63px);background:radial-gradient(#206c4f,#0c392d);border:1px solid var(--gold);border-radius:12px;display:grid;grid-template-columns:84px minmax(0,1fr) 84px;grid-template-rows:auto minmax(190px,1fr) auto;gap:4px;padding:6px;min-height:max(365px,calc(100dvh - 125px));box-shadow:inset 0 0 40px #0003}
 .solo-seat{min-width:0;padding:4px;border:1px solid transparent;border-radius:7px;background:#06211655;align-self:center;text-align:center}
 .solo-seat-name{display:flex;justify-content:center;align-items:center;gap:6px;margin-bottom:4px;font-size:.87rem;line-height:1.15}
 .solo-seat-name span{font-size:.74rem;color:#d6e8df}
@@ -63,7 +63,7 @@ table{width:100%;border-collapse:collapse;font-size:.88rem}
 th,td{padding:6px;border-bottom:1px solid #37584d;text-align:left}
 th{color:var(--gold)}
 #handHistory h3,#analysisPanel h3{margin:7px 0 4px}
-.review-board{min-height:270px;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-rows:auto 1fr auto}
+.review-board{min-height:clamp(270px,55dvh,540px);grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-rows:auto 1fr auto}
 .review-board .solo-seat-0,.review-board .solo-seat-2{justify-self:stretch}
 .review-board .solo-seat-1,.review-board .solo-seat-3{justify-self:center;text-align:left}
 .review-board .solo-seat-name{font-weight:700}
@@ -72,11 +72,11 @@ th{color:var(--gold)}
 .review-suit .suit-H{color:#ff8895}.review-suit .suit-D{color:#ffb771}.review-suit .suit-C{color:#86ddaa}
 @media(max-width:600px){
  .shell{padding-inline:5px}.top h1{font-size:.9rem}
- .solo-board{--card-w:clamp(19px,calc((100vw - 42px)/13),32px);grid-template-columns:57px minmax(0,1fr) 57px;min-height:375px;gap:2px;padding:4px}
+ .solo-board{--card-w:clamp(19px,calc((100vw - 42px)/13),32px);grid-template-columns:57px minmax(0,1fr) 57px;gap:2px;padding:4px}
  .solo-card{padding-left:2px}.solo-seat{padding:3px}.solo-hand{gap:1px}.solo-hand .solo-card.suit-start:not(:first-child){margin-inline-start:2px}
  .solo-seat-name{font-size:.77rem}.solo-seat-name span{font-size:.66rem}
  .solo-seat-1 .solo-back+.solo-back,.solo-seat-3 .solo-back+.solo-back{margin-left:-20px}
- .review-board{min-height:250px;font-size:.76rem}
+ .review-board{min-height:clamp(250px,55dvh,470px);font-size:.76rem}
 }
 </style></head><body>
 <main class="shell">
@@ -112,7 +112,7 @@ th{color:var(--gold)}
 <details class="section" id="results"><summary>Resultados e IMP</summary><div id="compareBody" class="table-scroll"></div></details>
 <details class="section" id="historySection"><summary>Historial de desafíos</summary>
   <div class="toolbar"><label>Desafío <select id="savedRun"></select></label><button id="reviewRun">Revisar</button><button id="exportRun">Exportar desafío</button><button id="analysisRun">Analizar</button></div>
-  <div id="reviewPanel" class="hidden"><div id="savedResults" class="table-scroll"></div><label>Mano <select id="savedBoard"></select></label><div id="handHistory" aria-live="polite"></div></div>
+  <div id="reviewPanel" class="hidden"><label>Mano <select id="savedBoard"></select></label><div id="handHistory" aria-live="polite"></div><div id="savedResults" class="table-scroll"></div></div>
   <section id="analysisPanel" class="hidden"><h3>Bridgemito · DDS3 (Double Dummy)</h3><p>Integración pendiente. La revisión y la exportación del desafío ya están disponibles.</p><ul>
     <li>Tabla de bazas alcanzables para cada declarante y cada denominación.</li>
     <li>Comparación de salidas y alternativas de carteo en posiciones guardadas.</li>
@@ -287,7 +287,7 @@ function finish() {
   $('game').classList.add('hidden');
   $('start').hidden=state.board>active.count;
   $('playAgain').hidden=!(active.demo&&state.board>active.count);
-  $('results').open=true;
+  $('results').open=!active.demo;
   render();
   if(active.completedAt) {
     updateRunList(active.id);
@@ -315,7 +315,7 @@ function handCards(cards,trump,seat,allowed=[]) {
   )).join('');
 }
 function render(){
-  $('compareBody').innerHTML=resultsMarkup(active?.count??8,load('A').results,load('B').results);
+  $('compareBody').innerHTML=resultsMarkup(active?.count??8,load('A').results,load('B').results,active?.demo);
   const game=state?.game;
   if(!game) return;
   $('claimDemo').hidden=!canClaim();
@@ -370,11 +370,14 @@ function resultText(result) {
   const contract=level+(strain[result.contract.slice(1)]||'')+(delta>0?' +'+delta:delta<0?' '+delta:' =');
   return `${contract} · ${result.tricks} bazas · ${result.score}${result.sample?' · Ejemplo':''}`;
 }
-function resultsMarkup(count,a,b) {
+function visibleBoards(boards,demo) {
+  return demo?boards.slice(4):boards;
+}
+function resultsMarkup(count,a,b,demo=false) {
   const boards=boardRows(count,a,b);
-  const rows=boards.map(({board,A,B,imp:delta})=>`<tr><td>${board}</td><td>${resultText(A)}</td><td>${resultText(B)}</td><td>${delta===null?'—':delta>0?'+'+delta:delta}</td></tr>`).join('');
+  const rows=visibleBoards(boards,demo).map(({board,A,B,imp:delta})=>`<tr><td>${board}</td><td>${resultText(A)}</td><td>${resultText(B)}</td><td>${delta===null?'—':delta>0?'+'+delta:delta}</td></tr>`).join('');
   const total=boards.every(row=>row.imp!==null)?boards.reduce((sum,row)=>sum+row.imp,0):'Pendiente';
-  return `<table><thead><tr><th>Mano</th><th>Jugador A</th><th>Jugador B</th><th>IMP A−B</th></tr></thead><tbody>${rows}</tbody></table><p><b>IMP acumulados · ${total}</b></p>`;
+  return `<table><thead><tr><th>Mano</th><th>Jugador A</th><th>Jugador B</th><th>IMP A−B</th></tr></thead><tbody>${rows}</tbody></table><p><b>IMP acumulados${demo?' (8 manos)':''} · ${total}</b></p>`;
 }
 function updateRunList(selected) {
   const runs=Object.values(data.runs).reverse();
@@ -383,14 +386,15 @@ function updateRunList(selected) {
   for(const id of ['reviewRun','exportRun','analysisRun']) $(id).disabled=!runs.length;
 }
 function selectedRun() { return data.runs[$('savedRun').value]; }
-function openReview(board=1) {
+function openReview(board) {
   const run=selectedRun();
   if(!run) return;
   $('analysisPanel').classList.add('hidden');
   $('reviewPanel').classList.remove('hidden');
-  $('savedResults').innerHTML=resultsMarkup(run.count,run.players.A.results,run.players.B.results);
-  $('savedBoard').innerHTML=Array.from({length:run.count},(_,i)=>`<option value="${i+1}">Mano ${i+1}</option>`).join('');
-  $('savedBoard').value=String(board);
+  const boards=visibleBoards(boardRows(run.count,run.players.A.results,run.players.B.results),run.demo);
+  $('savedResults').innerHTML=resultsMarkup(run.count,run.players.A.results,run.players.B.results,run.demo);
+  $('savedBoard').innerHTML=boards.map(({board})=>`<option value="${board}">Mano ${board}</option>`).join('');
+  $('savedBoard').value=String(board??(run.demo?8:1));
   reviewBoard();
 }
 function reviewBoard() {
